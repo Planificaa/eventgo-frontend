@@ -1,0 +1,19 @@
+{
+  "header": {
+    "dashboard": "Dashboard",
+    "events": "Events",
+    "task": "Tasks",
+    "quotes": "Quotes",
+    "messages": "Messages"
+  },
+  "common": {
+    "settings": "Settings",
+    "language": "Language",
+    "goHome": "Go home",
+    "goBack": "Go back"
+  },
+  "errors": {
+    "pageNotFound": "Page not found",
+    "pageNotFoundDescription": "The page you're looking for doesn't exist or has been moved."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "header": {
+    "dashboard": "Inicio",
+    "events": "Eventos",
+    "task": "Tareas",
+    "quotes": "Cotizaciones",
+    "messages": "Mensajes"
+  },
+  "common": {
+    "settings": "Configuración",
+    "language": "Idioma",
+    "goHome": "Ir al inicio",
+    "goBack": "Volver atrás"
+  },
+  "errors": {
+    "pageNotFound": "Página no encontrada",
+    "pageNotFoundDescription": "La página que estás buscando no existe o ha sido movida."
+  }
+}
