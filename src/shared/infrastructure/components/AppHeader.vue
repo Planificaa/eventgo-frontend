@@ -78,6 +78,7 @@ const closeSidebar = () => {
         </Dropdown>
 
         <Button icon="pi pi-cog" class="user-action-btn" text />
+        <Button class="user-action-btn" text>
         <div class="user-profile">
           <Avatar
             class="user-avatar"
@@ -86,6 +87,7 @@ const closeSidebar = () => {
           />
           <span class="user-name">Roberto Fox</span>
         </div>
+        </Button>
       </div>
     </div>
 
