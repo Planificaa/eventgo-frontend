@@ -15,5 +15,123 @@
   "errors": {
     "pageNotFound": "Page not found",
     "pageNotFoundDescription": "The page you're looking for doesn't exist or has been moved."
+  },
+  "quotes": {
+    "page": {
+      "title": "Quotes",
+      "subtitle": "Manage all your event quotes"
+    },
+    "list": {
+      "searchPlaceholder": "Search quotes...",
+      "filterAll": "All",
+      "sortRecent": "Most recent",
+      "newQuote": "New Quote",
+      "customer": "Customer",
+      "event": "Event",
+      "date": "Date",
+      "amount": "Amount",
+      "state": "State",
+      "actions": "Actions",
+      "view": "View",
+      "edit": "Edit",
+      "noQuotes": "No quotes available"
+    },
+    "filters": {
+      "all": "All",
+      "approved": "Approved",
+      "pending": "Pending",
+      "declined": "Declined",
+      "draft": "Drafts"
+    },
+    "sort": {
+      "recent": "Most recent",
+      "oldest": "Oldest",
+      "amountHigh": "Highest amount",
+      "amountLow": "Lowest amount"
+    },
+    "states": {
+      "draft": "Draft",
+      "pending": "Pending",
+      "approved": "Approved",
+      "declined": "Declined"
+    },
+    "form": {
+      "createTitle": "Create New Quote",
+      "editTitle": "Edit Quote",
+      "basicInfo": "Basic Information",
+      "customer": "Customer",
+      "customerPlaceholder": "Customer name",
+      "eventType": "Event Type",
+      "selectType": "Select type",
+      "eventDate": "Event Date",
+      "datePlaceholder": "MM/DD/YYYY",
+      "numberOfGuests": "Number of Guests",
+      "guestsPlaceholder": "Quantity",
+      "location": "Location",
+      "locationPlaceholder": "Event venue"
+    },
+    "services": {
+      "title": "Included Services",
+      "addService": "Add Service",
+      "addNewService": "Add New Service",
+      "description": "Description",
+      "descriptionPlaceholder": "Service name",
+      "quantity": "Quantity",
+      "unitPrice": "Unit Price",
+      "total": "Total",
+      "noServices": "No services added",
+      "services": "services"
+    },
+    "financial": {
+      "title": "Financial Summary",
+      "subtotal": "Subtotal",
+      "vat": "VAT",
+      "total": "Total",
+      "services": "services",
+      "paymentTerms": "Payment terms: 50% upfront, 50% upon completion"
+    },
+    "actions": {
+      "title": "Actions",
+      "save": "Save",
+      "preview": "Preview",
+      "send": "Send",
+      "cancel": "Cancel",
+      "currentState": "Current state",
+      "lastUpdate": "Last update"
+    },
+    "preview": {
+      "title": "Quote Preview",
+      "quotation": "Quotation",
+      "for": "FOR",
+      "event": "EVENT",
+      "date": "Date",
+      "location": "Location",
+      "guests": "Guests",
+      "tel": "Tel",
+      "editAgain": "Edit Again",
+      "saveAndSend": "Save and Send"
+    }
+  },
+  "events": {
+    "types": {
+      "wedding": "Wedding",
+      "conference": "Conference",
+      "corporate_party": "Corporate Party",
+      "baby_shower": "Baby Shower",
+      "graduation": "Graduation",
+      "birthday": "Birthday",
+      "fifteen_years": "Fifteen Years",
+      "other": "Other"
+    }
+  },
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "add": "Add",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "close": "Close"
   }
 }
