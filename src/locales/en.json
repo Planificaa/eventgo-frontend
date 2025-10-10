@@ -15,5 +15,30 @@
   "errors": {
     "pageNotFound": "Page not found",
     "pageNotFoundDescription": "The page you're looking for doesn't exist or has been moved."
+  },
+
+  "eventManagement": {
+    "pageTitle": "Event Management",
+    "actions": {
+      "label": "Actions",
+      "newEvent": "New Event"
+    },
+    "filters": {
+      "active": "Active",
+      "all": "All",
+      "archived": "Archived"
+    },
+    "sort": {
+      "recent": "Most Recent",
+      "oldest": "Oldest",
+      "nameAsc": "Name (A-Z)",
+      "nameDesc": "Name (Z-A)"
+    },
+    "pagination": {
+      "showing": "Showing {start}-{end} of {total}",
+      "previous": "Previous",
+      "next": "Next",
+      "of": "of"
+    }
   }
 }
