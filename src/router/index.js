@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import EventPage from '../../src/social-event-management/doman/presentation/pages/event-page.component.vue'
 
 const routes = [
   {
@@ -16,10 +17,12 @@ const routes = [
   {
     path: '/events',
     name: 'Events',
-    component: () =>
-      Promise.resolve({
-        template: '<div class="p-4"><h1>Eventos</h1><p>Página en construcción</p></div>',
-      }),
+    component: EventPage,
+    meta: {
+      title: 'Events Management',
+      requiresAuth: true
+    }
+
   },
   {
     path: '/task',
