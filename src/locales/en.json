@@ -15,5 +15,24 @@
   "errors": {
     "pageNotFound": "Page not found",
     "pageNotFoundDescription": "The page you're looking for doesn't exist or has been moved."
+  },
+  "messaging": {
+    "messages": "Messages",
+    "online": "Online",
+    "offline": "Offline",
+    "typing": "typing...",
+    "typeMessage": "Type a message...",
+    "send": "Send",
+    "newChat": "New chat",
+    "searchConversations": "Search conversations...",
+    "noConversations": "You have no conversations",
+    "startConversation": "Start conversation",
+    "selectConversation": "Select a conversation",
+    "selectConversationDescription": "Choose a conversation from the list or start a new one",
+    "backToList": "Back to list",
+    "noMessages": "No messages yet",
+    "messageSent": "Message sent",
+    "messageError": "Error sending message",
+    "loadingMessages": "Loading messages..."
   }
 }
