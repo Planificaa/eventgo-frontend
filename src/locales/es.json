@@ -15,5 +15,31 @@
   "errors": {
     "pageNotFound": "Página no encontrada",
     "pageNotFoundDescription": "La página que estás buscando no existe o ha sido movida."
+  },
+
+  "eventManagement": {
+    "pageTitle": "Gestión de Eventos",
+    "actions": {
+      "label": "Acciones",
+      "newEvent": "Nuevo Evento"
+    },
+    "filters": {
+      "active": "Activos",
+      "all": "Todos",
+      "archived": "Archivados"
+    },
+    "sort": {
+      "recent": "Más Recientes",
+      "oldest": "Más Antiguos",
+      "nameAsc": "Nombre (A-Z)",
+      "nameDesc": "Nombre (Z-A)"
+    },
+    "pagination": {
+      "showing": "Mostrando {start}-{end} de {total}",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "of": "de"
+    }
   }
+
 }
