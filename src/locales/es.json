@@ -16,4 +16,12 @@
     "pageNotFound": "Página no encontrada",
     "pageNotFoundDescription": "La página que estás buscando no existe o ha sido movida."
   }
+  "tasks": {
+      "status": {
+        "todo": "Por Hacer",
+        "inprogress": "En Progreso",
+        "done": "Completada",
+        "cancelled": "Cancelada"
+      }
+    }
 }
