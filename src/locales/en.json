@@ -16,4 +16,13 @@
     "pageNotFound": "Page not found",
     "pageNotFoundDescription": "The page you're looking for doesn't exist or has been moved."
   }
+  "tasks": {
+      "status": {
+        "todo": "To Do",
+        "inprogress": "In Progress",
+        "done": "Done",
+        "cancelled": "Cancelled"
+      }
+    }
+  }
 }
