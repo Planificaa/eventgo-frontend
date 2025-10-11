@@ -19,10 +19,8 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: () =>
-      Promise.resolve({
-        template: '<div class="p-4"><h1>Dashboard</h1><p>Página en construcción</p></div>',
-      }),
+    component: () => import('/src/dashboard/infrastructure/components/DashboardView.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/events',
