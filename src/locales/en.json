@@ -4,16 +4,69 @@
     "events": "Events",
     "task": "Tasks",
     "quotes": "Quotes",
-    "messages": "Messages"
+    "messages": "Messages",
+    "profile": "Profile",
+    "albums": "Albums",
+    "chat": "Chat"
   },
   "common": {
     "settings": "Settings",
     "language": "Language",
     "goHome": "Go home",
-    "goBack": "Go back"
+    "goBack": "Go back",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "create": "Create",
+    "delete": "Delete",
+    "update": "Update",
+    "loading": "Loading...",
+    "actions": "Actions",
+    "viewDetails": "View Details",
+    "noData": "No data available"
   },
   "errors": {
     "pageNotFound": "Page not found",
-    "pageNotFoundDescription": "The page you're looking for doesn't exist or has been moved."
+    "pageNotFoundDescription": "The page you're looking for doesn't exist or has been moved.",
+    "fetchError": "An error occurred while fetching data.",
+    "saveError": "An error occurred while saving.",
+    "deleteError": "An error occurred while deleting."
+  },
+  "profile": {
+    "title": "Organizer Profile",
+    "editTitle": "Edit Organizer Profile",
+    "description": "Manage your personal and professional information.",
+    "name": "Name",
+    "specialty": "Specialty",
+    "location": "Location",
+    "about": "About Me",
+    "editProfileButton": "Edit Profile",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Error updating profile",
+    "noDescription": "This organizer has no description yet."
+  },
+  "albums": {
+    "title": "Albums",
+    "createTitle": "Create Album",
+    "editTitle": "Edit Album",
+    "detailsTitle": "Album Details",
+    "emptyMessage": "This organizer doesn't have any albums yet.",
+    "createButton": "Create Album",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "albumName": "Album Name",
+    "albumDescription": "Album Description",
+    "coverImage": "Cover Image",
+    "saveSuccess": "Album saved successfully",
+    "deleteSuccess": "Album deleted successfully",
+    "noDescription": "No description"
+  },
+  "chat": {
+    "title": "Chat with Clients",
+    "emptyMessage": "No active conversations.",
+    "sendMessage": "Send Message",
+    "placeholder": "Type your message...",
+    "messageSent": "Message sent successfully",
+    "messageError": "Failed to send message"
   }
 }

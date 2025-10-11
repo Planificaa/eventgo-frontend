@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()
 
+// Idiomas
 const languageOptions = ref([
   { name: 'English', code: 'en', flag: '🇺🇸' },
   { name: 'Spanish', code: 'es', flag: '🇪🇸' },
@@ -13,18 +14,13 @@ const changeLanguage = (language) => {
   locale.value = language.code
   selectedLanguage.value = language
 }
-// Estado del sidebar
+
+// Sidebar
 const sidebarVisible = ref(false)
+const toggleSidebar = () => { sidebarVisible.value = !sidebarVisible.value }
 
-// Funciones para manejar el sidebar
-const toggleSidebar = () => {
-  sidebarVisible.value = !sidebarVisible.value
-}
-
-const closeSidebar = () => {
-  sidebarVisible.value = false
-}
 </script>
+
 <template>
   <header class="app-header">
     <div class="header-container">
@@ -58,6 +54,8 @@ const closeSidebar = () => {
           <i class="pi pi-envelope"></i>
           <span>{{ $t('header.messages') }}</span>
         </RouterLink>
+
+
       </nav>
 
       <!-- Zona de usuario -->
@@ -78,56 +76,37 @@ const closeSidebar = () => {
         </Dropdown>
 
         <Button icon="pi pi-cog" class="user-action-btn" text />
-        <Button class="user-action-btn" text>
-        <div class="user-profile">
+
+        <RouterLink to="/profile" class="user-profile">
           <Avatar
             class="user-avatar"
             shape="circle"
             image="https://www.gravatar.com/avatar/05dfd4b41340d09cae045235eb0893c3?d=mp"
           />
           <span class="user-name">Roberto Fox</span>
-        </div>
-        </Button>
+        </RouterLink>
       </div>
     </div>
 
-    <!-- Sidebar para móvil -->
-    <Sidebar v-model:visible="sidebarVisible" position="left" class="custom-sidebar">
-      <template #header>
-        <div class="sidebar-header">
-          <div>
-            <img class="logo" src="/src/assets/img/EventGO_logo.png" />
-          </div>
-        </div>
-      </template>
 
-      <nav class="sidebar-navigation">
-        <RouterLink to="/dashboard" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-home"></i>
-          <span>{{ $t('header.dashboard') }}</span>
-        </RouterLink>
-        <RouterLink to="/events" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-calendar"></i>
-          <span>{{ $t('header.events') }}</span>
-        </RouterLink>
-        <RouterLink to="/task" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-check-square"></i>
-          <span>{{ $t('header.task') }}</span>
-        </RouterLink>
-        <RouterLink to="/quotes" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-file-edit"></i>
-          <span>{{ $t('header.quotes') }}</span>
-        </RouterLink>
-        <RouterLink to="/messages" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-envelope"></i>
-          <span>{{ $t('header.messages') }}</span>
-        </RouterLink>
-      </nav>
-    </Sidebar>
+
   </header>
 </template>
-
 <style scoped>
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-profile:hover .user-name {
+  color: #ffffff;
+}
+
 /* Header principal */
 .app-header {
   position: sticky;
