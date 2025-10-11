@@ -9,7 +9,7 @@ import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css'
 
 // Importar componentes
-import { Avatar, Dropdown, Menubar, Sidebar } from 'primevue'
+import { Avatar, DataTable, Dialog, Dropdown, InputText, Menubar, Sidebar, ToastService } from 'primevue'
 import Button from 'primevue/button'
 import i18n from '@/locales/index.js'
 
@@ -32,4 +32,8 @@ app.use(PrimeVue, {
   .component('Avatar', Avatar)
   .component('Sidebar',Sidebar)
   .component('Dropdown',Dropdown)
-  .mount('#app')
+  .component('InputText', InputText)
+  .component('Dialog', Dialog)
+  .component('Table',DataTable)
+.use(ToastService)
+.mount('#app')

@@ -56,6 +56,123 @@
       "toBeConfirmed": "Por confirmar",
       "cancelled": "Cancelado"
     }
+  },
+  "quotes": {
+    "page": {
+      "title": "Cotizaciones",
+      "subtitle": "Gestiona todas tus cotizaciones de eventos"
+    },
+    "list": {
+      "searchPlaceholder": "Buscar cotizaciones...",
+      "filterAll": "Todos",
+      "sortRecent": "Más recientes",
+      "newQuote": "Nueva Cotización",
+      "customer": "Cliente",
+      "event": "Evento",
+      "date": "Fecha",
+      "amount": "Monto",
+      "state": "Estado",
+      "actions": "Acciones",
+      "view": "Ver",
+      "edit": "Editar",
+      "noQuotes": "No hay cotizaciones disponibles"
+    },
+    "filters": {
+      "all": "Todos",
+      "approved": "Aprobadas",
+      "pending": "Pendientes",
+      "declined": "Rechazadas",
+      "draft": "Borradores"
+    },
+    "sort": {
+      "recent": "Más recientes",
+      "oldest": "Más antiguas",
+      "amountHigh": "Monto mayor",
+      "amountLow": "Monto menor"
+    },
+    "states": {
+      "draft": "Borrador",
+      "pending": "Pendiente",
+      "approved": "Aprobada",
+      "declined": "Rechazada"
+    },
+    "form": {
+      "createTitle": "Crear Nueva Cotización",
+      "editTitle": "Editar Cotización",
+      "basicInfo": "Información Básica",
+      "customer": "Cliente",
+      "customerPlaceholder": "Nombre del cliente",
+      "eventType": "Tipo de Evento",
+      "selectType": "Seleccionar tipo",
+      "eventDate": "Fecha del Evento",
+      "datePlaceholder": "DD/MM/AAAA",
+      "numberOfGuests": "Número de Invitados",
+      "guestsPlaceholder": "Cantidad",
+      "location": "Ubicación",
+      "locationPlaceholder": "Lugar del evento"
+    },
+    "services": {
+      "title": "Servicios Incluidos",
+      "addService": "Agregar Servicio",
+      "addNewService": "Agregar Nuevo Servicio",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Nombre del servicio",
+      "quantity": "Cantidad",
+      "unitPrice": "Precio Unitario",
+      "total": "Total",
+      "noServices": "No hay servicios agregados",
+      "services": "servicios"
+    },
+    "financial": {
+      "title": "Resumen Financiero",
+      "subtotal": "Subtotal",
+      "vat": "IGV",
+      "total": "Total",
+      "services": "servicios",
+      "paymentTerms": "Términos de pago: 50% adelanto, 50% al finalizar"
+    },
+    "actions": {
+      "title": "Acciones",
+      "save": "Guardar",
+      "preview": "Vista Previa",
+      "send": "Enviar",
+      "cancel": "Cancelar",
+      "currentState": "Estado actual",
+      "lastUpdate": "Última actualización"
+    },
+    "preview": {
+      "title": "Vista Previa de Cotización",
+      "quotation": "Cotización",
+      "for": "PARA",
+      "event": "EVENTO",
+      "date": "Fecha",
+      "location": "Ubicación",
+      "guests": "Invitados",
+      "tel": "Tel",
+      "editAgain": "Editar de Nuevo",
+      "saveAndSend": "Guardar y Enviar"
+    }
+  },
+  "events": {
+    "types": {
+      "wedding": "Boda",
+      "conference": "Conferencia",
+      "corporate_party": "Fiesta Corporativa",
+      "baby_shower": "Baby Shower",
+      "graduation": "Graduación",
+      "birthday": "Cumpleaños",
+      "fifteen_years": "Quinceaños",
+      "other": "Otro"
+    }
+  },
+  "common": {
+    "back": "Volver",
+    "cancel": "Cancelar",
+    "add": "Agregar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "close": "Cerrar"
   }
-
 }
