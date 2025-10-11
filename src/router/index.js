@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import EventPage from '../../src/social-event-management/doman/presentation/pages/event-page.component.vue'
-
+import CreateAndEditEvent from '/src/social-event-management/doman/presentation/components/create-and-edit-event.component.vue'
 const routes = [
   {
     path: '/',
@@ -22,6 +22,16 @@ const routes = [
       title: 'Events Management',
       requiresAuth: true
     }
+  },
+  {
+    path: '/events/create',
+    name: 'Create Event',
+    component: CreateAndEditEvent,
+    meta: {
+      title: 'Create Event',
+      requiresAuth: true
+    }
+
 
   },
   {
