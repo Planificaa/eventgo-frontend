@@ -27,7 +27,7 @@ import '@/profile-management/presentation/styles/global.css'
 // ========================================
 import Menubar from 'primevue/menubar'
 // Importar componentes
-import { Avatar, DataTable, Dialog, Dropdown, InputText, Menubar, Sidebar, ToastService } from 'primevue'
+import {DataTable, Dialog, InputText } from 'primevue'
 import Button from 'primevue/button'
 import Avatar from 'primevue/avatar'
 import Sidebar from 'primevue/sidebar'
