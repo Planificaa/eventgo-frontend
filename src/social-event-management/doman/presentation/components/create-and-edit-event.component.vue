@@ -1,5 +1,7 @@
 <script>
-import EventService from '../services/event.service.js';
+
+
+import EventService from '@/social-event-management/application/services/event.service.js'
 
 export default {
   name: 'CreateAndEditEvent',
