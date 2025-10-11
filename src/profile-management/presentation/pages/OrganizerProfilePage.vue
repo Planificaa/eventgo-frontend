@@ -1,11 +1,9 @@
 <template>
-  <div class="max-w-3xl mx-auto mt-10 bg-white shadow rounded-lg overflow-hidden">
-    <!-- CABECERA PERFIL -->
+  <div class="max-w-2xl mx-auto mt-10 bg-white rounded-lg border border-gray-200 shadow-sm">
+    <!-- CABECERA -->
     <div class="flex flex-col md:flex-row items-center md:items-start p-6 gap-6 border-b border-gray-200">
-      <!-- FOTO DE PERFIL -->
-      <div
-        class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-medium text-lg"
-      >
+      <!-- FOTO -->
+      <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-medium text-lg">
         Foto
       </div>
 
@@ -13,21 +11,20 @@
       <div class="flex-1 w-full">
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
           <div>
-            <h2 class="text-2xl font-semibold text-gray-900">Roberto</h2>
+            <h2 class="text-lg font-semibold text-gray-900">Roberto</h2>
             <p class="text-gray-600 text-sm">Eventos Musicales S.L.</p>
 
-            <!-- Etiqueta -->
+            <!-- ETIQUETA -->
             <span
               class="inline-block mt-2 px-3 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded-full"
             >
               ORGANIZADOR
             </span>
 
-            <!-- Datos -->
-            <div class="mt-3 text-sm text-gray-600 space-y-1">
+            <!-- DETALLES -->
+            <div class="mt-2 text-sm text-gray-700 space-y-1">
               <p>
-                <span class="font-medium">Eventos organizados:</span>
-                <span class="text-gray-800">24</span>
+                <span class="font-medium">Eventos organizados:</span> 24
               </p>
               <p class="flex items-center gap-1">
                 <span class="font-medium">Valoración media:</span>
@@ -36,25 +33,20 @@
               </p>
             </div>
           </div>
-
-
-<!-- Botón editar -->
+<!-- BOTÓN EDITAR PERFIL  -->
 <button
   @click="goToEdit"
-              class="px-4 py-2 bg-[#3A506B] text-white text-sm font-medium rounded-md hover:bg-[#2f4052] transition"
+  class="mt-1 sm:mt-0 self-start sm:self-center ml-auto px-3 py-1 bg-[#3A506B] text-white text-xs font-medium rounded-md hover:bg-[#2c3e50] transition duration-200"
 >
   Editar perfil
 </button>
-
-
-
         </div>
       </div>
     </div>
 
     <!-- PESTAÑAS -->
-    <div class="px-6 pt-3 border-b border-gray-200">
-      <div class="flex space-x-2 text-sm font-medium text-gray-600">
+    <div class="px-6 pt-3 border-b border-gray-200 bg-gray-50">
+      <div class="flex space-x-4 text-sm font-medium text-gray-600"> <!-- ESPACIADO AUMENTADO -->
         <button
           v-for="tab in tabs"
           :key="tab"
@@ -73,13 +65,10 @@
 
     <!-- CONTENIDO -->
     <div class="p-6 text-gray-700 text-sm">
-      <!-- Información -->
+      <!-- INFORMACIÓN -->
       <div v-if="activeTab === 'Información'">
-        <h3 class="text-base font-semibold text-gray-800 mb-4">
-          Información del perfil
-        </h3>
-
-        <div class="space-y-1">
+        <h3 class="text-base font-semibold text-gray-800 mb-4">Información del perfil</h3> <!-- más separación -->
+        <div class="space-y-2"> <!-- más espacio entre líneas -->
           <p><strong>Email:</strong> roberto@eventosmusicales.com</p>
           <p><strong>Teléfono:</strong> +51 962531478</p>
           <p><strong>Ubicación:</strong> Surco, Lima</p>
@@ -88,18 +77,18 @@
         </div>
       </div>
 
-      <!-- Servicios -->
+      <!-- SERVICIOS -->
       <div v-else-if="activeTab === 'Servicios'">
         <p class="italic text-gray-500">Este organizador no ha añadido servicios aún.</p>
       </div>
 
-      <!-- Álbumes -->
+      <!-- ÁLBUMES -->
       <div v-else-if="activeTab === 'Álbumes'">
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center mb-5"> <!-- más espacio abajo -->
           <h3 class="text-base font-semibold text-gray-800">Álbumes</h3>
           <button
             @click="goToCreateAlbum"
-            class="px-3 py-2 bg-[#3A506B] text-white text-xs rounded-md hover:bg-[#6FFFE9] hover:text-[#3A506B] transition"
+            class="px-4 py-2 bg-[#3A506B] text-white text-sm font-medium rounded-md hover:bg-[#2c3e50] transition duration-200"
           >
             Crear álbum
           </button>
@@ -133,12 +122,12 @@
           </div>
         </div>
 
-        <div v-else class="text-gray-500 italic mt-4">
+        <div v-else class="text-gray-500 italic mt-5">
           Este organizador no tiene álbumes todavía.
         </div>
       </div>
 
-      <!-- Reseñas -->
+      <!-- RESEÑAS -->
       <div v-else-if="activeTab === 'Reseñas'">
         <p class="italic text-gray-500">No hay reseñas disponibles aún.</p>
       </div>
@@ -155,9 +144,17 @@ const tabs = ['Información', 'Servicios', 'Álbumes', 'Reseñas']
 const activeTab = ref('Información')
 const albums = ref([])
 
-function goToEdit() { router.push('/profile/edit') }
-function goToCreateAlbum() { router.push('/profile/albums/create') }
-function goToAlbum(id) { router.push(`/profile/albums/${id}`) }
+function goToEdit() {
+  router.push('/profile/edit')
+}
+
+function goToCreateAlbum() {
+  router.push('/profile/albums/create')
+}
+
+function goToAlbum(id) {
+  router.push(`/profile/albums/${id}`)
+}
 </script>
 
 <style scoped>
