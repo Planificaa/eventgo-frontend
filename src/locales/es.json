@@ -20,25 +20,41 @@
   "eventManagement": {
     "pageTitle": "Gestión de Eventos",
     "actions": {
-      "label": "Acciones",
-      "newEvent": "Nuevo Evento"
+      "selectAll": "Seleccionar todo",
+      "deleteSelected": "Eliminar seleccionados ({count})",
+      "search": "Buscar eventos...",
+      "newEvent": "Nuevo Evento",
+      "cancel": "Cancelar",
+      "delete": "Eliminar"
     },
     "filters": {
+      "all": "Todos los estados",
       "active": "Activos",
-      "all": "Todos",
-      "archived": "Archivados"
+      "pending": "Pendientes",
+      "cancelled": "Cancelados"
     },
     "sort": {
-      "recent": "Más Recientes",
-      "oldest": "Más Antiguos",
-      "nameAsc": "Nombre (A-Z)",
-      "nameDesc": "Nombre (Z-A)"
+      "recent": "Más recientes",
+      "oldest": "Más antiguos",
+      "title": "Por título"
     },
     "pagination": {
-      "showing": "Mostrando {start}-{end} de {total}",
+      "showing": "Mostrando",
+      "of": "de",
       "previous": "Anterior",
-      "next": "Siguiente",
-      "of": "de"
+      "next": "Siguiente"
+    },
+    "confirmation": {
+      "title": "Confirmar eliminación",
+      "message": "¿Está seguro de eliminar {count} evento(s)? Esta acción no se puede deshacer."
+    },
+    "messages": {
+      "noEvents": "No hay eventos disponibles"
+    },
+    "status": {
+      "active": "Activo",
+      "toBeConfirmed": "Por confirmar",
+      "cancelled": "Cancelado"
     }
   }
 

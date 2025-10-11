@@ -20,25 +20,41 @@
   "eventManagement": {
     "pageTitle": "Event Management",
     "actions": {
-      "label": "Actions",
-      "newEvent": "New Event"
+      "selectAll": "Select all",
+      "deleteSelected": "Delete selected ({count})",
+      "search": "Search events...",
+      "newEvent": "New Event",
+      "cancel": "Cancel",
+      "delete": "Delete"
     },
     "filters": {
+      "all": "All statuses",
       "active": "Active",
-      "all": "All",
-      "archived": "Archived"
+      "pending": "Pending",
+      "cancelled": "Cancelled"
     },
     "sort": {
-      "recent": "Most Recent",
+      "recent": "Most recent",
       "oldest": "Oldest",
-      "nameAsc": "Name (A-Z)",
-      "nameDesc": "Name (Z-A)"
+      "title": "By title"
     },
     "pagination": {
-      "showing": "Showing {start}-{end} of {total}",
+      "showing": "Showing",
+      "of": "of",
       "previous": "Previous",
-      "next": "Next",
-      "of": "of"
+      "next": "Next"
+    },
+    "confirmation": {
+      "title": "Confirm deletion",
+      "message": "Are you sure you want to delete {count} event(s)? This action cannot be undone."
+    },
+    "messages": {
+      "noEvents": "No events available"
+    },
+    "status": {
+      "active": "Active",
+      "toBeConfirmed": "To be confirmed",
+      "cancelled": "Cancelled"
     }
   }
 }
