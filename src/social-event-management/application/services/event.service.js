@@ -1,7 +1,7 @@
 // event.service.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://data-jaon-eventgo.onrender.com';
 
 class EventService {
   async getEvents() {
