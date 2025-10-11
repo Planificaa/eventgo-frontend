@@ -176,3 +176,14 @@
     }
   }
 }
+  },
+  "tasks": {
+      "status": {
+        "todo": "To Do",
+        "inprogress": "In Progress",
+        "done": "Done",
+        "cancelled": "Cancelled"
+      }
+    }
+  }
+

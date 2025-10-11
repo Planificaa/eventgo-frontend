@@ -46,7 +46,7 @@ const closeSidebar = () => {
           <i class="pi pi-calendar"></i>
           <span>{{ $t('header.events') }}</span>
         </RouterLink>
-        <RouterLink to="/task" class="nav-item">
+        <RouterLink to="/tasks" class="nav-item">
           <i class="pi pi-check-square"></i>
           <span>{{ $t('header.task') }}</span>
         </RouterLink>
@@ -108,7 +108,7 @@ const closeSidebar = () => {
           <i class="pi pi-calendar"></i>
           <span>{{ $t('header.events') }}</span>
         </RouterLink>
-        <RouterLink to="/task" class="sidebar-nav-item" @click="closeSidebar">
+        <RouterLink to="/tasks" class="sidebar-nav-item" @click="closeSidebar">
           <i class="pi pi-check-square"></i>
           <span>{{ $t('header.task') }}</span>
         </RouterLink>

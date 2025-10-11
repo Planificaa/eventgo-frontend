@@ -1,5 +1,3 @@
-// src/quote-management/infrastructure/http/axios.config.js
-
 /**
  * Configuración de Axios para el módulo Quote Management
  * Centraliza la configuración HTTP
@@ -26,10 +24,13 @@ apiClient.interceptors.request.use(
     // }
 
     console.log(`[API Request] ${config.method.toUpperCase()} ${config.url}`);
+
+    console.log(`[Task API Request] ${config.method.toUpperCase()} ${config.url}`);
     return config;
   },
   (error) => {
     console.error('[API Request Error]', error);
+    console.error('[Task API Request Error]', error);
     return Promise.reject(error);
   }
 );
@@ -38,10 +39,13 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => {
     console.log(`[API Response] ${response.status} ${response.config.url}`);
+    console.log(`[Task API Response] ${response.status} ${response.config.url}`);
     return response;
   },
   (error) => {
     console.error('[API Response Error]', error.response?.status, error.message);
+
+    console.error('[Task API Response Error]', error.response?.status, error.message);
 
     // Manejo de errores globales
     if (error.response) {
@@ -49,6 +53,7 @@ apiClient.interceptors.response.use(
       switch (error.response.status) {
         case 404:
           console.error('Resource not found');
+          console.error('Task resource not found');
           break;
         case 500:
           console.error('Server error');
@@ -57,8 +62,12 @@ apiClient.interceptors.response.use(
           console.error('Unauthorized');
           // TODO: Redirigir a login
           break;
+        case 403:
+          console.error('Forbidden - Insufficient permissions');
+          break;
         default:
           console.error('API Error:', error.response.data);
+          console.error('Task API Error:', error.response.data);
       }
     } else if (error.request) {
       // La petición se hizo pero no hubo respuesta

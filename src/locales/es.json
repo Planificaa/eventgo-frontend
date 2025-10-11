@@ -174,5 +174,13 @@
     "delete": "Eliminar",
     "confirm": "Confirmar",
     "close": "Cerrar"
-  }
+  },
+  "tasks": {
+      "status": {
+        "todo": "Por Hacer",
+        "inprogress": "En Progreso",
+        "done": "Completada",
+        "cancelled": "Cancelada"
+      }
+    }
 }
