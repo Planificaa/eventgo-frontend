@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()
 
+// Idiomas
 const languageOptions = ref([
   { name: 'English', code: 'en', flag: '🇺🇸' },
   { name: 'Spanish', code: 'es', flag: '🇪🇸' },
@@ -13,18 +14,16 @@ const changeLanguage = (language) => {
   locale.value = language.code
   selectedLanguage.value = language
 }
-// Estado del sidebar
-const sidebarVisible = ref(false)
 
-// Funciones para manejar el sidebar
-const toggleSidebar = () => {
-  sidebarVisible.value = !sidebarVisible.value
-}
+// Sidebar
+const sidebarVisible = ref(false)
+const toggleSidebar = () => { sidebarVisible.value = !sidebarVisible.value }
 
 const closeSidebar = () => {
   sidebarVisible.value = false
 }
 </script>
+
 <template>
   <header class="app-header">
     <div class="header-container">
@@ -58,6 +57,8 @@ const closeSidebar = () => {
           <i class="pi pi-envelope"></i>
           <span>{{ $t('header.messages') }}</span>
         </RouterLink>
+
+
       </nav>
 
       <!-- Zona de usuario -->
@@ -78,14 +79,15 @@ const closeSidebar = () => {
         </Dropdown>
 
         <Button icon="pi pi-cog" class="user-action-btn" text />
-        <div class="user-profile">
+
+        <RouterLink to="/profile" class="user-profile">
           <Avatar
             class="user-avatar"
             shape="circle"
             image="https://www.gravatar.com/avatar/05dfd4b41340d09cae045235eb0893c3?d=mp"
           />
           <span class="user-name">Roberto Fox</span>
-        </div>
+        </RouterLink>
       </div>
     </div>
 
@@ -122,10 +124,24 @@ const closeSidebar = () => {
         </RouterLink>
       </nav>
     </Sidebar>
+
   </header>
 </template>
-
 <style scoped>
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-profile:hover .user-name {
+  color: #ffffff;
+}
+
 /* Header principal */
 .app-header {
   position: sticky;

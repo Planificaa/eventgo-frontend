@@ -148,11 +148,35 @@ const routes = [
     props: true,
     meta: { requiresAuth: true },
   },
-  // Ruta 404 - SIEMPRE AL FINAL
+  // ========================================
+  // RUTAS DE ÁLBUMES
+  // ========================================
+  {
+    path: '/profile/albums',
+    name: 'OrganizerAlbumPage',
+    component: () => import('@/profile-management/presentation/pages/OrganizerAlbumPage.vue'),
+    meta: { title: 'Álbumes', requiresAuth: true }
+  },
+  {
+    path: '/profile/albums/create',
+    name: 'OrganizerAlbumCreatePage',
+    component: () => import('@/profile-management/presentation/pages/OrganizerAlbumCreatePage.vue'),
+    meta: { title: 'Crear Álbum', requiresAuth: true }
+  },
+  {
+    path: '/profile/albums/:id/edit',
+    name: 'OrganizerAlbumEditPage',
+    component: () => import('@/profile-management/presentation/pages/OrganizerAlbumEditPage.vue'),
+    props: true,
+    meta: { title: 'Editar Álbum', requiresAuth: true }
+  },
+
+  // Ruta 404
   {
     path: '/:pathMatch(.*)*',
     name: 'PageNotFound',
     component: () => import('/src/shared/infrastructure/components/common/PageNotFound.vue'),
+    meta: { title: 'Página no encontrada' }
   },
 ]
 
@@ -160,42 +184,14 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
-    // Scroll al inicio en cada navegación o mantener posición
-    if (savedPosition) {
-      return savedPosition;
-    } else {
-      return { top: 0 };
-    }
-  }
+    return savedPosition || { top: 0 }
+  },
 })
 
-// Navigation Guard - Actualizar título de página
+// Cambiar el título dinámicamente
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title ? `${to.meta.title} - EventGo` : 'EventGo';
-
-  // TODO: Agregar lógica de autenticación si es necesario
-  // if (to.meta.requiresAuth && !isAuthenticated()) {
-  //   next({ name: 'login' });
-  // } else {
-  //   next();
-  // }
-
-  next();
-});
-
-// Actualizar título de la página
-router.beforeEach((to, from, next) => {
-  if (to.meta.title) {
-    document.title = `${to.meta.title} - EventGO`
-  } else {
-    document.title = 'EventGO - Event Management Platform'
-  }
+  document.title = to.meta.title ? `${to.meta.title} - EventGo` : 'EventGo'
   next()
-})
-
-// Scroll al inicio al cambiar de ruta
-router.afterEach(() => {
-  window.scrollTo(0, 0)
 })
 
 export default router

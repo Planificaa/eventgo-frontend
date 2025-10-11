@@ -4,19 +4,71 @@
     "events": "Eventos",
     "task": "Tareas",
     "quotes": "Cotizaciones",
-    "messages": "Mensajes"
+    "messages": "Mensajes",
+    "profile": "Perfil",
+    "albums": "Álbumes",
+    "chat": "Chat"
   },
   "common": {
     "settings": "Configuración",
     "language": "Idioma",
     "goHome": "Ir al inicio",
-    "goBack": "Volver atrás"
+    "goBack": "Volver atrás",
+    "edit": "Editar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "create": "Crear",
+    "delete": "Eliminar",
+    "update": "Actualizar",
+    "loading": "Cargando...",
+    "actions": "Acciones",
+    "viewDetails": "Ver detalles",
+    "noData": "No hay datos disponibles"
   },
   "errors": {
     "pageNotFound": "Página no encontrada",
-    "pageNotFoundDescription": "La página que estás buscando no existe o ha sido movida."
+    "pageNotFoundDescription": "La página que estás buscando no existe o ha sido movida.",
+    "fetchError": "Ocurrió un error al obtener los datos.",
+    "saveError": "Ocurrió un error al guardar.",
+    "deleteError": "Ocurrió un error al eliminar."
   },
-
+  "profile": {
+    "title": "Perfil del Organizador",
+    "editTitle": "Editar Perfil del Organizador",
+    "description": "Administra tu información personal y profesional.",
+    "name": "Nombre",
+    "specialty": "Especialidad",
+    "location": "Ubicación",
+    "about": "Sobre mí",
+    "editProfileButton": "Editar Perfil",
+    "updateSuccess": "Perfil actualizado con éxito",
+    "updateError": "Error al actualizar el perfil",
+    "noDescription": "Este organizador aún no tiene descripción."
+  },
+  "albums": {
+    "title": "Álbumes",
+    "createTitle": "Crear Álbum",
+    "editTitle": "Editar Álbum",
+    "detailsTitle": "Detalles del Álbum",
+    "emptyMessage": "Este organizador no tiene álbumes todavía.",
+    "createButton": "Crear Álbum",
+    "editButton": "Editar",
+    "deleteButton": "Eliminar",
+    "albumName": "Nombre del Álbum",
+    "albumDescription": "Descripción del Álbum",
+    "coverImage": "Imagen de Portada",
+    "saveSuccess": "Álbum guardado con éxito",
+    "deleteSuccess": "Álbum eliminado con éxito",
+    "noDescription": "Sin descripción"
+  },
+  "chat": {
+    "title": "Chat con Clientes",
+    "emptyMessage": "No hay conversaciones activas.",
+    "sendMessage": "Enviar mensaje",
+    "placeholder": "Escribe tu mensaje...",
+    "messageSent": "Mensaje enviado con éxito",
+    "messageError": "Error al enviar el mensaje"
+  },
   "eventManagement": {
     "pageTitle": "Gestión de Eventos",
     "actions": {
@@ -176,13 +228,13 @@
     "close": "Cerrar"
   },
   "tasks": {
-      "status": {
-        "todo": "Por Hacer",
-        "inprogress": "En Progreso",
-        "done": "Completada",
-        "cancelled": "Cancelada"
-      }
-    },
+    "status": {
+      "todo": "Por Hacer",
+      "inprogress": "En Progreso",
+      "done": "Completada",
+      "cancelled": "Cancelada"
+    }
+  },
   "messaging": {
     "messages": "Mensajes",
     "online": "En línea",
