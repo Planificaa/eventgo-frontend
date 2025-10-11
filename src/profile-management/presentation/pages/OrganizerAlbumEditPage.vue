@@ -89,7 +89,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { AlbumApiService } from '@/profile-management/application/services/album-api.service.js'
+import { AlbumApiService } from '/src/profile-management/application/album-api.service.js'
 
 const router = useRouter()
 const route = useRoute()
