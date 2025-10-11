@@ -247,5 +247,29 @@
       "done": "Done",
       "cancelled": "Cancelled"
     }
+  },
+  "dashboard": {
+    "welcome": "Welcome, {name}",
+    "activitySummary": "Your activity summary",
+    "seeAll": "See all",
+    "viewAll": "View all",
+    "metrics": {
+      "activeEvents": {
+        "title": "Active Events",
+        "subtitle": "{count} events this week"
+      },
+      "pendingTasks": {
+        "title": "Pending Tasks",
+        "subtitle": "{count} win today"
+      },
+      "quotes": {
+        "title": "Quotes",
+        "subtitle": "{count} new this week"
+      }
+    },
+    "recentMessages": {
+      "title": "Recent Messages",
+      "seeAll": "See all"
+    }
   }
 }

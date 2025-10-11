@@ -247,5 +247,29 @@
     "messageSent": "Mensaje enviado",
     "messageError": "Error al enviar mensaje",
     "loadingMessages": "Cargando mensajes..."
+  },
+  "dashboard": {
+    "welcome": "Bienvenido, {name}",
+    "activitySummary": "Resumen de tu actividad",
+    "seeAll": "Ver todo",
+    "viewAll": "Ver todo",
+    "metrics": {
+      "activeEvents": {
+        "title": "Eventos Activos",
+        "subtitle": "{count} eventos esta semana"
+      },
+      "pendingTasks": {
+        "title": "Tareas Pendientes",
+        "subtitle": "{count} ganan hoy"
+      },
+      "quotes": {
+        "title": "Cotizaciones",
+        "subtitle": "{count} nueva esta semana"
+      }
+    },
+    "recentMessages": {
+      "title": "Mensajes Recientes",
+      "seeAll": "Ver todos"
+    }
   }
 }
