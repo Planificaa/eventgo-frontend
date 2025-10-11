@@ -182,5 +182,24 @@
         "done": "Completada",
         "cancelled": "Cancelada"
       }
-    }
+    },
+  "messaging": {
+    "messages": "Mensajes",
+    "online": "En línea",
+    "offline": "Desconectado",
+    "typing": "escribiendo...",
+    "typeMessage": "Escribe un mensaje...",
+    "send": "Enviar",
+    "newChat": "Nuevo chat",
+    "searchConversations": "Buscar conversaciones...",
+    "noConversations": "No tienes conversaciones",
+    "startConversation": "Iniciar conversación",
+    "selectConversation": "Selecciona una conversación",
+    "selectConversationDescription": "Elige una conversación de la lista o inicia una nueva",
+    "backToList": "Volver a la lista",
+    "noMessages": "No hay mensajes aún",
+    "messageSent": "Mensaje enviado",
+    "messageError": "Error al enviar mensaje",
+    "loadingMessages": "Cargando mensajes..."
+  }
 }

@@ -130,10 +130,23 @@ const routes = [
   {
     path: '/messages',
     name: 'Messages',
-    component: () =>
-      Promise.resolve({
-        template: '<div class="p-4"><h1>Mensajes</h1><p>Página en construcción</p></div>',
-      }),
+    component: () => import('/src/direct-communication/presentation/views/MessagesView.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: ':conversationId',
+        name: 'MessagesConversation',
+        component: () => import('/src/direct-communication/presentation/views/MessagesView.vue'),
+        props: true,
+      },
+    ],
+  },
+  {
+    path: '/chat/:userId',
+    name: 'DirectChat',
+    component: () => import('/src/direct-communication/presentation/views/ChatView.vue'),
+    props: true,
+    meta: { requiresAuth: true },
   },
   // Ruta 404 - SIEMPRE AL FINAL
   {
