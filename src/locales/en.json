@@ -14,16 +14,20 @@
     "language": "Language",
     "goHome": "Go home",
     "goBack": "Go back",
-    "edit": "Edit",
-    "save": "Save",
-    "cancel": "Cancel",
     "create": "Create",
-    "delete": "Delete",
     "update": "Update",
     "loading": "Loading...",
     "actions": "Actions",
     "viewDetails": "View Details",
-    "noData": "No data available"
+    "noData": "No data available",
+    "back": "Back",
+    "cancel": "Cancel",
+    "add": "Add",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "close": "Close"
   },
   "errors": {
     "pageNotFound": "Page not found",
@@ -177,17 +181,6 @@
       "other": "Other"
     }
   },
-  "common": {
-    "back": "Back",
-    "cancel": "Cancel",
-    "add": "Add",
-    "save": "Save",
-    "edit": "Edit",
-    "delete": "Delete",
-    "confirm": "Confirm",
-    "close": "Close"
-  },
-
   "eventManagement": {
     "pageTitle": "Event Management",
     "actions": {

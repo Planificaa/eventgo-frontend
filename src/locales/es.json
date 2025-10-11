@@ -14,16 +14,20 @@
     "language": "Idioma",
     "goHome": "Ir al inicio",
     "goBack": "Volver atrás",
-    "edit": "Editar",
-    "save": "Guardar",
-    "cancel": "Cancelar",
     "create": "Crear",
-    "delete": "Eliminar",
     "update": "Actualizar",
     "loading": "Cargando...",
     "actions": "Acciones",
     "viewDetails": "Ver detalles",
-    "noData": "No hay datos disponibles"
+    "noData": "No hay datos disponibles",
+    "back": "Volver",
+    "cancel": "Cancelar",
+    "add": "Agregar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "close": "Cerrar"
   },
   "errors": {
     "pageNotFound": "Página no encontrada",
@@ -216,16 +220,6 @@
       "fifteen_years": "Quinceaños",
       "other": "Otro"
     }
-  },
-  "common": {
-    "back": "Volver",
-    "cancel": "Cancelar",
-    "add": "Agregar",
-    "save": "Guardar",
-    "edit": "Editar",
-    "delete": "Eliminar",
-    "confirm": "Confirmar",
-    "close": "Cerrar"
   },
   "tasks": {
     "status": {
