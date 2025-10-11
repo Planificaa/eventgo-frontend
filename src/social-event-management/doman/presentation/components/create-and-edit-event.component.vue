@@ -1,77 +1,103 @@
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
+// Servicios
+import EventService from '@/social-event-management/application/services/event.service.js';
 
-import EventService from '@/social-event-management/application/services/event.service.js'
+// Composables
+const router = useRouter();
+const { t } = useI18n();
 
-export default {
-  name: 'CreateAndEditEvent',
-  props: {
-    id: {
-      type: [String, Number],
-      default: null
+// Props
+const props = defineProps({
+  id: {
+    type: [String, Number],
+    default: null
+  }
+});
+
+// Estado reactivo
+const eventData = ref({
+  title: '',
+  date: '',
+  customerName: '',
+  location: '',
+  status: 'Active',
+  userId: 1 // Fixed user for demonstration
+});
+
+const loading = ref(false);
+
+// Opciones para el dropdown de status
+const statusOptions = computed(() => [
+  { label: t('events.status.active'), value: 'Active' },
+  { label: t('events.status.toBeConfirmed'), value: 'To be confirmed' },
+  { label: t('events.status.cancelled'), value: 'Cancelled' }
+]);
+
+// Computed: verificar si estamos en modo edición
+const isEditMode = computed(() => !!props.id);
+
+// Métodos
+const fetchEvent = async () => {
+  if (!isEditMode.value) return;
+
+  loading.value = true;
+  try {
+    const response = await EventService.getEventById(props.id);
+    // Convertir la fecha del backend al formato de Calendar
+    const eventDataFromServer = { ...response.data };
+
+    // Si la fecha viene como string, convertirla a objeto Date
+    if (eventDataFromServer.date && typeof eventDataFromServer.date === 'string') {
+      eventDataFromServer.date = new Date(eventDataFromServer.date);
     }
-  },
-  data() {
-    return {
-      eventData: {
-        title: '',
-        date: '',
-        customerName: '',
-        location: '',
-        status: 'Active',
-        userId: 1 // Fixed user for demonstration
-      },
-      loading: false
-    };
-  },
-  computed: {
-    isEditMode() {
-      return !!this.id;
-    }
-  },
-  methods: {
-    async fetchEvent() {
-      if (!this.isEditMode) return;
 
-      this.loading = true;
-      try {
-        const response = await EventService.getEventById(this.id);
-        // Copy the data to avoid directly modifying the response
-        this.eventData = { ...response.data };
-      } catch (error) {
-        console.error('Error fetching event:', error);
-        this.$router.push('/events');
-      } finally {
-        this.loading = false;
-      }
-    },
-    async saveEvent() {
-      this.loading = true;
-      try {
-        if (this.isEditMode) {
-          await EventService.updateEvent(this.id, this.eventData);
-        } else {
-          await EventService.createEvent(this.eventData);
-        }
-        // Redirect to events list after saving
-        this.$router.push('/events');
-      } catch (error) {
-        console.error('Error saving event:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
-    goBack() {
-      this.$router.push('/events');
-    }
-  },
-  created() {
-    // If we're in edit mode, load the event data
-    this.fetchEvent();
+    eventData.value = eventDataFromServer;
+  } catch (error) {
+    console.error('Error fetching event:', error);
+    router.push('/events');
+  } finally {
+    loading.value = false;
   }
 };
 
+const saveEvent = async () => {
+  loading.value = true;
+  try {
+    // Preparar datos para enviar al backend
+    const dataToSend = { ...eventData.value };
 
+    // Convertir Date object a string si es necesario
+    if (dataToSend.date instanceof Date) {
+      dataToSend.date = dataToSend.date.toISOString().split('T')[0];
+    }
+
+    if (isEditMode.value) {
+      await EventService.updateEvent(props.id, dataToSend);
+    } else {
+      await EventService.createEvent(dataToSend);
+    }
+
+    // Redirect to events list after saving
+    router.push('/events');
+  } catch (error) {
+    console.error('Error saving event:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const goBack = () => {
+  router.push('/events');
+};
+
+// Lifecycle: cargar datos si estamos en modo edición
+onMounted(() => {
+  fetchEvent();
+});
 </script>
 
 <template>
@@ -144,5 +170,115 @@ export default {
 </template>
 
 <style scoped>
+/* Contenedor principal */
+.event-form-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
 
+/* Card del formulario */
+.event-form-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header del formulario */
+.form-header {
+  padding: 1.5rem;
+  background: var(--primary-color, #3A506B);
+  color: var(--primary-color-text, #6FFFE9);
+  border-radius: 6px 6px 0 0;
+}
+
+.form-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+/* Formulario */
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Grupos de formulario */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #3A506B;
+  font-size: 0.95rem;
+}
+
+/* Personalización de componentes PrimeVue */
+:deep(.p-inputtext),
+:deep(.p-dropdown),
+:deep(.p-calendar) {
+  font-size: 1rem;
+}
+
+:deep(.p-inputtext:enabled:focus),
+:deep(.p-dropdown:not(.p-disabled):focus),
+:deep(.p-calendar:not(.p-disabled) .p-inputtext:enabled:focus) {
+  border-color: #5BC0BE;
+  box-shadow: 0 0 0 0.2rem rgba(91, 192, 190, 0.25);
+}
+
+/* Acciones del formulario */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.cancel-btn {
+  min-width: 120px;
+}
+
+.save-btn {
+  min-width: 150px;
+  background-color: #5BC0BE;
+  border-color: #5BC0BE;
+}
+
+.save-btn:hover {
+  background-color: #4aa9a7;
+  border-color: #4aa9a7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .event-form-container {
+    margin: 1rem auto;
+    padding: 0 0.5rem;
+  }
+
+  .form-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .cancel-btn,
+  .save-btn {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+/* Estado de carga */
+:deep(.p-button-loading) {
+  opacity: 0.7;
+}
 </style>
