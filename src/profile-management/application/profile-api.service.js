@@ -2,6 +2,7 @@ import apiClient from '@/shared/infrastructure/http/axios.config.js';
 
 export class ProfileApiService {
   static ENDPOINT = '/organizers';
+  static USERS_ENDPOINT = '/users';
 
   // Obtener todos los perfiles
   static async getAll() {
@@ -24,9 +25,13 @@ export class ProfileApiService {
   }
 
   // Obtener perfil del usuario logueado
-  static async getProfile() {
+  static async getProfile(userId) {
+    if (!userId) {
+      throw new Error('A user id is required to fetch a profile');
+    }
+
     try {
-      const response = await apiClient.get(`${this.ENDPOINT}/me`);
+      const response = await apiClient.get(`${this.USERS_ENDPOINT}/${userId}`);
       return response.data;
     } catch (error) {
       throw this.handleError(error);

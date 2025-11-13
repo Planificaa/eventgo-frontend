@@ -2,73 +2,73 @@
   "events": [
     {
       "id": 1,
-      "title": "Boda Elegante en Jardín",
-      "customerName": "María García y Carlos López",
+      "title": "Boda de María y Juan",
+      "customerName": "María López",
       "location": "Jardines del Country Club, Lima",
       "status": "Activo",
-      "date": "2025-11-15T18:00:00",
+      "date": "2025-05-20T17:00:00.000Z",
       "type": "Boda",
       "guests": 150,
-      "budget": 25000,
-      "description": "Ceremonia al aire libre con recepción bajo carpa. Incluye catering premium y decoración floral.",
-      "createdAt": "2025-09-20T10:30:00",
-      "updatedAt": "2025-10-05T14:20:00"
+      "budget": 28000,
+      "description": "Ceremonia al aire libre con recepción elegante y catering premium.",
+      "createdAt": "2025-03-02T10:30:00.000Z",
+      "updatedAt": "2025-04-12T14:45:00.000Z"
     },
     {
       "id": 2,
-      "title": "Conferencia Tech Summit 2025",
-      "customerName": "Innovation Corp",
-      "location": "Centro de Convenciones Jockey Plaza",
-      "status": "Activo",
-      "date": "2025-10-25T09:00:00",
-      "type": "Corporativo",
-      "guests": 500,
-      "budget": 45000,
-      "description": "Conferencia tecnológica con speakers internacionales. Incluye coffee breaks y almuerzo.",
-      "createdAt": "2025-08-10T08:00:00",
-      "updatedAt": "2025-10-08T16:45:00"
+      "title": "Baby Shower Ana & Daniel",
+      "customerName": "María López",
+      "location": "Casa Club La Molina",
+      "status": "Pendiente",
+      "date": "2025-06-08T16:00:00.000Z",
+      "type": "Social",
+      "guests": 65,
+      "budget": 9500,
+      "description": "Celebración temática pastel con estaciones de postres y juegos interactivos.",
+      "createdAt": "2025-03-28T09:00:00.000Z",
+      "updatedAt": "2025-04-18T11:15:00.000Z"
     },
     {
       "id": 3,
-      "title": "Fiesta de 15 Años Sofía",
-      "customerName": "Familia Rodríguez",
-      "location": "Salón de Eventos El Prado",
-      "status": "Por confirmar",
-      "date": "2025-12-20T19:00:00",
-      "type": "Social",
-      "guests": 200,
-      "budget": 18000,
-      "description": "Celebración de quinceañera con vals, cena y show musical.",
-      "createdAt": "2025-09-15T11:00:00",
-      "updatedAt": "2025-10-01T09:30:00"
+      "title": "Lanzamiento Corporativo StarTech",
+      "customerName": "StarTech Solutions",
+      "location": "Centro de Convenciones Lima",
+      "status": "Activo",
+      "date": "2025-07-12T18:30:00.000Z",
+      "type": "Corporativo",
+      "guests": 220,
+      "budget": 42000,
+      "description": "Evento corporativo con presentación multimedia, networking lounge y cocktail.",
+      "createdAt": "2025-02-18T12:00:00.000Z",
+      "updatedAt": "2025-04-10T15:30:00.000Z"
     },
     {
       "id": 4,
-      "title": "Lanzamiento Producto StarTech",
-      "customerName": "StarTech Solutions",
+      "title": "Conferencia Innovación 2025",
+      "customerName": "Innovation Corp",
       "location": "Hotel Westin Lima",
       "status": "Activo",
-      "date": "2025-11-05T16:00:00",
-      "type": "Corporativo",
-      "guests": 120,
-      "budget": 32000,
-      "description": "Evento de lanzamiento con presentación multimedia y cocktail ejecutivo.",
-      "createdAt": "2025-09-01T14:00:00",
-      "updatedAt": "2025-10-07T10:15:00"
+      "date": "2025-08-25T09:00:00.000Z",
+      "type": "Conferencia",
+      "guests": 480,
+      "budget": 52000,
+      "description": "Conferencia anual de tecnología con ponentes internacionales y workshops especializados.",
+      "createdAt": "2025-01-22T08:30:00.000Z",
+      "updatedAt": "2025-04-05T16:20:00.000Z"
     },
     {
       "id": 5,
-      "title": "Boda Íntima en la Playa",
-      "customerName": "Andrea Vega y Miguel Torres",
-      "location": "Club Náutico, Ancón",
-      "status": "Cancelado",
-      "date": "2025-10-18T17:00:00",
-      "type": "Boda",
-      "guests": 80,
-      "budget": 15000,
-      "description": "Ceremonia junto al mar con cena mariscos. Cancelado por cambio de fecha.",
-      "createdAt": "2025-07-20T09:00:00",
-      "updatedAt": "2025-10-02T13:00:00"
+      "title": "Fiesta de 15 años Sofía",
+      "customerName": "Familia Rodríguez",
+      "location": "Salón El Bosque",
+      "status": "Por confirmar",
+      "date": "2025-09-14T19:00:00.000Z",
+      "type": "Social",
+      "guests": 180,
+      "budget": 21000,
+      "description": "Celebración temática con pista de baile LED, show de apertura y estación de postres.",
+      "createdAt": "2025-02-05T10:00:00.000Z",
+      "updatedAt": "2025-03-30T09:45:00.000Z"
     },
     {
       "id": 6,
@@ -76,614 +76,638 @@
       "customerName": "Fundación Esperanza",
       "location": "Gran Teatro Nacional",
       "status": "Activo",
-      "date": "2025-11-30T19:30:00",
+      "date": "2025-10-04T20:00:00.000Z",
       "type": "Beneficencia",
-      "guests": 300,
-      "budget": 38000,
-      "description": "Cena de gala con subasta benéfica y show artístico.",
-      "createdAt": "2025-08-25T10:00:00",
-      "updatedAt": "2025-10-06T15:30:00"
-    },
-    {
-      "id": 7,
-      "title": "Aniversario Corporativo 25 Años",
-      "customerName": "Constructora Del Sur SAC",
-      "location": "Country Club El Bosque",
-      "status": "Por confirmar",
-      "date": "2026-01-15T20:00:00",
-      "type": "Corporativo",
-      "guests": 250,
-      "budget": 42000,
-      "description": "Celebración de aniversario con cena formal y espectáculo musical.",
-      "createdAt": "2025-09-30T11:30:00",
-      "updatedAt": "2025-10-09T09:00:00"
-    },
-    {
-      "id": 8,
-      "title": "Cumpleaños Infantil Mateo",
-      "customerName": "Familia Sánchez",
-      "location": "Parque de la Amistad",
-      "status": "Activo",
-      "date": "2025-10-28T15:00:00",
-      "type": "Social",
-      "guests": 50,
-      "budget": 3500,
-      "description": "Fiesta temática de superhéroes con animación y juegos.",
-      "createdAt": "2025-09-10T14:00:00",
-      "updatedAt": "2025-10-04T12:00:00"
-    },
-    {
-      "id": 9,
-      "title": "Workshop Innovación Digital",
-      "customerName": "Digital Hub Peru",
-      "location": "Coworking Spaces Miraflores",
-      "status": "Activo",
-      "date": "2025-10-22T10:00:00",
-      "type": "Educativo",
-      "guests": 60,
-      "budget": 8500,
-      "description": "Taller intensivo de transformación digital con expertos internacionales.",
-      "createdAt": "2025-09-05T09:00:00",
-      "updatedAt": "2025-10-03T16:00:00"
-    },
-    {
-      "id": 10,
-      "title": "Boda Campestre Premium",
-      "customerName": "Lucía Paredes y Roberto Díaz",
-      "location": "Hacienda San Juan, Pachacamac",
-      "status": "Activo",
-      "date": "2025-12-07T17:30:00",
-      "type": "Boda",
-      "guests": 180,
-      "budget": 35000,
-      "description": "Boda campestre con ceremonia al atardecer y recepción en hacienda colonial.",
-      "createdAt": "2025-08-15T10:00:00",
-      "updatedAt": "2025-10-08T11:30:00"
-    },
-    {
-      "id": 11,
-      "title": "Reunión Anual Accionistas",
-      "customerName": "Inversiones Pacifico SAA",
-      "location": "Hotel Country Club Lima",
-      "status": "Por confirmar",
-      "date": "2026-02-10T09:00:00",
-      "type": "Corporativo",
-      "guests": 80,
-      "budget": 22000,
-      "description": "Junta anual con presentación de resultados y almuerzo ejecutivo.",
-      "createdAt": "2025-10-01T08:00:00",
-      "updatedAt": "2025-10-09T14:00:00"
-    },
-    {
-      "id": 12,
-      "title": "Festival Gastronómico",
-      "customerName": "Cámara de Comercio Lima",
-      "location": "Plaza Mayor de Lima",
-      "status": "Activo",
-      "date": "2025-11-12T12:00:00",
-      "type": "Cultural",
-      "guests": 1000,
-      "budget": 65000,
-      "description": "Festival al aire libre con stands de restaurantes y show en vivo.",
-      "createdAt": "2025-07-30T10:00:00",
-      "updatedAt": "2025-10-05T17:00:00"
-    },
-    {
-      "id": 13,
-      "title": "Graduación Promoción 2025",
-      "customerName": "Colegio San Agustín",
-      "location": "Auditorio Municipal San Isidro",
-      "status": "Activo",
-      "date": "2025-12-15T18:00:00",
-      "type": "Educativo",
-      "guests": 350,
-      "budget": 28000,
-      "description": "Ceremonia de graduación con entrega de diplomas y cena buffet.",
-      "createdAt": "2025-08-20T09:30:00",
-      "updatedAt": "2025-10-07T13:45:00"
-    },
-    {
-      "id": 14,
-      "title": "Concierto Benéfico Jazz Night",
-      "customerName": "Asociación Cultural Lima",
-      "location": "Teatro Británico",
-      "status": "Cancelado",
-      "date": "2025-10-30T20:00:00",
-      "type": "Cultural",
-      "guests": 200,
-      "budget": 18000,
-      "description": "Concierto de jazz con artistas locales. Cancelado por problemas logísticos.",
-      "createdAt": "2025-08-05T11:00:00",
-      "updatedAt": "2025-10-01T15:00:00"
-    },
-    {
-      "id": 15,
-      "title": "Feria Empresarial ExpoNegocios",
-      "customerName": "Cámara de Comercio Perú",
-      "location": "Centro de Exposiciones Jockey",
-      "status": "Activo",
-      "date": "2025-11-20T10:00:00",
-      "type": "Corporativo",
-      "guests": 800,
-      "budget": 75000,
-      "description": "Feria de negocios con stands empresariales y conferencias magistrales.",
-      "createdAt": "2025-07-15T08:00:00",
-      "updatedAt": "2025-10-08T09:30:00"
-    }
-  ],
-  "customers": [
-    {
-      "id": 1,
-      "name": "María García",
-      "email": "maria.garcia@email.com",
-      "phone": "+51 999 888 777",
-      "company": null
-    },
-    {
-      "id": 2,
-      "name": "Innovation Corp",
-      "email": "eventos@innovationcorp.pe",
-      "phone": "+51 999 777 666",
-      "company": "Innovation Corp SAC"
-    },
-    {
-      "id": 3,
-      "name": "Familia Rodríguez",
-      "email": "rodriguez.familia@email.com",
-      "phone": "+51 988 777 555",
-      "company": null
-    }
-  ],
-  "venues": [
-    {
-      "id": 1,
-      "name": "Jardines del Country Club",
-      "address": "Av. Country Club 123, Lima",
-      "capacity": 200,
-      "type": "Jardín"
-    },
-    {
-      "id": 2,
-      "name": "Centro de Convenciones Jockey Plaza",
-      "address": "Av. Jockey Plaza 250, Santiago de Surco",
-      "capacity": 1000,
-      "type": "Centro de Convenciones"
-    },
-    {
-      "id": 3,
-      "name": "Salón de Eventos El Prado",
-      "address": "Jr. El Prado 456, San Isidro",
-      "capacity": 250,
-      "type": "Salón"
+      "guests": 320,
+      "budget": 36000,
+      "description": "Cena de gala con subasta silenciosa, show musical y activaciones de marca.",
+      "createdAt": "2025-03-10T11:20:00.000Z",
+      "updatedAt": "2025-04-14T13:55:00.000Z"
     }
   ],
   "quotes": [
     {
-      "id": "quote_1704123456789_abc123",
-      "customer": {
-        "id": "customer_1",
-        "name": "Maria Lopez",
-        "email": "maria.lopez@gmail.com",
-        "phone": "+51 987 654 321"
-      },
-      "event": {
-        "id": "event_1",
-        "type": "WEDDING",
-        "name": "Maria and Juan's wedding",
-        "date": "2025-04-24T00:00:00.000Z",
-        "location": "Hotel Playa Azul",
-        "numberOfGuests": 100
-      },
-      "organizer": {
-        "id": "organizer_1",
-        "name": "Andrea Ramirez",
-        "role": "Event Organizer",
-        "phone": "+51 999 888 777",
-        "avatar": "https://i.pravatar.cc/150?img=1"
-      },
-      "services": [
-        {
-          "id": "service_1",
-          "description": "Full Menu Catering",
-          "quantity": 100,
-          "unitPrice": 45,
-          "currency": "S/.",
-          "total": 4500
-        },
-        {
-          "id": "service_2",
-          "description": "Floral decoration",
-          "quantity": 10,
-          "unitPrice": 75,
-          "currency": "S/.",
-          "total": 750
-        }
-      ],
+      "id": "quote_001",
+      "ownerId": "2",
+      "customerId": "1",
       "state": "APPROVED",
       "vatPercentage": 18,
       "currency": "S/.",
-      "subtotal": 5250,
-      "vat": 945,
-      "total": 6195,
-      "createdAt": "2025-04-04T10:30:00.000Z",
-      "updatedAt": "2025-10-09T04:21:49.028Z"
-    },
-    {
-      "id": "quote_1704223456789_def456",
+      "subtotal": 6200,
+      "vat": 1116,
+      "total": 7316,
+      "createdAt": "2025-02-15T14:30:00.000Z",
+      "updatedAt": "2025-03-02T09:45:00.000Z",
       "customer": {
-        "id": "customer_2",
-        "name": "ABC Company",
-        "email": "contact@abccompany.com",
-        "phone": "+51 912 345 678"
-      },
-      "event": {
-        "id": "event_2",
-        "type": "CONFERENCE",
-        "name": "Annual Tech Conference 2025",
-        "date": "2025-05-10T00:00:00.000Z",
-        "location": "Lima Convention Center",
-        "numberOfGuests": 200
+        "id": "1",
+        "name": "María López",
+        "email": "maria.lopez@gmail.com",
+        "phone": "+51 987 654 321"
       },
       "organizer": {
-        "id": "organizer_1",
-        "name": "Andrea Ramirez",
-        "role": "Event Organizer",
-        "phone": "+51 999 888 777",
-        "avatar": "https://i.pravatar.cc/150?img=1"
-      },
-      "services": [
-        {
-          "id": "service_4",
-          "description": "Coffee Break Service",
-          "quantity": 200,
-          "unitPrice": 25,
-          "currency": "S/.",
-          "total": 5000
-        },
-        {
-          "id": "service_5",
-          "description": "Audio Visual Equipment",
-          "quantity": 1,
-          "unitPrice": 1500,
-          "currency": "S/.",
-          "total": 1500
-        },
-        {
-          "id": "service_6",
-          "description": "Event Coordination Staff",
-          "quantity": 5,
-          "unitPrice": 250,
-          "currency": "S/.",
-          "total": 1250
-        }
-      ],
-      "state": "PENDING",
-      "vatPercentage": 18,
-      "currency": "S/.",
-      "subtotal": 7750,
-      "vat": 1395,
-      "total": 9145,
-      "createdAt": "2025-04-05T14:20:00.000Z",
-      "updatedAt": "2025-04-05T14:20:00.000Z"
-    },
-    {
-      "id": "quote_1704323456789_ghi789",
-      "customer": {
-        "id": "customer_3",
-        "name": "Company XYZ",
-        "email": "events@xyz.com",
-        "phone": "+51 923 456 789"
+        "id": "2",
+        "name": "Luis Contreras",
+        "role": "Organizador de eventos",
+        "phone": "+51 990 432 109",
+        "avatar": "https://i.pravatar.cc/150?img=62"
       },
       "event": {
-        "id": "event_3",
-        "type": "CORPORATE_PARTY",
-        "name": "End of Year Celebration",
-        "date": "2025-05-15T00:00:00.000Z",
-        "location": "Rooftop Miraflores",
+        "id": "event_host_1",
+        "type": "wedding",
+        "name": "Boda de María y Juan",
+        "date": "2025-05-20T17:00:00.000Z",
+        "location": "Jardines del Country Club",
         "numberOfGuests": 150
       },
-      "organizer": {
-        "id": "organizer_1",
-        "name": "Andrea Ramirez",
-        "role": "Event Organizer",
-        "phone": "+51 999 888 777",
-        "avatar": "https://i.pravatar.cc/150?img=1"
-      },
       "services": [
         {
-          "id": "service_7",
-          "description": "Premium Cocktail Bar",
-          "quantity": 150,
-          "unitPrice": 60,
-          "currency": "S/.",
-          "total": 9000
-        },
-        {
-          "id": "service_8",
-          "description": "Live Music Band",
+          "id": "service_001",
+          "description": "Coordinación completa del evento",
           "quantity": 1,
-          "unitPrice": 2500,
-          "currency": "S/.",
-          "total": 2500
-        },
-        {
-          "id": "service_9",
-          "description": "Ambient Lighting",
-          "quantity": 1,
-          "unitPrice": 800,
-          "currency": "S/.",
-          "total": 800
-        },
-        {
-          "id": "service_10",
-          "description": "Gourmet Appetizers",
-          "quantity": 150,
-          "unitPrice": 35,
-          "currency": "S/.",
-          "total": 5250
-        }
-      ],
-      "state": "DECLINED",
-      "vatPercentage": 18,
-      "currency": "S/.",
-      "subtotal": 17550,
-      "vat": 3159,
-      "total": 20709,
-      "createdAt": "2025-04-03T09:15:00.000Z",
-      "updatedAt": "2025-04-06T11:45:00.000Z"
-    },
-    {
-      "id": "quote_1704423456789_jkl012",
-      "customer": {
-        "id": "customer_4",
-        "name": "Ana Rodriguez",
-        "email": "ana.rodriguez@hotmail.com",
-        "phone": "+51 934 567 890"
-      },
-      "event": {
-        "id": "event_4",
-        "type": "BABY_SHOWER",
-        "name": "Baby Shower for Ana",
-        "date": "2025-06-06T00:00:00.000Z",
-        "location": "Garden House Lima",
-        "numberOfGuests": 50
-      },
-      "organizer": {
-        "id": "organizer_1",
-        "name": "Andrea Ramirez",
-        "role": "Event Organizer",
-        "phone": "+51 999 888 777",
-        "avatar": "https://i.pravatar.cc/150?img=1"
-      },
-      "services": [
-        {
-          "id": "service_11",
-          "description": "Dessert Table",
-          "quantity": 50,
-          "unitPrice": 35,
-          "currency": "S/.",
-          "total": 1750
-        },
-        {
-          "id": "service_12",
-          "description": "Balloon Decoration",
-          "quantity": 1,
-          "unitPrice": 450,
-          "currency": "S/.",
-          "total": 450
-        },
-        {
-          "id": "service_13",
-          "description": "Photography Package",
-          "quantity": 1,
-          "unitPrice": 800,
-          "currency": "S/.",
-          "total": 800
-        },
-        {
-          "id": "service_14",
-          "description": "Party Favors",
-          "quantity": 50,
-          "unitPrice": 15,
-          "currency": "S/.",
-          "total": 750
-        }
-      ],
-      "state": "PENDING",
-      "vatPercentage": 18,
-      "currency": "S/.",
-      "subtotal": 3750,
-      "vat": 675,
-      "total": 4425,
-      "createdAt": "2025-04-06T16:00:00.000Z",
-      "updatedAt": "2025-04-06T16:00:00.000Z"
-    },
-    {
-      "id": "quote_1704523456789_mno345",
-      "customer": {
-        "id": "customer_5",
-        "name": "Sanchez Family",
-        "email": "sanchez.family@gmail.com",
-        "phone": "+51 945 678 901"
-      },
-      "event": {
-        "id": "event_5",
-        "type": "GRADUATION",
-        "name": "University Graduation Party",
-        "date": "2025-06-20T00:00:00.000Z",
-        "location": "Backyard Event Space",
-        "numberOfGuests": 80
-      },
-      "organizer": {
-        "id": "organizer_1",
-        "name": "Andrea Ramirez",
-        "role": "Event Organizer",
-        "phone": "+51 999 888 777",
-        "avatar": "https://i.pravatar.cc/150?img=1"
-      },
-      "services": [
-        {
-          "id": "service_15",
-          "description": "BBQ Catering",
-          "quantity": 80,
-          "unitPrice": 40,
+          "unitPrice": 3200,
           "currency": "S/.",
           "total": 3200
         },
         {
-          "id": "service_16",
-          "description": "Beverage Station",
-          "quantity": 80,
-          "unitPrice": 15,
-          "currency": "S/.",
-          "total": 1200
-        },
-        {
-          "id": "service_17",
-          "description": "DJ Service",
-          "quantity": 1,
-          "unitPrice": 500,
-          "currency": "S/.",
-          "total": 500
-        },
-        {
-          "id": "service_18",
-          "description": "Tent Rental",
-          "quantity": 1,
-          "unitPrice": 800,
-          "currency": "S/.",
-          "total": 800
-        }
-      ],
-      "state": "APPROVED",
-      "vatPercentage": 18,
-      "currency": "S/.",
-      "subtotal": 5700,
-      "vat": 1026,
-      "total": 6726,
-      "createdAt": "2025-04-02T13:30:00.000Z",
-      "updatedAt": "2025-04-07T10:20:00.000Z"
-    },
-    {
-      "id": "quote_1704623456789_pqr678",
-      "customer": {
-        "id": "customer_6",
-        "name": "Diaz Family",
-        "email": "diaz.celebration@yahoo.com",
-        "phone": "+51 956 789 012"
-      },
-      "event": {
-        "id": "event_6",
-        "type": "FIFTEEN_YEARS",
-        "name": "Sofia's Quinceañera",
-        "date": "2025-07-11T00:00:00.000Z",
-        "location": "Grand Ballroom San Isidro",
-        "numberOfGuests": 120
-      },
-      "organizer": {
-        "id": "organizer_1",
-        "name": "Andrea Ramirez",
-        "role": "Event Organizer",
-        "phone": "+51 999 888 777",
-        "avatar": "https://i.pravatar.cc/150?img=1"
-      },
-      "services": [
-        {
-          "id": "service_19",
-          "description": "Formal Dinner Service",
-          "quantity": 120,
-          "unitPrice": 80,
-          "currency": "S/.",
-          "total": 9600
-        },
-        {
-          "id": "service_20",
-          "description": "Floral Centerpieces",
-          "quantity": 15,
-          "unitPrice": 120,
-          "currency": "S/.",
-          "total": 1800
-        },
-        {
-          "id": "service_21",
-          "description": "Live Orchestra",
-          "quantity": 1,
-          "unitPrice": 3500,
-          "currency": "S/.",
-          "total": 3500
-        },
-        {
-          "id": "service_22",
-          "description": "Professional Photography & Video",
-          "quantity": 1,
-          "unitPrice": 2000,
-          "currency": "S/.",
-          "total": 2000
-        },
-        {
-          "id": "service_23",
-          "description": "Cake & Dessert Display",
+          "id": "service_002",
+          "description": "Catering premium",
           "quantity": 120,
           "unitPrice": 25,
           "currency": "S/.",
           "total": 3000
         }
-      ],
+      ]
+    },
+    {
+      "id": "quote_002",
+      "ownerId": "2",
+      "customerId": "1",
       "state": "PENDING",
       "vatPercentage": 18,
       "currency": "S/.",
-      "subtotal": 19900,
-      "vat": 3582,
-      "total": 23482,
-      "createdAt": "2025-04-01T11:00:00.000Z",
-      "updatedAt": "2025-10-09T04:22:57.188Z"
+      "subtotal": 4820,
+      "vat": 867.6,
+      "total": 5687.6,
+      "createdAt": "2025-03-22T11:15:00.000Z",
+      "updatedAt": "2025-04-16T08:30:00.000Z",
+      "customer": {
+        "id": "1",
+        "name": "María López",
+        "email": "maria.lopez@gmail.com",
+        "phone": "+51 987 654 321"
+      },
+      "organizer": {
+        "id": "2",
+        "name": "Luis Contreras",
+        "role": "Organizador de eventos",
+        "phone": "+51 990 432 109",
+        "avatar": "https://i.pravatar.cc/150?img=62"
+      },
+      "event": {
+        "id": "event_host_2",
+        "type": "baby_shower",
+        "name": "Baby Shower Ana & Daniel",
+        "date": "2025-06-08T16:00:00.000Z",
+        "location": "Casa Club La Molina",
+        "numberOfGuests": 60
+      },
+      "services": [
+        {
+          "id": "service_101",
+          "description": "Decoración temática completa",
+          "quantity": 1,
+          "unitPrice": 1800,
+          "currency": "S/.",
+          "total": 1800
+        },
+        {
+          "id": "service_102",
+          "description": "Buffet salado y dulce",
+          "quantity": 60,
+          "unitPrice": 28,
+          "currency": "S/.",
+          "total": 1680
+        },
+        {
+          "id": "service_103",
+          "description": "Show infantil y dinámicas",
+          "quantity": 1,
+          "unitPrice": 1340,
+          "currency": "S/.",
+          "total": 1340
+        }
+      ]
+    },
+    {
+      "id": "quote_003",
+      "ownerId": "2",
+      "customerId": "1",
+      "state": "DECLINED",
+      "vatPercentage": 18,
+      "currency": "S/.",
+      "subtotal": 7650,
+      "vat": 1377,
+      "total": 9027,
+      "createdAt": "2025-01-28T10:00:00.000Z",
+      "updatedAt": "2025-02-05T16:10:00.000Z",
+      "customer": {
+        "id": "1",
+        "name": "María López",
+        "email": "maria.lopez@gmail.com",
+        "phone": "+51 987 654 321"
+      },
+      "organizer": {
+        "id": "2",
+        "name": "Luis Contreras",
+        "role": "Organizador de eventos",
+        "phone": "+51 990 432 109",
+        "avatar": "https://i.pravatar.cc/150?img=62"
+      },
+      "event": {
+        "id": "event_host_3",
+        "type": "corporate_party",
+        "name": "Cena de networking ejecutiva",
+        "date": "2025-07-18T19:30:00.000Z",
+        "location": "Hotel Country Club Lima",
+        "numberOfGuests": 80
+      },
+      "services": [
+        {
+          "id": "service_201",
+          "description": "Diseño de experiencia y logística",
+          "quantity": 1,
+          "unitPrice": 4100,
+          "currency": "S/.",
+          "total": 4100
+        },
+        {
+          "id": "service_202",
+          "description": "Catering ejecutivo",
+          "quantity": 80,
+          "unitPrice": 22,
+          "currency": "S/.",
+          "total": 1760
+        },
+        {
+          "id": "service_203",
+          "description": "Producción audiovisual",
+          "quantity": 1,
+          "unitPrice": 1790,
+          "currency": "S/.",
+          "total": 1790
+        }
+      ]
+    },
+    {
+      "id": "quote_004",
+      "ownerId": "2",
+      "customerId": "1",
+      "state": "APPROVED",
+      "vatPercentage": 18,
+      "currency": "S/.",
+      "subtotal": 5400,
+      "vat": 972,
+      "total": 6372,
+      "createdAt": "2025-04-02T12:05:00.000Z",
+      "updatedAt": "2025-04-20T10:40:00.000Z",
+      "customer": {
+        "id": "1",
+        "name": "María López",
+        "email": "maria.lopez@gmail.com",
+        "phone": "+51 987 654 321"
+      },
+      "organizer": {
+        "id": "2",
+        "name": "Luis Contreras",
+        "role": "Organizador de eventos",
+        "phone": "+51 990 432 109",
+        "avatar": "https://i.pravatar.cc/150?img=62"
+      },
+      "event": {
+        "id": "event_host_4",
+        "type": "birthday",
+        "name": "Cumpleaños sorpresa papá",
+        "date": "2025-07-04T20:00:00.000Z",
+        "location": "Casa familiar Miraflores",
+        "numberOfGuests": 45
+      },
+      "services": [
+        {
+          "id": "service_301",
+          "description": "Decoración temática y ambientación",
+          "quantity": 1,
+          "unitPrice": 2100,
+          "currency": "S/.",
+          "total": 2100
+        },
+        {
+          "id": "service_302",
+          "description": "Bebidas y barras especiales",
+          "quantity": 45,
+          "unitPrice": 30,
+          "currency": "S/.",
+          "total": 1350
+        },
+        {
+          "id": "service_303",
+          "description": "Show musical en vivo",
+          "quantity": 1,
+          "unitPrice": 1950,
+          "currency": "S/.",
+          "total": 1950
+        }
+      ]
     }
   ],
   "customers": [
     {
       "id": "customer_1",
-      "name": "Maria Lopez",
+      "name": "María López",
       "email": "maria.lopez@gmail.com",
       "phone": "+51 987 654 321"
     },
     {
       "id": "customer_2",
-      "name": "ABC Company",
-      "email": "contact@abccompany.com",
+      "name": "Innovation Corp",
+      "email": "contact@innovationcorp.com",
       "phone": "+51 912 345 678"
     },
     {
       "id": "customer_3",
-      "name": "Company XYZ",
-      "email": "events@xyz.com",
+      "name": "StarTech Solutions",
+      "email": "events@startech.com",
       "phone": "+51 923 456 789"
-    },
-    {
-      "id": "customer_4",
-      "name": "Ana Rodriguez",
-      "email": "ana.rodriguez@hotmail.com",
-      "phone": "+51 934 567 890"
-    },
-    {
-      "id": "customer_5",
-      "name": "Sanchez Family",
-      "email": "sanchez.family@gmail.com",
-      "phone": "+51 945 678 901"
-    },
-    {
-      "id": "customer_6",
-      "name": "Diaz Family",
-      "email": "diaz.celebration@yahoo.com",
-      "phone": "+51 956 789 012"
     }
   ],
   "organizers": [
     {
       "id": "organizer_1",
-      "name": "Andrea Ramirez",
-      "role": "Event Organizer",
-      "phone": "+51 999 888 777",
-      "avatar": "https://i.pravatar.cc/150?img=1"
+      "name": "Julia García",
+      "specialty": "Wedding Specialist",
+      "rating": 4.9,
+      "completedEvents": 128,
+      "avatar": "https://i.pravatar.cc/150?img=45",
+      "location": "Miraflores, Lima",
+      "description": "Experta en bodas románticas y celebraciones boutique con atención a cada detalle.",
+      "eventTypes": ["Bodas", "Aniversarios", "Elopements"],
+      "priceRange": "$$$",
+      "languages": ["Español", "Inglés"],
+      "contact": {
+        "email": "julia.garcia@dreamweddings.pe",
+        "phone": "+51 984 123 456"
+      },
+      "highlights": [
+        "Top Wedding Planner 2024",
+        "Red de proveedores premium",
+        "Experiencia en bodas destino"
+      ]
+    },
+    {
+      "id": "organizer_2",
+      "name": "Carlos Ramírez",
+      "specialty": "Corporate Events",
+      "rating": 4.7,
+      "completedEvents": 96,
+      "avatar": "https://i.pravatar.cc/150?img=52",
+      "location": "San Isidro, Lima",
+      "description": "Organizador corporativo con enfoque en experiencias inmersivas y lanzamientos innovadores.",
+      "eventTypes": ["Conferencias", "Lanzamientos", "Capacitaciones"],
+      "priceRange": "$$$",
+      "languages": ["Español", "Inglés"],
+      "contact": {
+        "email": "cramirez@corporate360.pe",
+        "phone": "+51 911 222 333"
+      },
+      "highlights": [
+        "Eventos híbridos de alto impacto",
+        "Coordinación con speakers internacionales",
+        "KPIs medibles para sponsors"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Luis Contreras",
+      "specialty": "Wedding & Social Events",
+      "rating": 4.8,
+      "completedEvents": 142,
+      "avatar": "https://i.pravatar.cc/150?img=62",
+      "location": "Barranco, Lima",
+      "description": "Organizador integral especializado en bodas, baby showers y eventos sociales con storytelling.",
+      "eventTypes": ["Bodas", "Baby shower", "Cumpleaños", "Eventos corporativos"],
+      "priceRange": "$$",
+      "languages": ["Español"],
+      "contact": {
+        "email": "luis.contreras@eventgo.pe",
+        "phone": "+51 990 432 109"
+      },
+      "highlights": [
+        "Más de 140 eventos realizados",
+        "Equipo propio de producción",
+        "Planificación financiera detallada"
+      ]
+    },
+    {
+      "id": "organizer_4",
+      "name": "Laura Mendoza",
+      "specialty": "Social Events",
+      "rating": 4.8,
+      "completedEvents": 110,
+      "avatar": "https://i.pravatar.cc/150?img=56",
+      "location": "La Molina, Lima",
+      "description": "Planificadora de eventos sociales, graduaciones y fiestas de 15 años con propuestas creativas.",
+      "eventTypes": ["Quinceaños", "Graduaciones", "Baby shower"],
+      "priceRange": "$$",
+      "languages": ["Español"],
+      "contact": {
+        "email": "laura.mendoza@celebrate.pe",
+        "phone": "+51 955 221 876"
+      },
+      "highlights": [
+        "Portafolio fotográfico profesional",
+        "Decoración personalizada",
+        "Alianzas con banqueteros locales"
+      ]
+    },
+    {
+      "id": "organizer_5",
+      "name": "Miguel Rivera",
+      "specialty": "Sports Events",
+      "rating": 4.6,
+      "completedEvents": 72,
+      "avatar": "https://i.pravatar.cc/150?img=40",
+      "location": "Surco, Lima",
+      "description": "Organizador de torneos deportivos, carreras y activaciones fitness para marcas.",
+      "eventTypes": ["Eventos deportivos", "Activaciones", "Team building"],
+      "priceRange": "$$",
+      "languages": ["Español", "Inglés"],
+      "contact": {
+        "email": "miguel.rivera@sportive.pe",
+        "phone": "+51 913 445 980"
+      },
+      "highlights": [
+        "Coordinación logística completa",
+        "Alianzas con auspiciadores",
+        "Protocolos de seguridad"
+      ]
+    },
+    {
+      "id": "organizer_6",
+      "name": "Ana Fuentes",
+      "specialty": "Fiestas de 15",
+      "rating": 4.7,
+      "completedEvents": 85,
+      "avatar": "https://i.pravatar.cc/150?img=47",
+      "location": "San Borja, Lima",
+      "description": "Especialista en fiestas temáticas para quinceañeras con coreografías y producción integral.",
+      "eventTypes": ["Quinceaños", "Bodas", "Fiestas temáticas"],
+      "priceRange": "$$$",
+      "languages": ["Español"],
+      "contact": {
+        "email": "ana.fuentes@glowevents.pe",
+        "phone": "+51 918 765 234"
+      },
+      "highlights": [
+        "Diseño escénico personalizado",
+        "Coaching de vals",
+        "Iluminación inteligente"
+      ]
+    },
+    {
+      "id": "organizer_7",
+      "name": "Sofía Lara",
+      "specialty": "Destination Weddings",
+      "rating": 4.9,
+      "completedEvents": 60,
+      "avatar": "https://i.pravatar.cc/150?img=53",
+      "location": "Cusco, Perú",
+      "description": "Organizadora de bodas destino en Cusco y el Valle Sagrado con experiencias culturales.",
+      "eventTypes": ["Bodas", "Renovaciones", "Escapadas románticas"],
+      "priceRange": "$$$$",
+      "languages": ["Español", "Inglés"],
+      "contact": {
+        "email": "sofia.lara@andeanweddings.pe",
+        "phone": "+51 977 654 210"
+      },
+      "highlights": [
+        "Bodas en sitios arqueológicos",
+        "Experiencias gastronómicas locales",
+        "Proveedores certificados"
+      ]
+    },
+    {
+      "id": "organizer_8",
+      "name": "Pedro Gómez",
+      "specialty": "International Events",
+      "rating": 4.5,
+      "completedEvents": 105,
+      "avatar": "https://i.pravatar.cc/150?img=39",
+      "location": "Miami, USA",
+      "description": "Planner para convenciones y viajes de incentivo con operación en Latinoamérica.",
+      "eventTypes": ["Convenciones", "Incentivos", "Roadshows"],
+      "priceRange": "$$$$",
+      "languages": ["Español", "Inglés", "Portugués"],
+      "contact": {
+        "email": "pedro.gomez@globalmeetings.com",
+        "phone": "+1 305 123 7788"
+      },
+      "highlights": [
+        "Cobertura internacional",
+        "Gestión de viajes",
+        "Asesoría en visas y logística"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "María López",
+      "email": "maria.lopez@gmail.com",
+      "password": "EventGo123!",
+      "role": "host",
+      "profileImage": "https://i.pravatar.cc/150?img=57",
+      "phone": "+51 987 654 321",
+      "city": "Miraflores, Lima",
+      "description": "Anfitriona apasionada por crear experiencias memorables para familia y amigos, con especial interés en eventos boutique.",
+      "socialLinks": [
+        { "type": "instagram", "url": "https://instagram.com/maria.host" },
+        { "type": "facebook", "url": "https://facebook.com/mariahost" }
+      ],
+      "metrics": {
+        "eventsOrganized": 6,
+        "rating": 4.7,
+        "customers": 12,
+        "experienceYears": 3
+      },
+      "dashboard": {
+        "totalQuotes": 4,
+        "pendingQuotes": 1,
+        "approvedQuotes": 2,
+        "declinedQuotes": 1
+      },
+      "hostProfile": {
+        "contact": {
+          "email": "maria.lopez@gmail.com",
+          "phone": "+51 987 654 321",
+          "location": "Miraflores, Lima",
+          "company": "Celebrations by María"
+        },
+        "preferences": ["Bodas", "Cumpleaños", "Baby shower"],
+        "recentEvents": [
+          {
+            "id": "recent_event_1",
+            "name": "Boda de María y Juan",
+            "date": "2025-05-20T17:00:00.000Z",
+            "state": "Active"
+          },
+          {
+            "id": "recent_event_2",
+            "name": "Baby Shower Ana & Daniel",
+            "date": "2025-06-08T16:00:00.000Z",
+            "state": "Pending"
+          },
+          {
+            "id": "recent_event_3",
+            "name": "Cumpleaños sorpresa papá",
+            "date": "2025-07-04T20:00:00.000Z",
+            "state": "Approved"
+          }
+        ],
+        "recentOrganizers": [
+          {
+            "id": "2",
+            "name": "Luis Contreras",
+            "specialty": "Wedding & Social Events",
+            "avatar": "https://i.pravatar.cc/150?img=62",
+            "rating": 4.8
+          },
+          {
+            "id": "organizer_4",
+            "name": "Laura Mendoza",
+            "specialty": "Social Events",
+            "avatar": "https://i.pravatar.cc/150?img=56",
+            "rating": 4.8
+          },
+          {
+            "id": "organizer_1",
+            "name": "Julia García",
+            "specialty": "Wedding Specialist",
+            "avatar": "https://i.pravatar.cc/150?img=45",
+            "rating": 4.9
+          }
+        ]
+      },
+      "status": "active",
+      "emailVerified": true,
+      "createdAt": "2025-01-05T12:00:00.000Z",
+      "updatedAt": "2025-04-18T12:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Luis Contreras",
+      "email": "luis.contreras@eventgo.pe",
+      "password": "EventGo123!",
+      "role": "organizer",
+      "profileImage": "https://i.pravatar.cc/150?img=62",
+      "phone": "+51 990 432 109",
+      "city": "Barranco, Lima",
+      "description": "Organizador profesional especializado en bodas, baby showers y eventos corporativos con enfoque creativo.",
+      "socialLinks": [
+        { "type": "linkedin", "url": "https://linkedin.com/in/luiscontreras" },
+        { "type": "instagram", "url": "https://instagram.com/contreras.events" }
+      ],
+      "metrics": {
+        "eventsOrganized": 142,
+        "rating": 4.8,
+        "customers": 118,
+        "experienceYears": 7
+      },
+      "services": [
+        {
+          "id": "svc_1",
+          "name": "Planificación integral de bodas",
+          "description": "Coordinación completa de principio a fin incluyendo proveedores y logística.",
+          "price": "S/. 4,500",
+          "icon": "heart"
+        },
+        {
+          "id": "svc_2",
+          "name": "Diseño y decoración temática",
+          "description": "Creación de ambientes personalizados según estilo y paleta de colores.",
+          "price": "S/. 2,800",
+          "icon": "palette"
+        },
+        {
+          "id": "svc_3",
+          "name": "Coordinación del día del evento",
+          "description": "Equipo experto para asegurar que cada momento se ejecute según el plan.",
+          "price": "S/. 1,900",
+          "icon": "calendar"
+        }
+      ],
+      "albums": [
+        {
+          "id": "alb_1",
+          "title": "Boda en Hacienda La Molina",
+          "description": "Decoración romántica con iluminación cálida y detalles florales pastel.",
+          "cover": "https://images.unsplash.com/photo-1520854221050-0f4caff449fb",
+          "photos": [
+            "https://images.unsplash.com/photo-1520854221050-0f4caff449fb",
+            "https://images.unsplash.com/photo-1520854221050-0f4caff449fb?auto=format&fit=crop&w=900&q=60"
+          ]
+        },
+        {
+          "id": "alb_2",
+          "title": "Baby shower Ana & Daniel",
+          "description": "Ambientación pastel con estaciones de postres, juegos y photobooth.",
+          "cover": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b",
+          "photos": [
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=60"
+          ]
+        }
+      ],
+      "reviews": [
+        {
+          "id": "rev_1",
+          "author": "María & Juan",
+          "authorImage": "https://i.pravatar.cc/100?img=32",
+          "date": "2025-03-25T10:00:00.000Z",
+          "rating": 5,
+          "comment": "Luis hizo realidad nuestra boda soñada, cuidó cada detalle y nos acompañó en todo momento."
+        },
+        {
+          "id": "rev_2",
+          "author": "Ana Rodríguez",
+          "authorImage": "https://i.pravatar.cc/100?img=28",
+          "date": "2025-02-14T13:20:00.000Z",
+          "rating": 4,
+          "comment": "Excelente coordinación y comunicación, el evento salió impecable."
+        }
+      ],
+      "dashboard": {
+        "activeEvents": 5,
+        "eventsThisWeek": 2,
+        "pendingTasks": 7,
+        "tasksToday": 3,
+        "newQuotesWeek": 1,
+        "recentMessages": [
+          {
+            "id": "msg_1",
+            "sender": "María López",
+            "preview": "¿Confirmamos la reunión del lunes?",
+            "time": "Hace 2 horas"
+          },
+          {
+            "id": "msg_2",
+            "sender": "Innovation Corp",
+            "preview": "Adjuntamos el briefing actualizado.",
+            "time": "Ayer"
+          }
+        ]
+      },
+      "status": "active",
+      "emailVerified": true,
+      "createdAt": "2025-01-08T09:30:00.000Z",
+      "updatedAt": "2025-04-19T09:30:00.000Z"
     }
   ]
 }

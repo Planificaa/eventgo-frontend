@@ -47,7 +47,83 @@
     "editProfileButton": "Edit Profile",
     "updateSuccess": "Profile updated successfully",
     "updateError": "Error updating profile",
-    "noDescription": "This organizer has no description yet."
+    "noDescription": "This organizer has no description yet.",
+    "loading": "Loading profile information...",
+    "roles": {
+      "host": "Host",
+      "organizer": "Organizer",
+      "admin": "Administrator"
+    },
+    "actions": {
+      "editProfile": "Edit profile",
+      "manageQuotes": "Manage quotes",
+      "logout": "Log out",
+      "viewAllQuotes": "View all quotes",
+      "viewQuote": "View details",
+      "settings": "Settings",
+      "addService": "Add service",
+      "createAlbum": "Create album"
+    },
+    "sections": {
+      "contactInfo": "Contact info",
+      "preferences": "Event preferences",
+      "recentEvents": "Recent events",
+      "recentOrganizers": "Recent organizers",
+      "quotes": "Quotes",
+      "personalInfo": "Personal information",
+      "description": "Description",
+      "social": "Social networks",
+      "services": "Offered services",
+      "albums": "My albums"
+    },
+    "hostMetrics": {
+      "totalQuotes": "Total quotes",
+      "totalQuotesSubtitle": "Requests sent",
+      "pendingQuotes": "Pending quotes",
+      "pendingQuotesSubtitle": "Waiting for your decision",
+      "approvedQuotes": "Approved quotes",
+      "approvedQuotesSubtitle": "Organizers ready to work",
+      "declinedQuotes": "Declined quotes",
+      "declinedQuotesSubtitle": "Requests dismissed"
+    },
+    "columns": {
+      "organizer": "Organizer",
+      "event": "Event",
+      "date": "Date",
+      "amount": "Amount",
+      "state": "State",
+      "actions": "Actions"
+    },
+    "tabs": {
+      "information": "Information",
+      "services": "Services",
+      "albums": "Albums",
+      "reviews": "Reviews"
+    },
+    "labels": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "city": "City",
+      "photos": "photos"
+    },
+    "empty": {
+      "preferences": "You haven't selected preferences yet.",
+      "events": "You don't have recent events yet.",
+      "organizers": "You haven't worked with any organizer yet.",
+      "quotes": "You haven't requested quotes yet.",
+      "services": "You haven't added services yet.",
+      "albums": "You don't have albums yet.",
+      "reviews": "There are no reviews available.",
+      "description": "No description available.",
+      "notProvided": "Not provided"
+    },
+    "eventStates": {
+      "active": "Active",
+      "pending": "Pending",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
   },
   "albums": {
     "title": "Albums",
@@ -154,7 +230,9 @@
       "send": "Send",
       "cancel": "Cancel",
       "currentState": "Current state",
-      "lastUpdate": "Last update"
+      "lastUpdate": "Last update",
+      "approve": "Approve",
+      "decline": "Decline"
     },
     "preview": {
       "title": "Quote Preview",
@@ -167,19 +245,22 @@
       "tel": "Tel",
       "editAgain": "Edit Again",
       "saveAndSend": "Save and Send"
+    },
+    "messages": {
+      "loadedSuccessfully": "Quotes loaded successfully",
+      "loadError": "Unable to load quotes. Please try again.",
+      "createdSuccessfully": "Quote created successfully",
+      "updatedSuccessfully": "Quote updated successfully",
+      "saveError": "We couldn't save the quote. Please check the information and try again.",
+      "sentSuccessfully": "Quote sent successfully",
+      "sendError": "We couldn't send the quote. Please try again later.",
+      "missingOwner": "You must be authenticated to manage this quote.",
+      "forbiddenQuote": "You don't have permission to access this quote.",
+      "stateApproved": "You approved the quote.",
+      "stateDeclined": "You declined the quote.",
+      "stateChangeError": "We couldn't update the quote state."
     }
   },
-  "messages": {
-  "loadedSuccessfully": "Quotes loaded successfully",
-  "loadError": "Unable to load quotes. Please try again.",
-  "createdSuccessfully": "Quote created successfully",
-  "updatedSuccessfully": "Quote updated successfully",
-  "saveError": "We couldn't save the quote. Please check the information and try again.",
-  "sentSuccessfully": "Quote sent successfully",
-  "sendError": "We couldn't send the quote. Please try again later.",
-  "missingOwner": "You must be authenticated to manage this quote.",
-  "forbiddenQuote": "You don't have permission to access this quote."
-},
   "events": {
     "types": {
       "wedding": "Wedding",
@@ -301,6 +382,9 @@
     "activitySummary": "Your activity summary",
     "seeAll": "See all",
     "viewAll": "View all",
+    "user": {
+      "defaultName": "User"
+    },
     "metrics": {
       "activeEvents": {
         "title": "Active Events",
@@ -317,7 +401,43 @@
     },
     "recentMessages": {
       "title": "Recent Messages",
-      "seeAll": "See all"
+      "seeAll": "See all",
+      "empty": "No recent messages"
+    },
+    "messages": {
+      "loadError": "We couldn't load the dashboard. Please try again."
+    },
+    "host": {
+      "welcome": "Hello, {name}",
+      "subtitle": "Discover organizers and manage your quotes",
+      "actions": {
+        "viewQuotes": "Go to quotes"
+      },
+      "metrics": {
+        "totalQuotes": "Total quotes",
+        "totalQuotesSubtitle": "Requests sent",
+        "pendingQuotes": "Pending quotes",
+        "pendingQuotesSubtitle": "Waiting for your decision",
+        "approvedQuotes": "Approved quotes",
+        "approvedQuotesSubtitle": "Organizers ready",
+        "declinedQuotes": "Declined quotes",
+        "declinedQuotesSubtitle": "Requests dismissed"
+      },
+      "organizerBrowser": {
+        "title": "Explore organizers",
+        "subtitle": "Filter by event type and review their experience",
+        "search": "Search organizers...",
+        "filterPlaceholder": "Filter by category",
+        "allCategories": "All categories",
+        "viewProfile": "View profile",
+        "empty": "No organizers were found for those filters",
+        "details": {
+          "eventTypes": "Event types",
+          "location": "Location",
+          "contact": "Contact details",
+          "highlights": "Highlights"
+        }
+      }
     }
   },
   "settings": {

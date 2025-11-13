@@ -49,6 +49,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { ProfileApiService } from '@/profile-management/application/profile-api.service.js'
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js'
 
 const organizer = ref({
   id: null,
@@ -63,9 +64,19 @@ const organizer = ref({
 
 const organizerInitial = computed(() => organizer.value.name ? organizer.value.name.charAt(0).toUpperCase() : 'O')
 
+const { user, restoreSession } = useAuth()
+
 onMounted(async () => {
   try {
-    const data = await ProfileApiService.getProfile()
+    if (!user.value) {
+      await restoreSession()
+    }
+
+    if (!user.value?.id) {
+      return
+    }
+
+    const data = await ProfileApiService.getProfile(user.value.id)
     organizer.value = data
   } catch (error) {
     console.error('Error cargando perfil de organizador:', error)

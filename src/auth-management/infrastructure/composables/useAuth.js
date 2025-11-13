@@ -17,6 +17,7 @@ export function useAuth() {
 
     // Computed
     isAuthenticated: authStore.isAuthenticated,
+    isHost: authStore.isHost,
     isOrganizer: authStore.isOrganizer,
     isAdmin: authStore.isAdmin,
 

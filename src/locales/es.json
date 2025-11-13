@@ -47,7 +47,83 @@
     "editProfileButton": "Editar Perfil",
     "updateSuccess": "Perfil actualizado con éxito",
     "updateError": "Error al actualizar el perfil",
-    "noDescription": "Este organizador aún no tiene descripción."
+    "noDescription": "Este organizador aún no tiene descripción.",
+    "loading": "Cargando información del perfil...",
+    "roles": {
+      "host": "Anfitrión",
+      "organizer": "Organizador",
+      "admin": "Administrador"
+    },
+    "actions": {
+      "editProfile": "Editar perfil",
+      "manageQuotes": "Gestionar cotizaciones",
+      "logout": "Cerrar sesión",
+      "viewAllQuotes": "Ver todas las cotizaciones",
+      "viewQuote": "Ver detalle",
+      "settings": "Configuración",
+      "addService": "Agregar servicio",
+      "createAlbum": "Crear álbum"
+    },
+    "sections": {
+      "contactInfo": "Información de contacto",
+      "preferences": "Preferencias para eventos",
+      "recentEvents": "Eventos recientes",
+      "recentOrganizers": "Organizadores recientes",
+      "quotes": "Cotizaciones",
+      "personalInfo": "Información personal",
+      "description": "Descripción",
+      "social": "Redes sociales",
+      "services": "Servicios ofrecidos",
+      "albums": "Mis álbumes"
+    },
+    "hostMetrics": {
+      "totalQuotes": "Cotizaciones totales",
+      "totalQuotesSubtitle": "Solicitudes enviadas",
+      "pendingQuotes": "Cotizaciones pendientes",
+      "pendingQuotesSubtitle": "Esperando tu decisión",
+      "approvedQuotes": "Cotizaciones aprobadas",
+      "approvedQuotesSubtitle": "Organizadores listos para trabajar",
+      "declinedQuotes": "Cotizaciones rechazadas",
+      "declinedQuotesSubtitle": "Solicitudes descartadas"
+    },
+    "columns": {
+      "organizer": "Organizador",
+      "event": "Evento",
+      "date": "Fecha",
+      "amount": "Monto",
+      "state": "Estado",
+      "actions": "Acciones"
+    },
+    "tabs": {
+      "information": "Información",
+      "services": "Servicios",
+      "albums": "Álbumes",
+      "reviews": "Reseñas"
+    },
+    "labels": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "city": "Ciudad",
+      "photos": "fotos"
+    },
+    "empty": {
+      "preferences": "Aún no has seleccionado preferencias.",
+      "events": "Todavía no tienes eventos recientes.",
+      "organizers": "Aún no has trabajado con ningún organizador.",
+      "quotes": "Todavía no has solicitado cotizaciones.",
+      "services": "No has agregado servicios aún.",
+      "albums": "No tienes álbumes aún.",
+      "reviews": "No hay reseñas disponibles.",
+      "description": "Sin descripción disponible.",
+      "notProvided": "No especificado"
+    },
+    "eventStates": {
+      "active": "Activo",
+      "pending": "Pendiente",
+      "completed": "Completado",
+      "cancelled": "Cancelado"
+    }
   },
   "albums": {
     "title": "Álbumes",
@@ -195,7 +271,9 @@
       "send": "Enviar",
       "cancel": "Cancelar",
       "currentState": "Estado actual",
-      "lastUpdate": "Última actualización"
+      "lastUpdate": "Última actualización",
+      "approve": "Aprobar",
+      "decline": "Rechazar"
     },
     "preview": {
       "title": "Vista Previa de Cotización",
@@ -208,18 +286,22 @@
       "tel": "Tel",
       "editAgain": "Editar de Nuevo",
       "saveAndSend": "Guardar y Enviar"
+    },
+    "messages": {
+      "loadedSuccessfully": "Cotizaciones cargadas correctamente",
+      "loadError": "No se pudieron cargar las cotizaciones. Inténtalo nuevamente.",
+      "createdSuccessfully": "Cotización creada correctamente",
+      "updatedSuccessfully": "Cotización actualizada correctamente",
+      "saveError": "No pudimos guardar la cotización. Verifica la información e inténtalo otra vez.",
+      "sentSuccessfully": "Cotización enviada correctamente",
+      "sendError": "No pudimos enviar la cotización. Intenta más tarde.",
+      "missingOwner": "Debes iniciar sesión para gestionar esta cotización.",
+      "forbiddenQuote": "No tienes permisos para acceder a esta cotización.",
+      "stateApproved": "Has aprobado la cotización.",
+      "stateDeclined": "Has rechazado la cotización.",
+      "stateChangeError": "No se pudo actualizar el estado de la cotización."
     }
-  }, "messages": {
-  "loadedSuccessfully": "Cotizaciones cargadas correctamente",
-  "loadError": "No se pudieron cargar las cotizaciones. Inténtalo nuevamente.",
-  "createdSuccessfully": "Cotización creada correctamente",
-  "updatedSuccessfully": "Cotización actualizada correctamente",
-  "saveError": "No pudimos guardar la cotización. Verifica la información e inténtalo otra vez.",
-  "sentSuccessfully": "Cotización enviada correctamente",
-  "sendError": "No pudimos enviar la cotización. Intenta más tarde.",
-  "missingOwner": "Debes iniciar sesión para gestionar esta cotización.",
-  "forbiddenQuote": "No tienes permisos para acceder a esta cotización."
-},
+  },
   "events": {
     "types": {
       "wedding": "Boda",
@@ -300,6 +382,9 @@
     "activitySummary": "Resumen de tu actividad",
     "seeAll": "Ver todo",
     "viewAll": "Ver todo",
+    "user": {
+      "defaultName": "Usuario"
+    },
     "metrics": {
       "activeEvents": {
         "title": "Eventos Activos",
@@ -316,7 +401,43 @@
     },
     "recentMessages": {
       "title": "Mensajes Recientes",
-      "seeAll": "Ver todos"
+      "seeAll": "Ver todos",
+      "empty": "No hay mensajes recientes"
+    },
+    "messages": {
+      "loadError": "No se pudo cargar el tablero. Inténtalo nuevamente."
+    },
+    "host": {
+      "welcome": "Hola, {name}",
+      "subtitle": "Encuentra organizadores y gestiona tus cotizaciones",
+      "actions": {
+        "viewQuotes": "Ir a cotizaciones"
+      },
+      "metrics": {
+        "totalQuotes": "Cotizaciones totales",
+        "totalQuotesSubtitle": "Solicitudes enviadas",
+        "pendingQuotes": "Cotizaciones pendientes",
+        "pendingQuotesSubtitle": "Esperando tu decisión",
+        "approvedQuotes": "Cotizaciones aprobadas",
+        "approvedQuotesSubtitle": "Organizadores listos",
+        "declinedQuotes": "Cotizaciones rechazadas",
+        "declinedQuotesSubtitle": "Solicitudes descartadas"
+      },
+      "organizerBrowser": {
+        "title": "Explora organizadores",
+        "subtitle": "Filtra por tipo de evento y revisa su experiencia",
+        "search": "Buscar organizadores...",
+        "filterPlaceholder": "Filtrar por categoría",
+        "allCategories": "Todas las categorías",
+        "viewProfile": "Ver perfil",
+        "empty": "No se encontraron organizadores con esos filtros",
+        "details": {
+          "eventTypes": "Tipos de eventos",
+          "location": "Ubicación",
+          "contact": "Datos de contacto",
+          "highlights": "Destacados"
+        }
+      }
     }
   },
   "settings": {

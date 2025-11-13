@@ -47,6 +47,136 @@
                 <div class="stat-value">{{ profileData.metrics.customers ?? 0 }}</div>
                 <div class="stat-label">Clientes</div>
               </div>
+            </template>
+          </Card>
+          <Card class="metric-card">
+            <template #content>
+              <div class="metric-content">
+                <h3>{{ $t('profile.hostMetrics.approvedQuotes') }}</h3>
+                <p class="metric-value metric-value--success">{{ hostQuoteStats.approved }}</p>
+                <span class="metric-subtitle">{{ $t('profile.hostMetrics.approvedQuotesSubtitle') }}</span>
+              </div>
+            </template>
+          </Card>
+          <Card class="metric-card">
+            <template #content>
+              <div class="metric-content">
+                <h3>{{ $t('profile.hostMetrics.declinedQuotes') }}</h3>
+                <p class="metric-value metric-value--danger">{{ hostQuoteStats.declined }}</p>
+                <span class="metric-subtitle">{{ $t('profile.hostMetrics.declinedQuotesSubtitle') }}</span>
+              </div>
+            </template>
+          </Card>
+        </div>
+
+        <div class="host-profile__grid">
+          <Card class="host-profile__panel">
+            <template #title>{{ $t('profile.sections.recentEvents') }}</template>
+            <template #content>
+              <ul v-if="hostOverview.recentEvents.length" class="panel-list">
+                <li v-for="event in hostOverview.recentEvents" :key="event.id">
+                  <div>
+                    <h4>{{ event.name }}</h4>
+                    <small>{{ formatDate(event.date) }}</small>
+                  </div>
+                  <Tag :value="$t(`profile.eventStates.${event.state.toLowerCase()}`)" :severity="getEventSeverity(event.state)" />
+                </li>
+              </ul>
+              <p v-else class="empty-text">{{ $t('profile.empty.events') }}</p>
+            </template>
+          </Card>
+
+          <Card class="host-profile__panel">
+            <template #title>{{ $t('profile.sections.recentOrganizers') }}</template>
+            <template #content>
+              <ul v-if="hostOverview.recentOrganizers.length" class="panel-list">
+                <li v-for="organizer in hostOverview.recentOrganizers" :key="organizer.id">
+                  <div class="panel-list__identity">
+                    <Avatar
+                      :image="organizer.avatar"
+                      :label="organizer.name.charAt(0)"
+                      size="large"
+                      shape="circle"
+                    />
+                    <div>
+                      <h4>{{ organizer.name }}</h4>
+                      <small>{{ organizer.specialty }}</small>
+                    </div>
+                  </div>
+                  <Rating :modelValue="organizer.rating" :readonly="true" :cancel="false" />
+                </li>
+              </ul>
+              <p v-else class="empty-text">{{ $t('profile.empty.organizers') }}</p>
+            </template>
+          </Card>
+        </div>
+
+        <div class="host-profile__quotes">
+          <div class="host-profile__quotes-header">
+            <h2>{{ $t('profile.sections.quotes') }}</h2>
+            <Button
+              :label="$t('profile.actions.viewAllQuotes')"
+              icon="pi pi-arrow-right"
+              class="p-button-text"
+              @click="goToQuotes"
+            />
+          </div>
+          <DataTable :value="hostQuotes" :loading="quotesLoading" responsiveLayout="scroll">
+            <Column field="organizerName" :header="$t('profile.columns.organizer')" />
+            <Column field="eventName" :header="$t('profile.columns.event')">
+              <template #body="{ data }">
+                <div class="quote-event">
+                  <span class="quote-event__name">{{ data.eventName }}</span>
+                  <small class="quote-event__type">{{ $t(`events.types.${data.eventType.toLowerCase()}`) }}</small>
+                </div>
+              </template>
+            </Column>
+            <Column field="eventDate" :header="$t('profile.columns.date')">
+              <template #body="{ data }">
+                {{ formatDate(data.eventDate) }}
+              </template>
+            </Column>
+            <Column field="total" :header="$t('profile.columns.amount')" />
+            <Column field="state" :header="$t('profile.columns.state')">
+              <template #body="{ data }">
+                <QuoteStateBadge :state="data.state" />
+              </template>
+            </Column>
+            <Column :header="$t('profile.columns.actions')">
+              <template #body="{ data }">
+                <Button
+                  :label="$t('profile.actions.viewQuote')"
+                  icon="pi pi-eye"
+                  text
+                  @click="viewQuoteDetail(data.id)"
+                />
+              </template>
+            </Column>
+            <template #empty>
+              <div class="empty-text">{{ $t('profile.empty.quotes') }}</div>
+            </template>
+          </DataTable>
+        </div>
+      </section>
+    </template>
+
+    <template v-else>
+      <div class="profile-header">
+        <div class="grid grid-nogutter">
+          <div class="col-12 md:col-4 lg:col-3 mb-4 md:mb-0">
+            <div class="profile-avatar-section">
+              <Avatar
+                :image="profileData.profileImage"
+                :label="getInitials(profileData.name)"
+                size="xlarge"
+                shape="circle"
+                class="mb-3"
+              />
+              <h2 class="text-2xl font-bold text-gray-800">{{ profileData.name }}</h2>
+              <p class="text-gray-600 text-sm">{{ profileData.email }}</p>
+              <span class="inline-block mt-2 px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+                {{ getRoleLabel(profileData.role) }}
+              </span>
             </div>
             <div class="col-6 md:col-3">
               <div class="stat-card">
@@ -56,81 +186,88 @@
             </div>
           </div>
         </div>
+
+        <div class="flex flex-wrap gap-2 mt-4">
+          <Button
+            :label="$t('profile.actions.editProfile')"
+            icon="pi pi-pencil"
+            @click="goToEdit"
+            class="p-button-primary"
+          />
+          <Button
+            :label="$t('profile.actions.settings')"
+            icon="pi pi-cog"
+            @click="goToSettings"
+            class="p-button-secondary"
+          />
+          <Button
+            :label="$t('profile.actions.logout')"
+            icon="pi pi-sign-out"
+            @click="handleLogout"
+            class="p-button-danger p-button-outlined"
+          />
+        </div>
       </div>
 
-      <!-- Botones de acción -->
-      <div class="flex flex-wrap gap-2 mt-4">
-        <Button
-          label="Editar Perfil"
-          icon="pi pi-pencil"
-          @click="goToEdit"
-          class="p-button-primary"
-        />
-        <Button
-          label="Configuración"
-          icon="pi pi-cog"
-          @click="goToSettings"
-          class="p-button-secondary"
-        />
-        <Button
-          label="Descargar CV"
-          icon="pi pi-download"
-          class="p-button-secondary"
-        />
-        <Button
-          label="Cerrar Sesión"
-          icon="pi pi-sign-out"
-          @click="handleLogout"
-          class="p-button-danger p-button-outlined"
-        />
-      </div>
-    </div>
+      <div class="profile-content mt-6">
+        <TabView v-model:activeIndex="activeTab" class="profile-tabs">
+          <TabPanel :header="$t('profile.tabs.information')" leftIcon="pi pi-info-circle">
+            <div class="p-4">
+              <div class="grid grid-nogutter gap-4">
+                <div class="col-12 md:col-6">
+                  <div class="info-section">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">{{ $t('profile.sections.personalInfo') }}</h3>
+                    <div class="space-y-3">
+                      <div class="info-item">
+                        <span class="label">{{ $t('profile.labels.name') }}:</span>
+                        <span class="value">{{ profileData.name }}</span>
+                      </div>
+                      <div class="info-item">
+                        <span class="label">{{ $t('profile.labels.email') }}:</span>
+                        <span class="value">{{ profileData.email }}</span>
+                      </div>
+                      <div class="info-item">
+                        <span class="label">{{ $t('profile.labels.phone') }}:</span>
+                        <span class="value">{{ profileData.phone || $t('profile.empty.notProvided') }}</span>
+                      </div>
+                      <div class="info-item">
+                        <span class="label">{{ $t('profile.labels.city') }}:</span>
+                        <span class="value">{{ profileData.city || $t('profile.empty.notProvided') }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-    <!-- Tabs de contenido -->
-    <div class="profile-content mt-6">
-      <TabView v-model:activeIndex="activeTab" class="profile-tabs">
-        <!-- Tab: Información -->
-        <TabPanel header="Información" leftIcon="pi pi-info-circle">
-          <div class="p-4">
-            <div class="grid grid-nogutter gap-4">
-              <div class="col-12 md:col-6">
-                <div class="info-section">
-                  <h3 class="text-lg font-semibold text-gray-800 mb-3">Información Personal</h3>
-                  <div class="space-y-3">
-                    <div class="info-item">
-                      <span class="label">Nombre:</span>
-                      <span class="value">{{ profileData.name }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="label">Email:</span>
-                      <span class="value">{{ profileData.email }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="label">Teléfono:</span>
-                      <span class="value">{{ profileData.phone || 'No especificado' }}</span>
-                    </div>
-                    <div class="info-item">
-                      <span class="label">Ciudad:</span>
-                      <span class="value">{{ profileData.city || 'No especificado' }}</span>
-                    </div>
+                <div class="col-12 md:col-6">
+                  <div class="info-section">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">{{ $t('profile.sections.description') }}</h3>
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                      {{ profileData.description || $t('profile.empty.description') }}
+                    </p>
                   </div>
                 </div>
               </div>
 
-              <div class="col-12 md:col-6">
-                <div class="info-section">
-                  <h3 class="text-lg font-semibold text-gray-800 mb-3">Descripción</h3>
-                  <p class="text-gray-700 text-sm leading-relaxed">
-                    {{ profileData.description || 'Sin descripción disponible' }}
-                  </p>
+              <div class="mt-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">{{ $t('profile.sections.social') }}</h3>
+                <div class="flex flex-wrap gap-3">
+                  <Button
+                    v-for="social in socialLinks"
+                    :key="social.type"
+                    :label="social.type"
+                    :icon="`pi pi-${getSocialIcon(social.type)}`"
+                    class="p-button-secondary p-button-sm"
+                    @click="openSocialLink(social.url)"
+                  />
                 </div>
               </div>
             </div>
+          </TabPanel>
 
-            <!-- Redes sociales -->
-            <div class="mt-6">
-              <h3 class="text-lg font-semibold text-gray-800 mb-3">Redes Sociales</h3>
-              <div class="flex flex-wrap gap-3">
+          <TabPanel :header="$t('profile.tabs.services')" leftIcon="pi pi-briefcase">
+            <div class="p-4">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">{{ $t('profile.sections.services') }}</h3>
                 <Button
                   v-for="social in socialLinks"
                   :key="social.type"
@@ -140,116 +277,100 @@
                   @click="openSocialLink(social.url)"
                 />
               </div>
-            </div>
-          </div>
-        </TabPanel>
 
-        <!-- Tab: Servicios -->
-        <TabPanel header="Servicios" leftIcon="pi pi-briefcase">
-          <div class="p-4">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-semibold text-gray-800">Servicios Ofrecidos</h3>
-              <Button
-                label="Agregar Servicio"
-                icon="pi pi-plus"
-                class="p-button-primary p-button-sm"
-              />
-            </div>
-
-            <div v-if="services.length" class="grid grid-nogutter gap-4">
-              <div v-for="service in services" :key="service.id" class="col-12 md:col-6 lg:col-4">
-                <Card class="service-card">
-                  <template #header>
-                    <div class="service-icon">
-                      <i :class="`pi pi-${service.icon}`"></i>
-                    </div>
-                  </template>
-                  <template #title>{{ service.name }}</template>
-                  <template #content>
-                    <p class="text-sm text-gray-600 mb-2">{{ service.description }}</p>
-                    <div class="flex justify-between items-center">
-                      <span class="font-semibold text-blue-600">S/. {{ service.price }}</span>
-                      <Button
-                        icon="pi pi-trash"
-                        class="p-button-rounded p-button-danger p-button-text p-button-sm"
-                      />
-                    </div>
-                  </template>
-                </Card>
-              </div>
-            </div>
-            <div v-else class="text-center py-8">
-              <p class="text-gray-500">No has agregado servicios aún</p>
-            </div>
-          </div>
-        </TabPanel>
-
-        <!-- Tab: Álbumes -->
-        <TabPanel header="Álbumes" leftIcon="pi pi-images">
-          <div class="p-4">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-semibold text-gray-800">Mis Álbumes</h3>
-              <Button
-                label="Crear Álbum"
-                icon="pi pi-plus"
-                class="p-button-primary p-button-sm"
-                @click="goToCreateAlbum"
-              />
-            </div>
-
-            <div v-if="albums.length" class="grid grid-nogutter gap-4">
-              <div v-for="album in albums" :key="album.id" class="col-12 sm:col-6 md:col-4 lg:col-3">
-                <Card class="album-card cursor-pointer hover:shadow-lg transition-shadow" @click="goToAlbum(album.id)">
-                  <template #header>
-                    <img
-                      v-if="album.cover"
-                      :src="album.cover"
-                      :alt="album.title"
-                      class="w-full h-40 object-cover"
-                    />
-                    <div v-else class="w-full h-40 bg-gray-200 flex items-center justify-center">
-                      <i class="pi pi-image text-gray-400 text-2xl"></i>
-                    </div>
-                  </template>
-                  <template #title>{{ album.title }}</template>
-                  <template #content>
-                    <p class="text-sm text-gray-600 line-clamp-2">{{ album.description }}</p>
-                    <small class="text-gray-500">{{ album.photos?.length || 0 }} fotos</small>
-                  </template>
-                </Card>
-              </div>
-            </div>
-            <div v-else class="text-center py-8">
-              <p class="text-gray-500">No tienes álbumes aún</p>
-            </div>
-          </div>
-        </TabPanel>
-
-        <!-- Tab: Reseñas -->
-        <TabPanel header="Reseñas" leftIcon="pi pi-star">
-          <div class="p-4">
-            <div v-if="reviews.length" class="space-y-4">
-              <div v-for="review in reviews" :key="review.id" class="review-card">
-                <div class="flex justify-between items-start mb-2">
-                  <div class="flex items-center gap-2">
-                    <Avatar :image="review.authorImage" size="small" shape="circle" />
-                    <div>
-                      <p class="font-semibold text-gray-800">{{ review.author }}</p>
-                      <small class="text-gray-500">{{ formatDate(review.date) }}</small>
-                    </div>
-                  </div>
-                  <Rating v-model="review.rating" :readonly="true" />
+              <div v-if="services.length" class="grid grid-nogutter gap-4">
+                <div v-for="service in services" :key="service.id" class="col-12 md:col-6 lg:col-4">
+                  <Card class="service-card">
+                    <template #header>
+                      <div class="service-icon">
+                        <i :class="`pi pi-${service.icon || 'briefcase'}`"></i>
+                      </div>
+                    </template>
+                    <template #title>{{ service.name }}</template>
+                    <template #content>
+                      <p class="text-sm text-gray-600 mb-2">{{ service.description }}</p>
+                      <div class="flex justify-between items-center">
+                        <span class="font-semibold text-blue-600">{{ service.price }}</span>
+                        <Button
+                          icon="pi pi-trash"
+                          class="p-button-rounded p-button-danger p-button-text p-button-sm"
+                        />
+                      </div>
+                    </template>
+                  </Card>
                 </div>
-                <p class="text-gray-700 text-sm">{{ review.comment }}</p>
+              </div>
+              <div v-else class="text-center py-8">
+                <p class="text-gray-500">{{ $t('profile.empty.services') }}</p>
               </div>
             </div>
-            <div v-else class="text-center py-8">
-              <p class="text-gray-500">No hay reseñas aún</p>
+          </TabPanel>
+
+          <TabPanel :header="$t('profile.tabs.albums')" leftIcon="pi pi-images">
+            <div class="p-4">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">{{ $t('profile.sections.albums') }}</h3>
+                <Button
+                  :label="$t('profile.actions.createAlbum')"
+                  icon="pi pi-plus"
+                  class="p-button-primary p-button-sm"
+                  @click="goToCreateAlbum"
+                />
+              </div>
+
+              <div v-if="albums.length" class="grid grid-nogutter gap-4">
+                <div v-for="album in albums" :key="album.id" class="col-12 sm:col-6 md:col-4 lg:col-3">
+                  <Card class="album-card cursor-pointer hover:shadow-lg transition-shadow" @click="goToAlbum(album.id)">
+                    <template #header>
+                      <img
+                        v-if="album.cover"
+                        :src="album.cover"
+                        :alt="album.title"
+                        class="w-full h-40 object-cover"
+                      />
+                      <div v-else class="w-full h-40 bg-gray-200 flex items-center justify-center">
+                        <i class="pi pi-image text-gray-400 text-2xl"></i>
+                      </div>
+                    </template>
+                    <template #title>{{ album.title }}</template>
+                    <template #content>
+                      <p class="text-sm text-gray-600 line-clamp-2">{{ album.description }}</p>
+                      <small class="text-gray-500">{{ album.photos?.length || 0 }} {{ $t('profile.labels.photos') }}</small>
+                    </template>
+                  </Card>
+                </div>
+              </div>
+              <div v-else class="text-center py-8">
+                <p class="text-gray-500">{{ $t('profile.empty.albums') }}</p>
+              </div>
             </div>
-          </div>
-        </TabPanel>
-      </TabView>
-    </div>
+          </TabPanel>
+
+          <TabPanel :header="$t('profile.tabs.reviews')" leftIcon="pi pi-star">
+            <div class="p-4">
+              <div v-if="reviews.length" class="space-y-4">
+                <div v-for="review in reviews" :key="review.id" class="review-card">
+                  <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center gap-2">
+                      <Avatar :image="review.authorImage" size="small" shape="circle" />
+                      <div>
+                        <p class="font-semibold text-gray-800">{{ review.author }}</p>
+                        <small class="text-gray-500">{{ formatDate(review.date) }}</small>
+                      </div>
+                    </div>
+                    <Rating :modelValue="review.rating" :readonly="true" :cancel="false" />
+                  </div>
+                  <p class="text-gray-700 text-sm">{{ review.comment }}</p>
+                </div>
+              </div>
+              <div v-else class="text-center py-8">
+                <p class="text-gray-500">{{ $t('profile.empty.reviews') }}</p>
+              </div>
+            </div>
+          </TabPanel>
+        </TabView>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -341,7 +462,6 @@ watch(user, () => {
 
 const socialLinks = computed(() => profileData.value.socialLinks);
 
-// Métodos
 const getInitials = (name) => {
   if (!name) return '';
   return name
@@ -349,17 +469,17 @@ const getInitials = (name) => {
     .filter(Boolean)
     .map((part) => part[0])
     .join('')
-    .toUpperCase();
-};
+    .toUpperCase()
+}
 
 const getRoleLabel = (role) => {
   const labels = {
     host: 'Anfitrión',
     organizer: 'Organizador',
     admin: 'Administrador',
-  };
-  return labels[role] || role;
-};
+  }
+  return labels[role] || role
+}
 
 const getSocialIcon = (type) => {
   const icons = {
@@ -367,33 +487,47 @@ const getSocialIcon = (type) => {
     facebook: 'facebook',
     twitter: 'twitter',
     linkedin: 'linkedin',
-  };
-  return icons[type] || 'link';
-};
+  }
+  return icons[type] || 'link'
+}
 
 const formatDate = (date) => {
+  if (!date) return ''
   return new Date(date).toLocaleDateString('es-ES', {
     year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
+    month: 'short',
+    day: '2-digit',
+  })
+}
+
+const getEventSeverity = (state) => {
+  const normalized = (state || '').toLowerCase()
+  if (normalized === 'activo' || normalized === 'active') return 'success'
+  if (normalized === 'pendiente' || normalized === 'pending') return 'warning'
+  if (normalized === 'finalizado' || normalized === 'completed') return 'info'
+  if (normalized === 'cancelado' || normalized === 'cancelled') return 'danger'
+  return 'info'
+}
 
 const goToEdit = () => {
-  router.push('/profile/edit');
-};
+  router.push('/profile/edit')
+}
 
 const goToSettings = () => {
-  router.push('/settings');
-};
+  router.push('/settings')
+}
 
 const goToCreateAlbum = () => {
-  router.push('/profile/albums/create');
-};
+  router.push('/profile/albums/create')
+}
 
 const goToAlbum = (id) => {
-  router.push(`/profile/albums/${id}`);
-};
+  router.push(`/profile/albums/${id}`)
+}
+
+const goToQuotes = () => {
+  router.push({ name: 'quotes' })
+}
 
 const openSocialLink = (url) => {
   if (!url) return;
@@ -401,164 +535,316 @@ const openSocialLink = (url) => {
 };
 
 const handleLogout = async () => {
-  await logout();
-  router.push('/login');
-};
+  await logout()
+  router.push('/login')
+}
 </script>
 
 <style scoped>
 .profile-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 70px);
+}
+
+.alert {
+  margin-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+.alert-info {
+  background: #e0f2fe;
+  color: #0c4a6e;
+}
+
+.alert-error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.host-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.host-profile__card {
+  border-radius: 18px;
+  border: none;
+  box-shadow: 0 16px 40px rgba(28, 37, 65, 0.08);
+}
+
+.host-profile__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.host-profile__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.host-profile__name {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1c2541;
+}
+
+.host-profile__role {
+  margin: 0;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.host-profile__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.host-profile__details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.host-profile__contact ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  color: #475569;
+}
+
+.host-profile__contact i {
+  margin-right: 0.5rem;
+  color: #3a506b;
+}
+
+.preferences-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.empty-text {
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.host-profile__metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.metric-card {
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(28, 37, 65, 0.08);
+}
+
+.metric-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metric-content h3 {
+  margin: 0;
+  color: #1c2541;
+  font-size: 1rem;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.metric-value--primary {
+  color: #3a506b;
+}
+
+.metric-value--warning {
+  color: #f59e0b;
+}
+
+.metric-value--success {
+  color: #22c55e;
+}
+
+.metric-value--danger {
+  color: #ef4444;
+}
+
+.metric-subtitle {
+  color: #94a3b8;
+}
+
+.host-profile__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.host-profile__panel {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 12px 28px rgba(28, 37, 65, 0.07);
+}
+
+.panel-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.panel-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.panel-list__identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.host-profile__quotes {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 16px 32px rgba(28, 37, 65, 0.08);
+}
+
+.host-profile__quotes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.quote-event {
+  display: flex;
+  flex-direction: column;
+}
+
+.quote-event__name {
+  font-weight: 600;
+  color: #1c2541;
+}
+
+.quote-event__type {
+  color: #64748b;
 }
 
 .profile-header {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 16px 32px rgba(28, 37, 65, 0.08);
 }
 
 .profile-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
 
 .stat-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 8px;
-  padding: 1.5rem;
+  background: #f1f5f9;
+  border-radius: 14px;
+  padding: 1.25rem;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
 }
 
 .stat-value {
   font-size: 1.75rem;
-  font-weight: bold;
+  font-weight: 700;
+  color: #1c2541;
 }
 
 .stat-label {
-  font-size: 0.875rem;
-  opacity: 0.9;
-  margin-top: 0.5rem;
+  color: #64748b;
 }
 
 .profile-content {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 16px 32px rgba(28, 37, 65, 0.08);
 }
 
 .info-section {
   background: #f8fafc;
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .info-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
 }
 
-.info-item:last-child {
-  border-bottom: none;
-}
-
-.info-item .label {
+.label {
   font-weight: 600;
-  color: #64748b;
-  font-size: 0.875rem;
-}
-
-.info-item .value {
-  color: #1e293b;
-  font-weight: 500;
 }
 
 .service-card {
-  height: 100%;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.service-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(28, 37, 65, 0.07);
 }
 
 .service-icon {
-  width: 100%;
-  height: 80px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 2rem;
+  height: 56px;
+  font-size: 1.5rem;
+  color: #3a506b;
 }
 
 .album-card {
-  height: 100%;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.album-card:hover {
-  transform: translateY(-4px);
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(28, 37, 65, 0.07);
 }
 
 .review-card {
   background: #f8fafc;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border-left: 4px solid #667eea;
-}
-
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-:deep(.p-tabview) {
-  border: none;
-}
-
-:deep(.p-tabview .p-tabview-nav) {
-  background: #f8fafc;
-  border-bottom: 2px solid #e2e8f0;
-}
-
-:deep(.p-tabview .p-tabview-nav .p-tabview-nav-link) {
-  color: #64748b;
-  border: none;
-}
-
-:deep(.p-tabview .p-tabview-nav .p-tabview-nav-link.p-tabview-selected) {
-  color: #667eea;
-  border-bottom: 2px solid #667eea;
+  border-radius: 16px;
+  padding: 1.25rem;
 }
 
 @media (max-width: 768px) {
   .profile-container {
-    padding: 1rem;
-  }
-
-  .profile-header {
     padding: 1.5rem;
   }
 
-  .stat-card {
-    padding: 1rem;
+  .host-profile__actions {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .stat-value {
-    font-size: 1.5rem;
+  .host-profile__metrics {
+    grid-template-columns: 1fr 1fr;
   }
 }
 </style>
