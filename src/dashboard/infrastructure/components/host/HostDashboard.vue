@@ -1,19 +1,21 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import Skeleton from 'primevue/skeleton';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import Card from 'primevue/card';
-import Avatar from 'primevue/avatar';
-import Tag from 'primevue/tag';
 import { useToast } from 'primevue/usetoast';
 
 import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
 import { ProfileApiService } from '@/profile-management/application/profile-api.service.js';
+import { QuoteApiService } from '@/quote-management/application/services/quote-api.service.js';
+import { QuoteOrder } from '@/quote-management/domain/model';
 
+import HostDashboardSidebar from './HostDashboardSidebar.vue';
+import HostHeroFilters from './HostHeroFilters.vue';
+import HostQuoteMetrics from './HostQuoteMetrics.vue';
+import HostOrganizerBrowser from './HostOrganizerBrowser.vue';
 import HostOrganizerDialog from './HostOrganizerDialog.vue';
 
+const router = useRouter();
 const { t } = useI18n();
 const toast = useToast();
 const { user, restoreSession, isHost } = useAuth();
@@ -28,6 +30,8 @@ const filtersExpanded = ref(true);
 const selectedOrganizer = ref(null);
 const organizerDialogVisible = ref(false);
 const hostDataLoaded = ref(false);
+const quoteStats = ref({ total: 0, approved: 0, pending: 0, declined: 0 });
+const activeSidebarItem = ref('organizers');
 
 const ensureSession = async () => {
   if (!user.value) {
@@ -95,14 +99,39 @@ const resetFilters = () => {
   selectedCategory.value = 'all';
 };
 
-const categoryLabel = (category) =>
-  category === 'all'
-    ? t('dashboard.host.organizerBrowser.allCategories')
-    : category;
-
 const openOrganizerProfile = (organizer) => {
   selectedOrganizer.value = organizer;
   organizerDialogVisible.value = true;
+};
+
+const navigateToQuotes = () => {
+  router.push({ name: 'quotes' }).catch(() => {
+    toast.add({
+      severity: 'warn',
+      summary: t('common.warning'),
+      detail: t('dashboard.host.messages.unableToNavigateQuotes'),
+      life: 3000,
+    });
+  });
+};
+
+const deriveQuoteStats = (quotes = []) => {
+  const stats = quotes.reduce(
+    (acc, quoteOrder) => {
+      acc.total += 1;
+      if (quoteOrder.state === QuoteOrder.STATES.APPROVED) {
+        acc.approved += 1;
+      } else if (quoteOrder.state === QuoteOrder.STATES.PENDING) {
+        acc.pending += 1;
+      } else if (quoteOrder.state === QuoteOrder.STATES.DECLINED) {
+        acc.declined += 1;
+      }
+      return acc;
+    },
+    { total: 0, approved: 0, pending: 0, declined: 0 },
+  );
+
+  quoteStats.value = stats;
 };
 
 const loadHostDashboard = async () => {
@@ -111,7 +140,10 @@ const loadHostDashboard = async () => {
   try {
     await ensureSession();
 
-    const organizersResponse = await ProfileApiService.getAll();
+    const [organizersResponse, quotesResponse] = await Promise.all([
+      ProfileApiService.getAll(),
+      QuoteApiService.getAll(),
+    ]);
 
     const normalizedOrganizers = Array.isArray(organizersResponse)
       ? organizersResponse.map((organizer) => ({
@@ -133,6 +165,19 @@ const loadHostDashboard = async () => {
 
     hostOrganizers.value = normalizedOrganizers;
     currentPage.value = 1;
+
+    const hostId = user.value?.id ? String(user.value.id) : null;
+    const hostQuotes = Array.isArray(quotesResponse)
+      ? quotesResponse
+          .map((data) => QuoteOrder.fromJSON(data))
+          .filter((quoteOrder) => {
+            const ownerId = quoteOrder.ownerId ? String(quoteOrder.ownerId) : null;
+            return ownerId && hostId && ownerId === hostId;
+          })
+      : [];
+
+    deriveQuoteStats(hostQuotes);
+
     hostDataLoaded.value = true;
   } catch (error) {
     console.error('Error loading host dashboard:', error);
@@ -190,176 +235,68 @@ const goToNextPage = () => {
     currentPage.value += 1;
   }
 };
+
+const handleSidebarSelection = (itemId) => {
+  activeSidebarItem.value = itemId;
+  if (itemId === 'quotes') {
+    navigateToQuotes();
+  }
+};
 </script>
 
 <template>
   <div class="host-dashboard">
-    <aside class="host-dashboard__sidebar">
-      <div class="sidebar-brand">EVENTIFY</div>
-      <nav class="sidebar-nav">
-        <button class="sidebar-nav__item sidebar-nav__item--active" type="button">
-          <i class="pi pi-search" />
-          <span>{{ t('dashboard.host.sidebar.browseOrganizers') }}</span>
-        </button>
-        <button class="sidebar-nav__item" type="button">
-          <i class="pi pi-calendar" />
-          <span>{{ t('dashboard.host.sidebar.myEvents') }}</span>
-        </button>
-        <button class="sidebar-nav__item" type="button">
-          <i class="pi pi-send" />
-          <span>{{ t('dashboard.host.sidebar.quotes') }}</span>
-        </button>
-        <button class="sidebar-nav__item" type="button">
-          <i class="pi pi-comments" />
-          <span>{{ t('dashboard.host.sidebar.messages') }}</span>
-        </button>
-      </nav>
-    </aside>
+    <HostDashboardSidebar
+      :active-item="activeSidebarItem"
+      @select="handleSidebarSelection"
+    />
 
     <section class="host-dashboard__main">
-      <div class="host-dashboard__hero">
-        <div class="hero-copy">
-          <h2>{{ t('dashboard.host.hero.title') }}</h2>
-          <p>{{ t('dashboard.host.hero.subtitle') }}</p>
-        </div>
-        <div class="hero-search">
-          <span class="p-input-icon-left search-input">
-            <i class="pi pi-search" />
-            <InputText
-              :modelValue="searchTerm"
-              :placeholder="t('dashboard.host.hero.searchPlaceholder')"
-              @update:modelValue="(value) => (searchTerm.value = value)"
-            />
-          </span>
-          <Button
-            class="filters-toggle"
-            outlined
-            icon="pi pi-filter"
-            :label="t('dashboard.host.hero.filters')"
-            @click="toggleFilters"
-          />
-          <Button
-            class="clear-filters"
-            text
-            icon="pi pi-times"
-            :label="t('dashboard.host.hero.clearFilters')"
-            :disabled="!canClearFilters"
-            @click="resetFilters"
-          />
-        </div>
-        <div
-          :class="[
-            'host-dashboard__filters',
-            { 'host-dashboard__filters--collapsed': !filtersExpanded },
-          ]"
-        >
-          <button
-            v-for="category in hostCategories"
-            :key="category"
-            class="filters-chip"
-            :class="{ 'filters-chip--active': selectedCategory === category }"
-            type="button"
-            @click="selectedCategory = category"
-          >
-            {{ categoryLabel(category) }}
-          </button>
-        </div>
-      </div>
+      <HostHeroFilters
+        :search-term="searchTerm"
+        :selected-category="selectedCategory"
+        :categories="hostCategories"
+        :filters-expanded="filtersExpanded"
+        :can-clear-filters="canClearFilters"
+        @update:searchTerm="(value) => (searchTerm.value = value)"
+        @update:selectedCategory="(value) => (selectedCategory.value = value)"
+        @toggle-filters="toggleFilters"
+        @reset-filters="resetFilters"
+      />
 
-      <div class="host-dashboard__content">
-        <div
-          v-if="isLoading"
-          class="host-dashboard__grid host-dashboard__grid--loading"
-        >
-          <Skeleton
-            v-for="index in itemsPerPage"
-            :key="`organizer-skeleton-${index}`"
-            height="260px"
-            borderRadius="20px"
-          />
-        </div>
+      <HostQuoteMetrics :stats="quoteStats" @view-quotes="navigateToQuotes" />
 
-        <div v-else-if="paginatedOrganizers.length" class="host-dashboard__grid">
-          <Card
-            v-for="organizer in paginatedOrganizers"
-            :key="organizer.id"
-            class="organizer-card"
-          >
-            <template #content>
-              <div class="organizer-card__header">
-                <Avatar
-                  :image="organizer.avatar"
-                  :label="organizer.name?.charAt(0)"
-                  size="large"
-                  shape="circle"
-                />
-                <div>
-                  <h3 class="organizer-name">{{ organizer.name }}</h3>
-                  <p v-if="organizer.location" class="organizer-location">
-                    <i class="pi pi-map-marker" />
-                    <span>{{ organizer.location }}</span>
-                  </p>
-                </div>
-              </div>
-              <div class="organizer-card__body">
-                <p v-if="organizer.specialty" class="organizer-specialty">
-                  {{ organizer.specialty }}
-                </p>
-                <div class="organizer-rating">
-                  <i class="pi pi-star-fill" />
-                  <span>{{ Number(organizer.rating || 0).toFixed(1) }}</span>
-                </div>
-                <p v-if="organizer.description" class="organizer-description">
-                  {{ organizer.description }}
-                </p>
-                <div v-if="organizer.eventTypes?.length" class="organizer-tags">
-                  <Tag
-                    v-for="type in organizer.eventTypes"
-                    :key="type"
-                    severity="info"
-                    :value="type"
-                    rounded
-                  />
-                </div>
-              </div>
-              <div class="organizer-card__footer">
-                <Button
-                  class="view-profile-btn"
-                  :label="t('dashboard.host.organizerBrowser.viewProfile')"
-                  @click="openOrganizerProfile(organizer)"
-                />
-              </div>
-            </template>
-          </Card>
-        </div>
-
-        <div v-else-if="hostDataLoaded" class="host-dashboard__empty">
-          <i class="pi pi-users" />
-          <p>{{ t('dashboard.host.organizerBrowser.empty') }}</p>
-        </div>
-      </div>
+      <HostOrganizerBrowser
+        :organizers="paginatedOrganizers"
+        :loading="isLoading"
+        :data-loaded="hostDataLoaded"
+        :skeleton-count="itemsPerPage"
+        @view-profile="openOrganizerProfile"
+      />
 
       <div
         v-if="hostDataLoaded && filteredOrganizers.length > 0 && totalPages > 1"
         class="host-dashboard__pagination"
       >
-        <Button
-          icon="pi pi-chevron-left"
-          rounded
-          text
+        <button
+          class="pagination-button"
+          type="button"
           :disabled="currentPage === 1"
           @click="goToPreviousPage"
-        />
+        >
+          <i class="pi pi-chevron-left" />
+        </button>
         <span class="pagination-label">
           {{ t('dashboard.host.pagination.label', { page: currentPage, total: totalPages }) }}
         </span>
-        <Button
-          icon="pi pi-chevron-right"
-          rounded
-          text
+        <button
+          class="pagination-button"
+          type="button"
           :disabled="currentPage === totalPages"
           @click="goToNextPage"
-        />
+        >
+          <i class="pi pi-chevron-right" />
+        </button>
       </div>
     </section>
 
@@ -377,59 +314,6 @@ const goToNextPage = () => {
   align-items: flex-start;
 }
 
-.host-dashboard__sidebar {
-  width: 240px;
-  background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
-  color: #ffffff;
-  border-radius: 24px;
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
-}
-
-.sidebar-brand {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-}
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.sidebar-nav__item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.9rem 1rem;
-  border: none;
-  border-radius: 14px;
-  background: transparent;
-  color: #d1d5db;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.sidebar-nav__item i {
-  font-size: 1.1rem;
-}
-
-.sidebar-nav__item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-}
-
-.sidebar-nav__item--active {
-  background: rgba(99, 102, 241, 0.25);
-  color: #ffffff;
-}
-
 .host-dashboard__main {
   flex: 1;
   background: #ffffff;
@@ -441,208 +325,41 @@ const goToNextPage = () => {
   box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
 }
 
-.host-dashboard__hero {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.hero-copy h2 {
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #111827;
-}
-
-.hero-copy p {
-  margin: 0;
-  color: #6b7280;
-  font-size: 1rem;
-}
-
-.hero-search {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.search-input {
-  flex: 1 1 320px;
-}
-
-.search-input :deep(input) {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
-  border-radius: 14px;
-  border: 1px solid #e5e7eb;
-  font-size: 0.95rem;
-}
-
-.filters-toggle,
-.clear-filters {
-  white-space: nowrap;
-}
-
-.host-dashboard__filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.host-dashboard__filters--collapsed {
-  display: none;
-}
-
-.filters-chip {
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  border: 1px solid #e5e7eb;
-  background: #f9fafb;
-  color: #4b5563;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.filters-chip--active {
-  background: #4f46e5;
-  border-color: #4f46e5;
-  color: #ffffff;
-  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.35);
-}
-
-.host-dashboard__content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.host-dashboard__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-}
-
-.host-dashboard__grid--loading {
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.organizer-card {
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.12);
-  border: none;
-}
-
-.organizer-card__header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.organizer-name {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #111827;
-}
-
-.organizer-location {
-  margin: 0.25rem 0 0;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: #6b7280;
-  font-size: 0.95rem;
-}
-
-.organizer-location i {
-  font-size: 0.9rem;
-}
-
-.organizer-card__body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  color: #4b5563;
-}
-
-.organizer-specialty {
-  margin: 0;
-  font-weight: 600;
-  color: #4f46e5;
-}
-
-.organizer-rating {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-weight: 600;
-  color: #f59e0b;
-}
-
-.organizer-rating i {
-  font-size: 1rem;
-}
-
-.organizer-description {
-  margin: 0;
-  line-height: 1.5;
-}
-
-.organizer-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.organizer-card__footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1.25rem;
-}
-
-.view-profile-btn {
-  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
-  border: none;
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.view-profile-btn:hover {
-  background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
-}
-
-.host-dashboard__empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 3rem 1.5rem;
-  border-radius: 18px;
-  background: #f9fafb;
-  color: #6b7280;
-  text-align: center;
-}
-
-.host-dashboard__empty i {
-  font-size: 2rem;
-  color: #4f46e5;
-}
-
 .host-dashboard__pagination {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pagination-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.pagination-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-button:not(:disabled):hover {
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+  color: #ffffff;
 }
 
 .pagination-label {
   font-weight: 600;
-  color: #4b5563;
+  color: #1f2937;
 }
 
 @media (max-width: 1024px) {
@@ -650,49 +367,8 @@ const goToNextPage = () => {
     flex-direction: column;
   }
 
-  .host-dashboard__sidebar {
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .sidebar-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .sidebar-nav__item {
-    flex: 1 1 calc(50% - 0.5rem);
-  }
-}
-
-@media (max-width: 768px) {
   .host-dashboard__main {
     padding: 1.5rem;
-  }
-
-  .hero-copy h2 {
-    font-size: 1.6rem;
-  }
-
-  .filters-toggle {
-    display: inline-flex;
-  }
-
-  .host-dashboard__filters--collapsed {
-    display: none;
-  }
-}
-
-@media (min-width: 769px) {
-  .filters-toggle {
-    display: none;
-  }
-
-  .host-dashboard__filters--collapsed {
-    display: flex;
   }
 }
 </style>

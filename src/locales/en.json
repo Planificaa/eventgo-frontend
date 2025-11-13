@@ -22,6 +22,7 @@
     "noData": "No data available",
     "back": "Back",
     "cancel": "Cancel",
+    "warning": "Warning",
     "add": "Add",
     "save": "Save",
     "edit": "Edit",
@@ -422,6 +423,9 @@
         "searchPlaceholder": "Search by name, event type, city...",
         "filters": "Filters",
         "clearFilters": "Clear filters"
+      },
+      "messages": {
+        "unableToNavigateQuotes": "We couldn't open the quotes section. Please try again."
       },
       "pagination": {
         "label": "Page {page} of {total}"

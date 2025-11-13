@@ -4,9 +4,6 @@ import { useI18n } from 'vue-i18n';
 import Card from 'primevue/card';
 import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
-import Dropdown from 'primevue/dropdown';
-import InputText from 'primevue/inputtext';
-import Rating from 'primevue/rating';
 import Skeleton from 'primevue/skeleton';
 import Tag from 'primevue/tag';
 
@@ -23,77 +20,36 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  categories: {
-    type: Array,
-    default: () => [],
-  },
-  searchTerm: {
-    type: String,
-    default: '',
-  },
-  selectedCategory: {
-    type: String,
-    default: 'all',
+  skeletonCount: {
+    type: Number,
+    default: 6,
   },
 });
 
-const emit = defineEmits([
-  'update:searchTerm',
-  'update:selectedCategory',
-  'view-profile',
-]);
+const emit = defineEmits(['view-profile']);
 
 const { t } = useI18n();
 
-const hasOrganizers = computed(
-  () => props.dataLoaded && props.organizers.length > 0,
+const showEmptyState = computed(
+  () => props.dataLoaded && !props.loading && props.organizers.length === 0,
 );
 </script>
 
 <template>
   <section class="organizer-browser">
-    <div class="browser-header">
-      <div>
-        <h2 class="section-title">{{ t('dashboard.host.organizerBrowser.title') }}</h2>
-        <p class="section-subtitle">{{ t('dashboard.host.organizerBrowser.subtitle') }}</p>
-      </div>
-      <div class="browser-filters">
-        <span class="p-input-icon-left search-wrapper">
-          <i class="pi pi-search" />
-          <InputText
-            :modelValue="props.searchTerm"
-            :placeholder="t('dashboard.host.organizerBrowser.search')"
-            @update:modelValue="(value) => emit('update:searchTerm', value)"
-          />
-        </span>
-        <Dropdown
-          :modelValue="props.selectedCategory"
-          :options="props.categories"
-          :placeholder="t('dashboard.host.organizerBrowser.filterPlaceholder')"
-          optionLabel=""
-          class="category-dropdown"
-          @update:modelValue="(value) => emit('update:selectedCategory', value)"
-        >
-          <template #value="{ value }">
-            <span>{{ value === 'all' ? t('dashboard.host.organizerBrowser.allCategories') : value }}</span>
-          </template>
-          <template #option="{ option }">
-            <span>{{ option === 'all' ? t('dashboard.host.organizerBrowser.allCategories') : option }}</span>
-          </template>
-        </Dropdown>
-      </div>
-    </div>
-
-    <div v-if="props.loading" class="organizer-grid organizer-grid--loading">
+    <div
+      v-if="props.loading"
+      class="organizer-browser__grid organizer-browser__grid--loading"
+    >
       <Skeleton
-        v-for="index in 3"
+        v-for="index in props.skeletonCount"
         :key="`organizer-skeleton-${index}`"
         height="260px"
-        borderRadius="16px"
+        borderRadius="20px"
       />
     </div>
 
-    <div v-else-if="hasOrganizers" class="organizer-grid">
+    <div v-else-if="props.organizers.length" class="organizer-browser__grid">
       <Card
         v-for="organizer in props.organizers"
         :key="organizer.id"
@@ -103,22 +59,30 @@ const hasOrganizers = computed(
           <div class="organizer-card__header">
             <Avatar
               :image="organizer.avatar"
-              :label="organizer.name.charAt(0)"
+              :label="organizer.name?.charAt(0)"
               size="large"
               shape="circle"
             />
             <div>
               <h3 class="organizer-name">{{ organizer.name }}</h3>
-              <p class="organizer-specialty">{{ organizer.specialty }}</p>
+              <p v-if="organizer.location" class="organizer-location">
+                <i class="pi pi-map-marker" />
+                <span>{{ organizer.location }}</span>
+              </p>
             </div>
           </div>
           <div class="organizer-card__body">
+            <p v-if="organizer.specialty" class="organizer-specialty">
+              {{ organizer.specialty }}
+            </p>
             <div class="organizer-rating">
-              <Rating :modelValue="organizer.rating" :readonly="true" :cancel="false" />
-              <span class="rating-value">{{ organizer.rating.toFixed(1) }}</span>
+              <i class="pi pi-star-fill" />
+              <span>{{ Number(organizer.rating || 0).toFixed(1) }}</span>
             </div>
-            <p class="organizer-description">{{ organizer.description }}</p>
-            <div class="organizer-tags">
+            <p v-if="organizer.description" class="organizer-description">
+              {{ organizer.description }}
+            </p>
+            <div v-if="organizer.eventTypes?.length" class="organizer-tags">
               <Tag
                 v-for="type in organizer.eventTypes"
                 :key="type"
@@ -130,8 +94,8 @@ const hasOrganizers = computed(
           </div>
           <div class="organizer-card__footer">
             <Button
-              :label="t('dashboard.host.organizerBrowser.viewProfile')"
               class="view-profile-btn"
+              :label="t('dashboard.host.organizerBrowser.viewProfile')"
               @click="emit('view-profile', organizer)"
             />
           </div>
@@ -139,7 +103,7 @@ const hasOrganizers = computed(
       </Card>
     </div>
 
-    <div v-else-if="props.dataLoaded" class="empty-organizers">
+    <div v-else-if="showEmptyState" class="organizer-browser__empty">
       <i class="pi pi-users" />
       <p>{{ t('dashboard.host.organizerBrowser.empty') }}</p>
     </div>
@@ -153,99 +117,48 @@ const hasOrganizers = computed(
   gap: 1.5rem;
 }
 
-.browser-header {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-@media (min-width: 768px) {
-  .browser-header {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-}
-
-.section-title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1c2541;
-}
-
-.section-subtitle {
-  margin: 0.25rem 0 0;
-  color: #6b7280;
-  font-size: 1rem;
-}
-
-.browser-filters {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-@media (min-width: 768px) {
-  .browser-filters {
-    flex-direction: row;
-    align-items: center;
-  }
-}
-
-.search-wrapper {
-  width: 100%;
-}
-
-.search-wrapper input {
-  width: 100%;
-}
-
-.category-dropdown {
-  min-width: 200px;
-}
-
-.organizer-grid {
+.organizer-browser__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
 }
 
-.organizer-grid--loading {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+.organizer-browser__grid--loading {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 .organizer-card {
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  border-radius: 20px;
   overflow: hidden;
-  background-color: #ffffff;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.organizer-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.12);
+  border: none;
 }
 
 .organizer-card__header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .organizer-name {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1c2541;
+  color: #111827;
 }
 
-.organizer-specialty {
+.organizer-location {
   margin: 0.25rem 0 0;
-  color: #6366f1;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.organizer-location i {
+  font-size: 0.9rem;
 }
 
 .organizer-card__body {
@@ -255,15 +168,22 @@ const hasOrganizers = computed(
   color: #4b5563;
 }
 
+.organizer-specialty {
+  margin: 0;
+  font-weight: 600;
+  color: #4f46e5;
+}
+
 .organizer-rating {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
+  font-weight: 600;
+  color: #f59e0b;
 }
 
-.rating-value {
-  font-weight: 600;
-  color: #1c2541;
+.organizer-rating i {
+  font-size: 1rem;
 }
 
 .organizer-description {
@@ -280,7 +200,7 @@ const hasOrganizers = computed(
 .organizer-card__footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
 }
 
 .view-profile-btn {
@@ -294,21 +214,21 @@ const hasOrganizers = computed(
   background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
 }
 
-.empty-organizers {
+.organizer-browser__empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 1rem;
   padding: 3rem 1.5rem;
-  border-radius: 16px;
-  background: #ffffff;
+  border-radius: 18px;
+  background: #f9fafb;
   color: #6b7280;
   text-align: center;
 }
 
-.empty-organizers i {
+.organizer-browser__empty i {
   font-size: 2rem;
-  color: #6366f1;
+  color: #4f46e5;
 }
 </style>

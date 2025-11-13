@@ -22,6 +22,7 @@
     "noData": "No hay datos disponibles",
     "back": "Volver",
     "cancel": "Cancelar",
+    "warning": "Advertencia",
     "add": "Agregar",
     "save": "Guardar",
     "edit": "Editar",
@@ -422,6 +423,9 @@
         "searchPlaceholder": "Buscar por nombre, tipo de evento, ciudad...",
         "filters": "Filtros",
         "clearFilters": "Limpiar filtros"
+      },
+      "messages": {
+        "unableToNavigateQuotes": "No pudimos abrir la sección de cotizaciones. Inténtalo nuevamente."
       },
       "pagination": {
         "label": "Página {page} de {total}"
