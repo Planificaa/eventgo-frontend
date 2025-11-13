@@ -1,106 +1,51 @@
 <template>
   <div class="profile-container">
-    <div v-if="isProfileLoading" class="alert alert-info">
-      {{ $t('profile.loading') }}
+    <div v-if="isProfileLoading" class="mb-4 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
+      Cargando información del perfil...
     </div>
-    <div v-if="profileError" class="alert alert-error">
+    <div v-if="profileError" class="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
       {{ profileError }}
     </div>
+    <!-- Header con información del perfil -->
+    <div class="profile-header">
+      <div class="grid grid-nogutter">
+        <!-- Avatar y información básica -->
+        <div class="col-12 md:col-4 lg:col-3 mb-4 md:mb-0">
+          <div class="profile-avatar-section">
+            <Avatar
+              :image="profileData.profileImage"
+              :label="getInitials(profileData.name)"
+              size="xlarge"
+              shape="circle"
+              class="mb-3"
+            />
+            <h2 class="text-2xl font-bold text-gray-800">{{ profileData.name }}</h2>
+            <p class="text-gray-600 text-sm">{{ profileData.email }}</p>
+            <span class="inline-block mt-2 px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+              {{ getRoleLabel(profileData.role) }}
+            </span>
+          </div>
+        </div>
 
-    <template v-if="isHostProfile">
-      <section class="host-profile">
-        <Card class="host-profile__card">
-          <template #content>
-            <div class="host-profile__header">
-              <Avatar
-                :image="profileData.profileImage"
-                :label="getInitials(profileData.name)"
-                size="xlarge"
-                shape="circle"
-                class="host-profile__avatar"
-              />
-              <div class="host-profile__identity">
-                <h1 class="host-profile__name">{{ profileData.name }}</h1>
-                <p class="host-profile__role">{{ $t('profile.roles.host') }}</p>
-                <div class="host-profile__actions">
-                  <Button
-                    :label="$t('profile.actions.editProfile')"
-                    icon="pi pi-pencil"
-                    class="p-button-rounded p-button-sm"
-                    @click="goToEdit"
-                  />
-                  <Button
-                    :label="$t('profile.actions.manageQuotes')"
-                    icon="pi pi-briefcase"
-                    class="p-button-text p-button-sm"
-                    @click="goToQuotes"
-                  />
-                  <Button
-                    :label="$t('profile.actions.logout')"
-                    icon="pi pi-sign-out"
-                    class="p-button-danger p-button-outlined p-button-sm"
-                    @click="handleLogout"
-                  />
-                </div>
+        <!-- Estadísticas -->
+        <div class="col-12 md:col-8 lg:col-9">
+          <div class="grid grid-nogutter gap-3">
+            <div class="col-6 md:col-3">
+              <div class="stat-card">
+                <div class="stat-value">{{ profileData.metrics.eventsOrganized ?? 0 }}</div>
+                <div class="stat-label">Eventos Organizados</div>
               </div>
             </div>
-
-            <div class="host-profile__details">
-              <div class="host-profile__contact">
-                <h2>{{ $t('profile.sections.contactInfo') }}</h2>
-                <ul>
-                  <li v-if="hostOverview.contact.email">
-                    <i class="pi pi-envelope"></i>
-                    <span>{{ hostOverview.contact.email }}</span>
-                  </li>
-                  <li v-if="hostOverview.contact.phone">
-                    <i class="pi pi-phone"></i>
-                    <span>{{ hostOverview.contact.phone }}</span>
-                  </li>
-                  <li v-if="hostOverview.contact.location">
-                    <i class="pi pi-map-marker"></i>
-                    <span>{{ hostOverview.contact.location }}</span>
-                  </li>
-                  <li v-if="hostOverview.contact.company">
-                    <i class="pi pi-briefcase"></i>
-                    <span>{{ hostOverview.contact.company }}</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="host-profile__preferences">
-                <h2>{{ $t('profile.sections.preferences') }}</h2>
-                <div v-if="hostOverview.preferences.length" class="preferences-tags">
-                  <Tag
-                    v-for="preference in hostOverview.preferences"
-                    :key="preference"
-                    severity="info"
-                    rounded
-                    :value="preference"
-                  />
-                </div>
-                <p v-else class="empty-text">{{ $t('profile.empty.preferences') }}</p>
+            <div class="col-6 md:col-3">
+              <div class="stat-card">
+                <div class="stat-value">{{ profileData.metrics.rating ?? 0 }}</div>
+                <div class="stat-label">Calificación</div>
               </div>
             </div>
-          </template>
-        </Card>
-
-        <div class="host-profile__metrics">
-          <Card class="metric-card">
-            <template #content>
-              <div class="metric-content">
-                <h3>{{ $t('profile.hostMetrics.totalQuotes') }}</h3>
-                <p class="metric-value metric-value--primary">{{ hostQuoteStats.total }}</p>
-                <span class="metric-subtitle">{{ $t('profile.hostMetrics.totalQuotesSubtitle') }}</span>
-              </div>
-            </template>
-          </Card>
-          <Card class="metric-card">
-            <template #content>
-              <div class="metric-content">
-                <h3>{{ $t('profile.hostMetrics.pendingQuotes') }}</h3>
-                <p class="metric-value metric-value--warning">{{ hostQuoteStats.pending }}</p>
-                <span class="metric-subtitle">{{ $t('profile.hostMetrics.pendingQuotesSubtitle') }}</span>
+            <div class="col-6 md:col-3">
+              <div class="stat-card">
+                <div class="stat-value">{{ profileData.metrics.customers ?? 0 }}</div>
+                <div class="stat-label">Clientes</div>
               </div>
             </template>
           </Card>
@@ -233,15 +178,10 @@
                 {{ getRoleLabel(profileData.role) }}
               </span>
             </div>
-          </div>
-
-          <div class="col-12 md:col-8 lg:col-9">
-            <div class="grid grid-nogutter gap-3">
-              <div class="col-6 md:col-3" v-for="metric in organizerMetricList" :key="metric.id">
-                <div class="stat-card">
-                  <div class="stat-value">{{ metric.value }}</div>
-                  <div class="stat-label">{{ metric.label }}</div>
-                </div>
+            <div class="col-6 md:col-3">
+              <div class="stat-card">
+                <div class="stat-value">{{ profileData.metrics.experienceYears ?? 0 }}</div>
+                <div class="stat-label">Años Exp.</div>
               </div>
             </div>
           </div>
@@ -329,9 +269,12 @@
               <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">{{ $t('profile.sections.services') }}</h3>
                 <Button
-                  :label="$t('profile.actions.addService')"
-                  icon="pi pi-plus"
-                  class="p-button-primary p-button-sm"
+                  v-for="social in socialLinks"
+                  :key="social.type"
+                  :label="social.type"
+                  :icon="`pi pi-${getSocialIcon(social.type)}`"
+                  class="p-button-secondary p-button-sm"
+                  @click="openSocialLink(social.url)"
                 />
               </div>
 
@@ -432,36 +375,27 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import Avatar from 'primevue/avatar'
-import Button from 'primevue/button'
-import TabView from 'primevue/tabview'
-import TabPanel from 'primevue/tabpanel'
-import Card from 'primevue/card'
-import Rating from 'primevue/rating'
-import Tag from 'primevue/tag'
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import { useToast } from 'primevue/usetoast'
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
+import { AuthApiService } from '@/auth-management/application/auth-api.service.js';
+import Avatar from 'primevue/avatar';
+import Button from 'primevue/button';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import Card from 'primevue/card';
+import Rating from 'primevue/rating';
 
-import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js'
-import { AuthApiService } from '@/auth-management/application/auth-api.service.js'
-import { QuoteApiService } from '@/quote-management/application/services/quote-api.service.js'
-import { QuoteOrder } from '@/quote-management/domain/model'
-import QuoteStateBadge from '@/quote-management/presentation/pages/QuoteStateBadge.vue'
-
-const router = useRouter()
-const toast = useToast()
-const { user, restoreSession, logout } = useAuth()
-const activeTab = ref(0)
+const router = useRouter();
+const { logout, user } = useAuth();
+const activeTab = ref(0);
 
 const defaultMetrics = Object.freeze({
   eventsOrganized: 0,
   rating: 0,
   customers: 0,
   experienceYears: 0,
-})
+});
 
 const defaultProfile = Object.freeze({
   id: '',
@@ -474,48 +408,15 @@ const defaultProfile = Object.freeze({
   description: '',
   socialLinks: [],
   metrics: defaultMetrics,
-})
+});
 
-const defaultHostOverview = Object.freeze({
-  contact: {
-    email: '',
-    phone: '',
-    location: '',
-    company: '',
-  },
-  preferences: [],
-  recentEvents: [],
-  recentOrganizers: [],
-})
+const profileData = ref({ ...defaultProfile });
+const isProfileLoading = ref(false);
+const profileError = ref(null);
 
-const profileData = ref({ ...defaultProfile })
-const isProfileLoading = ref(false)
-const profileError = ref(null)
-const services = ref([])
-const albums = ref([])
-const reviews = ref([])
-const hostOverview = ref({ ...defaultHostOverview })
-const hostQuotes = ref([])
-const quotesLoading = ref(false)
-
-const socialLinks = computed(() => profileData.value.socialLinks)
-
-const isHostProfile = computed(() => (profileData.value.role || user.value?.role) === 'host')
-
-const organizerMetricList = computed(() => [
-  { id: 'events', label: 'Eventos Organizados', value: profileData.value.metrics.eventsOrganized ?? 0 },
-  { id: 'rating', label: 'Calificación', value: profileData.value.metrics.rating ?? 0 },
-  { id: 'customers', label: 'Clientes', value: profileData.value.metrics.customers ?? 0 },
-  { id: 'experience', label: 'Años Exp.', value: profileData.value.metrics.experienceYears ?? 0 },
-])
-
-const hostQuoteStats = computed(() => hostQuotes.value.reduce((acc, quote) => {
-  acc.total += 1
-  if (quote.state === QuoteOrder.STATES.APPROVED) acc.approved += 1
-  if (quote.state === QuoteOrder.STATES.PENDING) acc.pending += 1
-  if (quote.state === QuoteOrder.STATES.DECLINED) acc.declined += 1
-  return acc
-}, { total: 0, approved: 0, pending: 0, declined: 0 }))
+const services = ref([]);
+const albums = ref([]);
+const reviews = ref([]);
 
 const normalizeProfile = (rawProfile = {}) => ({
   ...defaultProfile,
@@ -525,108 +426,44 @@ const normalizeProfile = (rawProfile = {}) => ({
     ...defaultMetrics,
     ...(rawProfile.metrics || {}),
   },
-})
-
-const loadHostQuotes = async (userId) => {
-  quotesLoading.value = true
-  try {
-    const quotesResponse = await QuoteApiService.getAll()
-    const hostId = String(userId)
-    const mappedQuotes = Array.isArray(quotesResponse)
-      ? quotesResponse
-          .map((data) => QuoteOrder.fromJSON(data))
-          .filter((quote) => {
-            const customerId = quote.customer?.id ? String(quote.customer.id) : null
-            const ownerId = quote.ownerId ? String(quote.ownerId) : null
-            return customerId === hostId || ownerId === hostId
-          })
-          .map((quote) => ({
-            id: quote.id,
-            organizerName: quote.organizer?.name || '-',
-            eventName: quote.event?.name || '-',
-            eventType: quote.event?.type || 'other',
-            eventDate: quote.event?.date || null,
-            total: quote.getFormattedTotal(),
-            state: quote.state,
-          }))
-      : []
-
-    hostQuotes.value = mappedQuotes
-  } catch (error) {
-    console.error('Error loading host quotes', error)
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: error.message || 'No se pudieron cargar las cotizaciones del anfitrión.',
-      life: 4000,
-    })
-  } finally {
-    quotesLoading.value = false
-  }
-}
+});
 
 const loadProfile = async () => {
-  const currentUser = user.value
+  const currentUser = user.value;
 
   if (!currentUser) {
-    profileData.value = { ...defaultProfile }
-    return
+    profileData.value = { ...defaultProfile };
+    return;
   }
 
-  isProfileLoading.value = true
-  profileError.value = null
+  isProfileLoading.value = true;
+  profileError.value = null;
 
   try {
-    const [apiUser] = await AuthApiService.fetchUsers({ id: currentUser.id })
-    const normalizedUser = apiUser ? AuthApiService.sanitizeUser(apiUser) : currentUser
-    profileData.value = normalizeProfile({ ...currentUser, ...normalizedUser, ...(apiUser || {}) })
-
-    if (profileData.value.role === 'host') {
-      const hostProfile = apiUser?.hostProfile || {}
-      hostOverview.value = {
-        contact: {
-          email: hostProfile.contact?.email || profileData.value.email,
-          phone: hostProfile.contact?.phone || profileData.value.phone,
-          location: hostProfile.contact?.location || profileData.value.city,
-          company: hostProfile.contact?.company || hostProfile.company || '',
-        },
-        preferences: Array.isArray(hostProfile.preferences) ? hostProfile.preferences : [],
-        recentEvents: Array.isArray(hostProfile.recentEvents) ? hostProfile.recentEvents : [],
-        recentOrganizers: Array.isArray(hostProfile.recentOrganizers) ? hostProfile.recentOrganizers : [],
-      }
-
-      if (profileData.value.id) {
-        await loadHostQuotes(profileData.value.id)
-      }
+    if (currentUser.id) {
+      const [apiUser] = await AuthApiService.fetchUsers({ id: currentUser.id });
+      const normalizedUser = apiUser ? AuthApiService.sanitizeUser(apiUser) : currentUser;
+      profileData.value = normalizeProfile({ ...currentUser, ...normalizedUser });
     } else {
-      services.value = Array.isArray(apiUser?.services) ? apiUser.services : []
-      albums.value = Array.isArray(apiUser?.albums) ? apiUser.albums : []
-      reviews.value = Array.isArray(apiUser?.reviews) ? apiUser.reviews : []
+      profileData.value = normalizeProfile(currentUser);
     }
   } catch (error) {
-    profileError.value = error.message || 'No se pudo cargar la información del perfil.'
+    profileError.value = error.message || 'No se pudo cargar la información del perfil.';
+    profileData.value = normalizeProfile(currentUser);
   } finally {
-    isProfileLoading.value = false
+    isProfileLoading.value = false;
   }
-}
+};
 
-const ensureSession = async () => {
-  if (!user.value) {
-    await restoreSession()
-  }
-}
+onMounted(loadProfile);
+watch(user, () => {
+  loadProfile();
+});
 
-onMounted(async () => {
-  await ensureSession()
-  await loadProfile()
-})
-
-watch(user, async () => {
-  await loadProfile()
-})
+const socialLinks = computed(() => profileData.value.socialLinks);
 
 const getInitials = (name) => {
-  if (!name) return ''
+  if (!name) return '';
   return name
     .split(' ')
     .filter(Boolean)
@@ -693,13 +530,9 @@ const goToQuotes = () => {
 }
 
 const openSocialLink = (url) => {
-  if (!url) return
-  window.open(url, '_blank', 'noopener')
-}
-
-const viewQuoteDetail = (quoteId) => {
-  router.push({ name: 'quote-detail', params: { id: quoteId } })
-}
+  if (!url) return;
+  window.open(url, '_blank', 'noopener');
+};
 
 const handleLogout = async () => {
   await logout()

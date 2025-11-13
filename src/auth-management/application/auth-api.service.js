@@ -3,7 +3,7 @@
  * Capa de Aplicación - Servicios de autenticación contra la fake API desplegada
  */
 
-import apiClient from '@/shared/infrastructure/http/axios.config.js';
+import apiClient from '/src/shared/infrastructure/http/axios.config.js';
 
 const RESOURCE = '/users';
 const DEFAULT_STATUS = 'active';
