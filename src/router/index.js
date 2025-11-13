@@ -15,7 +15,7 @@ import TaskDetailPage from '/src/task-management/presentation/pages/TaskDetailPa
 
 const routes = [
   // ========================================
-  // RUTAS DE AUTENTICACIÃ“N
+  // RUTAS DE AUTENTICACIÓN
   // ========================================
   {
     path: '/login',
@@ -68,7 +68,7 @@ const routes = [
     name: 'tasks',
     component: TaskPage,
     meta: {
-      title: 'GestiÃ³n de Tareas',
+      title: 'Gestión de Tareas',
     }
   },
   {
@@ -185,35 +185,35 @@ const routes = [
     meta: { title: 'Chat con Clientes', requiresAuth: true }
   },
   // ========================================
-  // RUTAS DE ÃLBUMES
+  // RUTAS DE ALBUMES
   // ========================================
   {
     path: '/profile/albums',
     name: 'OrganizerAlbumPage',
     component: () => import('/src/profile-management/presentation/pages/OrganizerAlbumPage.vue'),
-    meta: { title: 'Ãlbumes', requiresAuth: true }
+    meta: { title: 'Albumes', requiresAuth: true }
   },
   {
     path: '/profile/albums/create',
     name: 'OrganizerAlbumCreatePage',
     component: () => import('/src/profile-management/presentation/pages/OrganizerAlbumCreatePage.vue'),
-    meta: { title: 'Crear Ãlbum', requiresAuth: true }
+    meta: { title: 'Crear Album', requiresAuth: true }
   },
   {
     path: '/profile/albums/:id/edit',
     name: 'OrganizerAlbumEditPage',
     component: () => import('/src/profile-management/presentation/pages/OrganizerAlbumEditPage.vue'),
     props: true,
-    meta: { title: 'Editar Ãlbum', requiresAuth: true }
+    meta: { title: 'Editar Album', requiresAuth: true }
   },
   // ========================================
-  // RUTAS DE CONFIGURACIÃ“N Y NOTIFICACIONES
+  // RUTAS DE CONFIGURACIÓN Y NOTIFICACIONES
   // ========================================
   {
     path: '/settings',
     name: 'Settings',
     component: () => import('/src/profile-management/presentation/pages/SettingsPage.vue'),
-    meta: { title: 'ConfiguraciÃ³n', requiresAuth: true }
+    meta: { title: 'Configuración', requiresAuth: true }
   },
   {
     path: '/notifications',
@@ -227,7 +227,7 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'PageNotFound',
     component: () => import('/src/shared/infrastructure/components/common/PageNotFound.vue'),
-    meta: { title: 'PÃ¡gina no encontrada' }
+    meta: { title: 'Página no encontrada' }
   },
 ]
 
@@ -242,13 +242,16 @@ const router = createRouter({
 // Inicializar Pinia para poder usar el store fuera de un componente
 const pinia = createPinia()
 const authStore = useAuthStore(pinia)
-
+const getPersistedToken = () => {
+  if (typeof window === 'undefined') return null;
+  return window.localStorage.getItem('authToken') || window.sessionStorage.getItem('authToken');
+};
 // Guarda de navegación global
 router.beforeEach(async (to, from, next) => {
   // 1. Restaurar sesión al inicio (solo si aún no se ha restaurado)
-  if (!authStore.isAuthenticated && (localStorage.getItem('token') || sessionStorage.getItem('token'))) {
+  if (!authStore.isAuthenticated && getPersistedToken()) {
     try {
-      authStore.restoreSession()
+      await authStore.restoreSession()
     } catch (error) {
       console.error('Error restoring session:', error)
     }
@@ -263,7 +266,7 @@ router.beforeEach(async (to, from, next) => {
   // 3. Lógica de redirección
   if (requiresAuth && !isAuthenticated) {
     // Si la ruta requiere autenticación y el usuario no está logeado
-    console.log('🚫 Access denied - Redirecting to login')
+    console.log(' Access denied - Redirecting to login')
     next({ name: 'Login', query: { redirect: to.fullPath } })
   } else if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
     // Si el usuario está logeado y trata de acceder a Login o Register

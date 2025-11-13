@@ -101,7 +101,9 @@ const formData = ref({
 
 const handleLogin = async () => {
   try {
-    await login(formData.email, formData.password);
+    await login(formData.value.email, formData.value.password, {
+      remember: formData.value.rememberMe,
+    });
     router.push('/dashboard');
   } catch (err) {
     console.error('Error al iniciar sesión:', err);

@@ -22,7 +22,7 @@ const handleSubmit = async () => {
   errorMessage.value = ''
 
   try {
-    await login(email.value, password.value)
+    await login(email.value, password.value, { remember: rememberMe.value })
 
     toast.add({
       severity: 'success',

@@ -9,8 +9,8 @@ const { locale } = useI18n()
 
 // Idiomas
 const languageOptions = ref([
-  { name: 'English', code: 'en', flag: 'ðŸ‡ºðŸ‡¸' },
-  { name: 'Spanish', code: 'es', flag: 'ðŸ‡ªðŸ‡¸' },
+  { name: 'English', code: 'en', flag: 'EN' },
+  { name: 'Spanish', code: 'es', flag: 'ES' },
 ])
 const selectedLanguage = ref(languageOptions.value.find((lang) => lang.code === locale.value))
 const changeLanguage = (language) => {
