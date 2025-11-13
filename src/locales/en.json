@@ -361,7 +361,7 @@
     "loginSubtitle": "Access your EventGO account",
     "registerTitle": "Create Account",
     "registerSubtitle": "Join the EventGO community",
-    "emailPlaceholder": "you@email.com",
+    "emailPlaceholder": "you@@email.com",
     "passwordPlaceholder": "Enter your password",
     "confirmPasswordPlaceholder": "Confirm your password",
     "fullName": "Full Name",
