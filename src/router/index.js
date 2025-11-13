@@ -13,6 +13,13 @@ import TaskEditPage from "@/task-management/presentation/pages/TaskEditPage.vue"
 import TaskDetailPage from "@/task-management/presentation/pages/TaskDetailPage.vue";
 import QuotePage from "@/quote-management/presentation/pages/QuotePage.vue";
 
+const QuoteCreatePage = () =>
+  import("@/quote-management/presentation/pages/QuoteCreatePage.vue");
+const QuoteDetailPage = () =>
+  import("@/quote-management/presentation/pages/QuoteDetailPage.vue");
+const QuoteEditPage = () =>
+  import("@/quote-management/presentation/pages/QuoteEditPage.vue");
+
 const routes = [
   // ========================================
   // LOGIN / REGISTRO
@@ -125,6 +132,36 @@ const routes = [
   },
 
   // ========================================
+  // COTIZACIONES
+  // ========================================
+  {
+    path: "/quotes",
+    name: "quotes",
+    component: QuotePage,
+    meta: { requiresAuth: true, allowedRoles: ["organizer", "host"] },
+  },
+  {
+    path: "/quotes/create",
+    name: "quote-create",
+    component: QuoteCreatePage,
+    meta: { requiresAuth: true, requiresRole: "organizer" },
+  },
+  {
+    path: "/quotes/:id",
+    name: "quote-detail",
+    component: QuoteDetailPage,
+    props: true,
+    meta: { requiresAuth: true, allowedRoles: ["organizer", "host"] },
+  },
+  {
+    path: "/quotes/:id/edit",
+    name: "quote-edit",
+    component: QuoteEditPage,
+    props: true,
+    meta: { requiresAuth: true, requiresRole: "organizer" },
+  },
+
+  // ========================================
   // NOT FOUND
   // ========================================
   {
@@ -150,6 +187,13 @@ router.beforeEach(async (to, from, next) => {
 
   const requiresAuth = to.meta.requiresAuth ?? true;
   const requiresRole = to.meta.requiresRole;
+  const allowedRoles = to.meta.allowedRoles;
+
+  const resolveDashboardRedirect = () => {
+    if (auth.user?.role === "host") return "/host/dashboard";
+    if (auth.user?.role === "organizer") return "/organizer/dashboard";
+    return "/login";
+  };
 
   // Intentar restaurar sesión si hay token
   if (!auth.isAuthenticated) {
@@ -165,8 +209,7 @@ router.beforeEach(async (to, from, next) => {
   // Rutas que no requieren auth
   if (!requiresAuth) {
     if (to.meta.redirectIfAuth && auth.isAuthenticated) {
-      if (auth.user.role === "host") return next("/host/dashboard");
-      if (auth.user.role === "organizer") return next("/organizer/dashboard");
+      return next(resolveDashboardRedirect());
     }
     return next();
   }
@@ -175,9 +218,24 @@ router.beforeEach(async (to, from, next) => {
   if (!auth.isAuthenticated) return next("/login");
 
   // Si requiere rol
-  if (requiresRole && auth.user.role !== requiresRole) {
-    if (auth.user.role === "host") return next("/host/dashboard");
-    return next("/organizer/dashboard");
+  const normalizedRoles = [];
+  if (Array.isArray(requiresRole)) {
+    normalizedRoles.push(...requiresRole);
+  } else if (typeof requiresRole === "string" && requiresRole) {
+    normalizedRoles.push(requiresRole);
+  }
+
+  if (Array.isArray(allowedRoles)) {
+    normalizedRoles.push(...allowedRoles);
+  } else if (typeof allowedRoles === "string" && allowedRoles) {
+    normalizedRoles.push(allowedRoles);
+  }
+
+  if (
+    normalizedRoles.length > 0 &&
+    (!auth.user?.role || !normalizedRoles.includes(auth.user.role))
+  ) {
+    return next(resolveDashboardRedirect());
   }
 
   next();
