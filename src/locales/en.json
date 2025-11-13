@@ -169,6 +169,17 @@
       "saveAndSend": "Save and Send"
     }
   },
+  "messages": {
+  "loadedSuccessfully": "Quotes loaded successfully",
+  "loadError": "Unable to load quotes. Please try again.",
+  "createdSuccessfully": "Quote created successfully",
+  "updatedSuccessfully": "Quote updated successfully",
+  "saveError": "We couldn't save the quote. Please check the information and try again.",
+  "sentSuccessfully": "Quote sent successfully",
+  "sendError": "We couldn't send the quote. Please try again later.",
+  "missingOwner": "You must be authenticated to manage this quote.",
+  "forbiddenQuote": "You don't have permission to access this quote."
+},
   "events": {
     "types": {
       "wedding": "Wedding",
@@ -213,7 +224,8 @@
       "message": "Are you sure you want to delete {count} event(s)? This action cannot be undone."
     },
     "messages": {
-      "noEvents": "No events available"
+      "noEvents": "No events available",
+      "forbiddenEvent": "You don't have permission to modify this event."
     },
     "status": {
       "active": "Active",

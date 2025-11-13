@@ -19,7 +19,8 @@ export class QuoteOrder {
                 vatPercentage = 18,
                 currency = 'S/.',
                 createdAt = null,
-                updatedAt = null
+                updatedAt = null,
+                ownerId = null
               }) {
     this.id = id || this.generateId();
     this.customer = customer || new Customer({});
@@ -31,6 +32,7 @@ export class QuoteOrder {
     this.currency = currency;
     this.createdAt = createdAt || new Date();
     this.updatedAt = updatedAt || new Date();
+    this.ownerId = ownerId;
   }
 
   generateId() {
@@ -180,16 +182,20 @@ export class QuoteOrder {
   static fromJSON(data) {
     return new QuoteOrder({
       id: data.id,
-      customer: data.customer ? Customer.fromJSON(data.customer) : new Customer({}),
-      event: data.event ? Event.fromJSON(data.event) : new Event({}),
+      customer: data.customer
+        ? Customer.fromJSON({
+          ...data.customer,
+          id: data.customer.id ?? data.customerId ?? null,
+        })
+        : new Customer({ id: data.customerId ?? null }),      event: data.event ? Event.fromJSON(data.event) : new Event({}),
       organizer: data.organizer ? Organizer.fromJSON(data.organizer) : new Organizer({}),
       services: data.services ? data.services.map(s => ServiceItem.fromJSON(s)) : [],
       state: data.state || QuoteOrder.STATES.DRAFT,
       vatPercentage: data.vatPercentage || 18,
       currency: data.currency || 'S/.',
       createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
-      updatedAt: data.updatedAt ? new Date(data.updatedAt) : new Date()
-    });
+      updatedAt: data.updatedAt ? new Date(data.updatedAt) : new Date(),
+      ownerId: data.ownerId ?? data.organizerId ?? data.customerId ?? null });
   }
 
   // Serialización para API fake
@@ -207,7 +213,10 @@ export class QuoteOrder {
       vat: this.vat,
       total: this.total,
       createdAt: this.createdAt.toISOString(),
-      updatedAt: this.updatedAt.toISOString()
+      updatedAt: this.updatedAt.toISOString(),
+      ownerId: this.ownerId || this.organizer?.id || null,
+      organizerId: this.organizer?.id || null,
+      customerId: this.customer?.id || null
     };
   }
 
@@ -223,7 +232,8 @@ export class QuoteOrder {
       vatPercentage: this.vatPercentage,
       currency: this.currency,
       createdAt: new Date(this.createdAt),
-      updatedAt: new Date(this.updatedAt)
+      updatedAt: new Date(this.updatedAt),
+      ownerId: this.ownerId
     });
   }
 }

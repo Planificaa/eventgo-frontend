@@ -13,11 +13,17 @@ import Button from 'primevue/button';
 import QuoteStateBadge from '/src/quote-management/presentation/pages/QuoteStateBadge.vue'
 import { QuoteApiService } from '../../application/services/quote-api.service.js';
 import { QuoteOrder } from '../../domain/model';
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
 
 const router = useRouter();
 const { t } = useI18n();
 const toast = useToast();
+const { user, isOrganizer, restoreSession } = useAuth();
 
+const currentUserId = computed(() => {
+  const value = user.value?.id;
+  return value != null ? String(value) : null;
+});
 // Estado reactivo
 const quotes = ref([]);
 const loading = ref(false);
@@ -104,8 +110,41 @@ const handleEdit = (quoteId) => {
 const loadQuotes = async () => {
   loading.value = true;
   try {
+    if (!user.value) {
+      await restoreSession();
+    }
+
     const data = await QuoteApiService.getAll();
-    quotes.value = data.map(q => QuoteOrder.fromJSON(q));
+    const userId = currentUserId.value;
+
+    if (!userId) {
+      quotes.value = [];
+      return;
+    }
+
+    const filtered = data.filter((quoteItem) => {
+      const ownerId = quoteItem.ownerId ?? quoteItem.organizerId ?? quoteItem.customerId ?? quoteItem.organizer?.id ?? quoteItem.customer?.id;
+      const normalizedOwner = ownerId != null ? String(ownerId) : null;
+
+      if (!normalizedOwner) {
+        return false;
+      }
+
+      if (isOrganizer.value) {
+        return normalizedOwner === userId;
+      }
+
+      const customerId = quoteItem.customerId != null
+        ? String(quoteItem.customerId)
+        : (quoteItem.customer?.id != null ? String(quoteItem.customer.id) : null);
+      return normalizedOwner === userId || (customerId && customerId === userId);
+    });
+
+    quotes.value = filtered.map(q => {
+      const entity = QuoteOrder.fromJSON(q);
+      entity.ownerId = entity.ownerId || userId;
+      return entity;
+    });
 
     toast.add({
       severity: 'success',

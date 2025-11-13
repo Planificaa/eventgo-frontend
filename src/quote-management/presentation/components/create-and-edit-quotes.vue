@@ -157,24 +157,60 @@ import FinancialSummary from './financial-summary.vue';
 import ActionsQuotes from './actions-quotes.vue';
 import QuotePreviewModal from './QuotePreviewModal.vue';
 import { QuoteApiService } from '../../application/services/quote-api.service.js';
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
 
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 const toast = useToast();
+const { user, restoreSession, isOrganizer } = useAuth();
+
+const currentUserId = computed(() => {
+  const value = user.value?.id;
+  return value != null ? String(value) : null;
+});
+
+const buildOrganizerForUser = () => {
+  if (!user.value || !isOrganizer.value) {
+    return new Organizer({});
+  }
+
+  return new Organizer({
+    id: String(user.value.id),
+    name: user.value.name || '',
+    role: user.value.role || '',
+    phone: user.value.phone || '',
+    avatar: user.value.profileImage || ''
+  });
+};
 
 // Estado reactivo
 const quote = ref(new QuoteOrder({
   customer: new Customer({}),
   event: new Event({}),
-  organizer: new Organizer({
-    name: 'Andrea Ramirez',
-    role: 'Event Organizer',
-    phone: '+51 999 888 777',
-    avatar: 'https://i.pravatar.cc/150?img=1'
-  })
+  organizer: buildOrganizerForUser(),
+  ownerId: currentUserId.value
 }));
 
+const applyUserContextToQuote = () => {
+  if (!currentUserId.value) {
+    return;
+  }
+
+  quote.value.ownerId = currentUserId.value;
+
+  if (isOrganizer.value) {
+    quote.value.organizer = buildOrganizerForUser();
+  } else {
+    const customerData = {
+      id: currentUserId.value,
+      name: user.value?.name || quote.value.customer.name,
+      email: user.value?.email || quote.value.customer.email,
+      phone: user.value?.phone || quote.value.customer.phone
+    };
+    quote.value.customer = new Customer(customerData);
+  }
+};
 const isSaving = ref(false);
 const isSending = ref(false);
 const showPreviewModal = ref(false);
@@ -232,9 +268,18 @@ const handleSave = async () => {
   isSaving.value = true;
 
   try {
+    if (!currentUserId.value) {
+      throw new Error(t('quotes.messages.missingOwner'));
+    }
     const quoteData = quote.value.toJSON();
     quoteData.updatedAt = new Date().toISOString();
-
+    quoteData.ownerId = currentUserId.value;
+    if (quoteData.organizer) {
+      quoteData.organizer.id = quoteData.organizer.id || currentUserId.value;
+    }
+    if (!isOrganizer.value && quoteData.customer) {
+      quoteData.customer.id = currentUserId.value;
+    }
     let savedQuote;
     if (isEditMode.value) {
       // Actualizar cotización existente
@@ -288,9 +333,16 @@ const handleSend = async () => {
   isSending.value = true;
 
   try {
+    if (!currentUserId.value) {
+      throw new Error(t('quotes.messages.missingOwner'));
+    }
     // Primero guardar si hay cambios
     if (quote.value.state === 'DRAFT') {
       const quoteData = quote.value.toJSON();
+      quoteData.ownerId = currentUserId.value;
+      if (!isOrganizer.value && quoteData.customer) {
+        quoteData.customer.id = currentUserId.value;
+      }
       await QuoteApiService.update(quote.value.id, quoteData);
     }
 
@@ -338,7 +390,24 @@ const loadQuote = async (quoteId) => {
   isLoadingQuote.value = true;
   try {
     const data = await QuoteApiService.getById(quoteId);
-    quote.value = QuoteOrder.fromJSON(data);
+    const loadedQuote = QuoteOrder.fromJSON(data);
+    const userId = currentUserId.value;
+
+    const ownerId = loadedQuote.ownerId ? String(loadedQuote.ownerId) : null;
+    const organizerId = loadedQuote.organizer?.id ? String(loadedQuote.organizer.id) : null;
+    const customerId = loadedQuote.customer?.id
+      ? String(loadedQuote.customer.id)
+      : (data.customerId != null ? String(data.customerId) : null);
+
+    if (!userId || (ownerId && ownerId !== userId) || (!ownerId && organizerId && organizerId !== userId)) {
+      throw new Error(t('quotes.messages.forbiddenQuote'));
+    }
+
+    loadedQuote.ownerId = ownerId || organizerId || userId;
+    if (!isOrganizer.value && customerId === userId) {
+      loadedQuote.customer.id = userId;
+    }
+    quote.value = loadedQuote;
 
     toast.add({
       severity: 'success',
@@ -351,7 +420,7 @@ const loadQuote = async (quoteId) => {
     toast.add({
       severity: 'error',
       summary: t('common.error'),
-      detail: t('quotes.messages.loadError'),
+      detail: error.message || t('quotes.messages.loadError'),
       life: 5000
     });
     router.push({ name: 'quotes' });
@@ -361,9 +430,16 @@ const loadQuote = async (quoteId) => {
 };
 
 // Lifecycle
-onMounted(() => {
+onMounted(async () => {
+  if (!user.value) {
+    await restoreSession();
+    applyUserContextToQuote();
+  }
+
   if (isEditMode.value) {
-    loadQuote(route.params.id);
+    await loadQuote(route.params.id);
+  } else if (!quote.value.ownerId) {
+    applyUserContextToQuote();
   }
 });
 </script>

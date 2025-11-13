@@ -220,7 +220,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'primevue/usetoast';
@@ -232,11 +232,17 @@ import QuoteStateBadge from '/src/quote-management/presentation/pages/QuoteState
 import FinancialSummary from '../components/financial-summary.vue';
 import { QuoteApiService } from '/src/quote-management/application/services/quote-api.service.js';
 import { QuoteOrder } from '/src/quote-management/domain/model';
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js'
 
 const router = useRouter();
 const { t } = useI18n();
 const toast = useToast();
+const { user, isOrganizer, restoreSession } = useAuth();
 
+const currentUserId = computed(() => {
+  const value = user.value?.id;
+  return value != null ? String(value) : null;
+});
 const props = defineProps({
   id: {
     type: String,
@@ -292,14 +298,40 @@ const handleSend = async () => {
 const loadQuote = async () => {
   loading.value = true;
   try {
+    if (!user.value) {
+      await restoreSession();
+    }
+
     const data = await QuoteApiService.getById(props.id);
-    quote.value = QuoteOrder.fromJSON(data);
+    const loadedQuote = QuoteOrder.fromJSON(data);
+    const userId = currentUserId.value;
+    const ownerId = loadedQuote.ownerId ? String(loadedQuote.ownerId) : null;
+    const organizerId = loadedQuote.organizer?.id ? String(loadedQuote.organizer.id) : null;
+    const customerId = loadedQuote.customer?.id
+      ? String(loadedQuote.customer.id)
+      : (data.customerId != null ? String(data.customerId) : null);
+
+    const isAllowed = () => {
+      if (!userId) return false;
+      if (ownerId && ownerId === userId) return true;
+      if (isOrganizer.value && organizerId) {
+        return organizerId === userId;
+      }
+      return customerId === userId;
+    };
+
+    if (!isAllowed()) {
+      throw new Error(t('quotes.messages.forbiddenQuote'));
+    }
+
+    loadedQuote.ownerId = ownerId || organizerId || customerId || userId;
+    quote.value = loadedQuote;
   } catch (error) {
     console.error('Error loading quote:', error);
     toast.add({
       severity: 'error',
       summary: t('common.error'),
-      detail: t('quotes.messages.loadError'),
+      detail: error.message || t('quotes.messages.loadError'),
       life: 5000
     });
 

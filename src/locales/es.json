@@ -105,7 +105,8 @@
       "message": "¿Está seguro de eliminar {count} evento(s)? Esta acción no se puede deshacer."
     },
     "messages": {
-      "noEvents": "No hay eventos disponibles"
+      "noEvents": "No hay eventos disponibles",
+      "forbiddenEvent": "No tienes permisos para modificar este evento."
     },
     "status": {
       "active": "Activo",
@@ -208,7 +209,17 @@
       "editAgain": "Editar de Nuevo",
       "saveAndSend": "Guardar y Enviar"
     }
-  },
+  }, "messages": {
+  "loadedSuccessfully": "Cotizaciones cargadas correctamente",
+  "loadError": "No se pudieron cargar las cotizaciones. Inténtalo nuevamente.",
+  "createdSuccessfully": "Cotización creada correctamente",
+  "updatedSuccessfully": "Cotización actualizada correctamente",
+  "saveError": "No pudimos guardar la cotización. Verifica la información e inténtalo otra vez.",
+  "sentSuccessfully": "Cotización enviada correctamente",
+  "sendError": "No pudimos enviar la cotización. Intenta más tarde.",
+  "missingOwner": "Debes iniciar sesión para gestionar esta cotización.",
+  "forbiddenQuote": "No tienes permisos para acceder a esta cotización."
+},
   "events": {
     "types": {
       "wedding": "Boda",
