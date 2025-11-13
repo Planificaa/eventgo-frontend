@@ -113,11 +113,8 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
-import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
-
-const props = defineProps({
+defineProps({
   visible: {
     type: Boolean,
     default: false

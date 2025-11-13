@@ -90,7 +90,6 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import Button from 'primevue/button';
 import Avatar from 'primevue/avatar';
 import Badge from 'primevue/badge';
@@ -112,9 +111,6 @@ const props = defineProps({
 
 // Emits
 const emit = defineEmits(['select-conversation', 'new-chat']);
-
-// Composables
-const { t } = useI18n();
 
 // Estado local
 const searchQuery = ref('');

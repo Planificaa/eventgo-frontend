@@ -91,7 +91,6 @@ const filteredEvents = computed(() => {
 });
 
 const totalEvents = computed(() => events.value.length);
-const totalPages = computed(() => Math.ceil(totalEvents.value / pageSize.value));
 const startItem = computed(() => {
   if (totalEvents.value === 0) return 0;
   return (currentPage.value - 1) * pageSize.value + 1;

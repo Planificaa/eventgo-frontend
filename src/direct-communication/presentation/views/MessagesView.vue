@@ -47,9 +47,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useI18n } from 'vue-i18n';
 import Button from 'primevue/button';
 import ChatList from '../components/ChatList.vue';
 import ChatWindow from '../components/ChatWindow.vue';
@@ -57,7 +56,6 @@ import ChatWindow from '../components/ChatWindow.vue';
 // Composables
 const router = useRouter();
 const route = useRoute();
-const { t } = useI18n();
 
 // Estado
 const selectedConversation = ref(null);

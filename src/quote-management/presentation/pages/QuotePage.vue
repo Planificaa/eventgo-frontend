@@ -14,10 +14,7 @@
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n';
 import QuotesList from '../components/quotes-list.vue';
-
-const { t } = useI18n();
 </script>
 
 <style scoped>

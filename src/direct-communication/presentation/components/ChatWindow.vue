@@ -1,7 +1,6 @@
 <script setup>
 import { ref, watch, nextTick, onMounted } from 'vue';
 import { useChat } from '../../infrastructure/composables/useChat.js';
-import { useI18n } from 'vue-i18n';
 import Avatar from 'primevue/avatar';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
@@ -29,7 +28,6 @@ const props = defineProps({
 });
 
 // Composables
-const { t } = useI18n();
 const {
   messages,
   typingUsers,

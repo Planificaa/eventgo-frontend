@@ -12,11 +12,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import ChatWindow from '../components/ChatWindow.vue';
 
 const route = useRoute();
-const router = useRouter();
 
 // Props desde la URL
 const otherUserId = ref(route.params.userId);

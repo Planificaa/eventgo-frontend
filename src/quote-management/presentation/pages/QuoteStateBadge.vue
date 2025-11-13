@@ -8,7 +8,6 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
 import Badge from 'primevue/badge';
 
 const props = defineProps({

@@ -1,13 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import { ref } from 'vue';
 import Card from 'primevue/card';
 import Calendar from 'primevue/calendar';
-
-// Composables
-const router = useRouter();
-const { t } = useI18n();
 
 // User Data
 const userName = ref('Roberto Fox');
@@ -41,9 +35,6 @@ const recentMessages = ref([
     preview: 'We need a quote for...'
   }
 ]);
-
-// Computed properties
-const hasMessages = computed(() => recentMessages.value.length > 0);
 </script>
 <template>
   <div class="dashboard-container">

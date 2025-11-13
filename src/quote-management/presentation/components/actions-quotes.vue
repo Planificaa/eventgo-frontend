@@ -1,10 +1,7 @@
 <script setup>
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import Button from 'primevue/button';
 import QuoteStateBadge from '/src/quote-management/presentation/pages/QuoteStateBadge.vue';
-
-const { t } = useI18n();
 
 const props = defineProps({
   canSave: {

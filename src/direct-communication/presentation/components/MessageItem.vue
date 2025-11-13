@@ -11,9 +11,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-
-const props = defineProps({
+defineProps({
   message: {
     type: Object,
     required: true,

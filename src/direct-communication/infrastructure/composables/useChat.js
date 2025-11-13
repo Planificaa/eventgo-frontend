@@ -6,13 +6,11 @@ export const useChat = (userId) => {
   const messages = ref([]);
   const conversations = ref([]);
   const activeConversation = ref(null);
-  const isTyping = ref(false);
   const typingUsers = ref([]);
 
   const {
     initialize,
     subscribe,
-    unsubscribe,
     addListener,
     publish,
     getHistory

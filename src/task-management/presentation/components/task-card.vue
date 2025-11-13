@@ -87,7 +87,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['view', 'edit', 'delete']);
+defineEmits(['view', 'edit', 'delete']);
 
 const showMenu = ref(false);
 

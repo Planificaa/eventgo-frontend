@@ -162,7 +162,6 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
@@ -170,8 +169,6 @@ import InputNumber from 'primevue/inputnumber';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import { ServiceItem } from '../../domain/model';
-
-const { t } = useI18n();
 
 const props = defineProps({
   services: {

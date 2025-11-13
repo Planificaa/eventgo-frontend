@@ -1,14 +1,12 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
 
 // Servicios
 import EventService from '@/social-event-management/application/services/event.service.js';
 
 // Composables
 const router = useRouter();
-const { t } = useI18n();
 
 // Props
 const props = defineProps({
@@ -29,13 +27,6 @@ const eventData = ref({
 });
 
 const loading = ref(false);
-
-// Opciones para el dropdown de status
-const statusOptions = computed(() => [
-  { label: t('events.status.active'), value: 'Active' },
-  { label: t('events.status.toBeConfirmed'), value: 'To be confirmed' },
-  { label: t('events.status.cancelled'), value: 'Cancelled' }
-]);
 
 // Computed: verificar si estamos en modo edición
 const isEditMode = computed(() => !!props.id);
