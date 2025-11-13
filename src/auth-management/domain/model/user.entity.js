@@ -11,7 +11,7 @@ export class User {
    * @param {string} params.email - Correo electrónico del usuario
    * @param {string} params.password - Contraseña (hasheada en producción)
    * @param {string} params.name - Nombre completo del usuario
-   * @param {string} [params.role] - Rol del usuario (user | organizer | admin)
+   * @param {string} [params.role] - Rol del usuario (host | organizer | admin)
    * @param {string} [params.profileImage] - URL de imagen de perfil
    * @param {string} [params.status] - Estado del usuario (active | inactive | suspended)
    * @param {boolean} [params.emailVerified] - Si el email ha sido verificado
@@ -23,7 +23,7 @@ export class User {
                 email,
                 password,
                 name,
-                role = 'user',
+                role = 'host',
                 profileImage = '',
                 status = 'active',
                 emailVerified = false,

@@ -17,6 +17,7 @@
 
         <div class="header-actions" v-if="quote && !loading">
           <Button
+            v-if="isOrganizer"
             :label="$t('common.edit')"
             icon="pi pi-pencil"
             @click="handleEdit"
@@ -24,11 +25,31 @@
             class="edit-btn"
           />
           <Button
+            v-if="isOrganizer && quote.state === quoteStates.DRAFT"
             :label="$t('quotes.actions.send')"
             icon="pi pi-send"
             @click="handleSend"
-            v-if="quote.state === 'DRAFT'"
             class="send-btn"
+          />
+          <Button
+            v-if="isHostUser && quote.state === quoteStates.PENDING"
+            :label="$t('quotes.actions.approve')"
+            icon="pi pi-check"
+            severity="success"
+            class="state-btn"
+            @click="handleApprove"
+            :loading="stateLoading"
+            :disabled="stateLoading"
+          />
+          <Button
+            v-if="isHostUser && quote.state === quoteStates.PENDING"
+            :label="$t('quotes.actions.decline')"
+            icon="pi pi-times"
+            severity="danger"
+            class="state-btn"
+            @click="handleDecline"
+            :loading="stateLoading"
+            :disabled="stateLoading"
           />
         </div>
       </header>
@@ -237,7 +258,9 @@ import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js
 const router = useRouter();
 const { t } = useI18n();
 const toast = useToast();
-const { user, isOrganizer, restoreSession } = useAuth();
+const { user, isOrganizer, isHost, restoreSession } = useAuth();
+const isHostUser = computed(() => isHost.value);
+const quoteStates = QuoteOrder.STATES;
 
 const currentUserId = computed(() => {
   const value = user.value?.id;
@@ -252,6 +275,7 @@ const props = defineProps({
 
 const quote = ref(null);
 const loading = ref(true);
+const stateLoading = ref(false);
 
 const formatDate = (date) => {
   if (!date) return '';
@@ -294,6 +318,42 @@ const handleSend = async () => {
     });
   }
 };
+
+const changeQuoteState = async (newState) => {
+  stateLoading.value = true;
+  try {
+    const response = await QuoteApiService.changeState(props.id, newState);
+    const updatedQuote = QuoteOrder.fromJSON(response);
+    if (quote.value) {
+      quote.value.state = updatedQuote.state;
+      quote.value.updatedAt = updatedQuote.updatedAt;
+    }
+
+    const successMessage = newState === QuoteOrder.STATES.APPROVED
+      ? t('quotes.messages.stateApproved')
+      : t('quotes.messages.stateDeclined');
+
+    toast.add({
+      severity: 'success',
+      summary: t('common.success'),
+      detail: successMessage,
+      life: 3000,
+    });
+  } catch (error) {
+    console.error('Error changing quote state:', error);
+    toast.add({
+      severity: 'error',
+      summary: t('common.error'),
+      detail: error.message || t('quotes.messages.stateChangeError'),
+      life: 5000,
+    });
+  } finally {
+    stateLoading.value = false;
+  }
+};
+
+const handleApprove = () => changeQuoteState(QuoteOrder.STATES.APPROVED);
+const handleDecline = () => changeQuoteState(QuoteOrder.STATES.DECLINED);
 
 const loadQuote = async () => {
   loading.value = true;
@@ -366,6 +426,10 @@ onMounted(() => {
   align-items: center;
   gap: 1rem;
   margin-bottom: 2rem;
+}
+
+.state-btn {
+  min-width: 140px;
 }
 
 .page-title {

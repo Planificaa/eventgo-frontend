@@ -16,7 +16,7 @@ const formData = ref({
   email: '',
   password: '',
   confirmPassword: '',
-  role: 'user',
+  role: 'host',
   acceptTerms: false
 })
 
@@ -200,13 +200,13 @@ const passwordStrengthLabel = computed(() => {
             <div class="role-option">
               <input
                 type="radio"
-                id="roleClient"
-                value="user"
+                id="roleHost"
+                value="host"
                 v-model="formData.role"
               />
-              <label for="roleClient" class="role-label">
-                <i class="pi pi-user"></i>
-                <span>{{ $t('auth.roleClient') }}</span>
+              <label for="roleHost" class="role-label">
+                <i class="pi pi-home"></i>
+                <span>{{ $t('auth.roleHost') }}</span>
               </label>
             </div>
             <div class="role-option">

@@ -48,7 +48,7 @@ export class AuthApiService {
         name: userData.name?.trim() || '',
         email,
         password: userData.password, // En producción la contraseña debe ir cifrada.
-        role: userData.role || 'user',
+        role: userData.role || 'host',
         profileImage: userData.profileImage || '',
         status: DEFAULT_STATUS,
         emailVerified: false,
@@ -140,7 +140,7 @@ export class AuthApiService {
     return {
       ...safeUser,
       email: safeUser.email?.toLowerCase() || '',
-      role: safeUser.role || 'user',
+      role: safeUser.role || 'host',
       status: safeUser.status || DEFAULT_STATUS,
       emailVerified: Boolean(safeUser.emailVerified),
     };

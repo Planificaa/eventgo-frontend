@@ -69,6 +69,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => Boolean(token.value) && Boolean(user.value));
   const isOrganizer = computed(() => user.value?.role === 'organizer');
+  const isHost = computed(() => user.value?.role === 'host');
   const isAdmin = computed(() => user.value?.role === 'admin');
 
   const clearPersistedSession = () => {
@@ -213,6 +214,7 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading,
     error,
     isAuthenticated,
+    isHost,
     isOrganizer,
     isAdmin,
     register,
