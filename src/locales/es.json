@@ -410,6 +410,22 @@
     "host": {
       "welcome": "Hola, {name}",
       "subtitle": "Encuentra organizadores y gestiona tus cotizaciones",
+      "sidebar": {
+        "browseOrganizers": "Buscar Organizadores",
+        "myEvents": "Mis Eventos",
+        "quotes": "Cotizaciones",
+        "messages": "Mensajes"
+      },
+      "hero": {
+        "title": "Encuentra el organizador perfecto para tu evento",
+        "subtitle": "Busca por nombre, tipo de evento o ciudad para solicitar una cotización.",
+        "searchPlaceholder": "Buscar por nombre, tipo de evento, ciudad...",
+        "filters": "Filtros",
+        "clearFilters": "Limpiar filtros"
+      },
+      "pagination": {
+        "label": "Página {page} de {total}"
+      },
       "actions": {
         "viewQuotes": "Ir a cotizaciones"
       },

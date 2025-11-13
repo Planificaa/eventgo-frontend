@@ -410,6 +410,22 @@
     "host": {
       "welcome": "Hello, {name}",
       "subtitle": "Discover organizers and manage your quotes",
+      "sidebar": {
+        "browseOrganizers": "Browse organizers",
+        "myEvents": "My events",
+        "quotes": "Quotes",
+        "messages": "Messages"
+      },
+      "hero": {
+        "title": "Find the perfect organizer for your event",
+        "subtitle": "Search by name, event type, or city to request a quote.",
+        "searchPlaceholder": "Search by name, event type, city...",
+        "filters": "Filters",
+        "clearFilters": "Clear filters"
+      },
+      "pagination": {
+        "label": "Page {page} of {total}"
+      },
       "actions": {
         "viewQuotes": "Go to quotes"
       },
