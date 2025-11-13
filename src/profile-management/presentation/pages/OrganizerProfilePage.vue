@@ -1,168 +1,29 @@
 <template>
   <div class="profile-container">
-    <div v-if="isProfileLoading" class="mb-4 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
+
+    <!-- Loading -->
+    <div
+      v-if="isProfileLoading"
+      class="mb-4 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700"
+    >
       Cargando información del perfil...
     </div>
-    <div v-if="profileError" class="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+
+    <!-- Error -->
+    <div
+      v-if="profileError"
+      class="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+    >
       {{ profileError }}
     </div>
-    <!-- Header con información del perfil -->
-    <div class="profile-header">
-      <div class="grid grid-nogutter">
-        <!-- Avatar y información básica -->
-        <div class="col-12 md:col-4 lg:col-3 mb-4 md:mb-0">
-          <div class="profile-avatar-section">
-            <Avatar
-              :image="profileData.profileImage"
-              :label="getInitials(profileData.name)"
-              size="xlarge"
-              shape="circle"
-              class="mb-3"
-            />
-            <h2 class="text-2xl font-bold text-gray-800">{{ profileData.name }}</h2>
-            <p class="text-gray-600 text-sm">{{ profileData.email }}</p>
-            <span class="inline-block mt-2 px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
-              {{ getRoleLabel(profileData.role) }}
-            </span>
-          </div>
-        </div>
 
-        <!-- Estadísticas -->
-        <div class="col-12 md:col-8 lg:col-9">
-          <div class="grid grid-nogutter gap-3">
-            <div class="col-6 md:col-3">
-              <div class="stat-card">
-                <div class="stat-value">{{ profileData.metrics.eventsOrganized ?? 0 }}</div>
-                <div class="stat-label">Eventos Organizados</div>
-              </div>
-            </div>
-            <div class="col-6 md:col-3">
-              <div class="stat-card">
-                <div class="stat-value">{{ profileData.metrics.rating ?? 0 }}</div>
-                <div class="stat-label">Calificación</div>
-              </div>
-            </div>
-            <div class="col-6 md:col-3">
-              <div class="stat-card">
-                <div class="stat-value">{{ profileData.metrics.customers ?? 0 }}</div>
-                <div class="stat-label">Clientes</div>
-              </div>
-            </template>
-          </Card>
-          <Card class="metric-card">
-            <template #content>
-              <div class="metric-content">
-                <h3>{{ $t('profile.hostMetrics.approvedQuotes') }}</h3>
-                <p class="metric-value metric-value--success">{{ hostQuoteStats.approved }}</p>
-                <span class="metric-subtitle">{{ $t('profile.hostMetrics.approvedQuotesSubtitle') }}</span>
-              </div>
-            </template>
-          </Card>
-          <Card class="metric-card">
-            <template #content>
-              <div class="metric-content">
-                <h3>{{ $t('profile.hostMetrics.declinedQuotes') }}</h3>
-                <p class="metric-value metric-value--danger">{{ hostQuoteStats.declined }}</p>
-                <span class="metric-subtitle">{{ $t('profile.hostMetrics.declinedQuotesSubtitle') }}</span>
-              </div>
-            </template>
-          </Card>
-        </div>
-
-        <div class="host-profile__grid">
-          <Card class="host-profile__panel">
-            <template #title>{{ $t('profile.sections.recentEvents') }}</template>
-            <template #content>
-              <ul v-if="hostOverview.recentEvents.length" class="panel-list">
-                <li v-for="event in hostOverview.recentEvents" :key="event.id">
-                  <div>
-                    <h4>{{ event.name }}</h4>
-                    <small>{{ formatDate(event.date) }}</small>
-                  </div>
-                  <Tag :value="$t(`profile.eventStates.${event.state.toLowerCase()}`)" :severity="getEventSeverity(event.state)" />
-                </li>
-              </ul>
-              <p v-else class="empty-text">{{ $t('profile.empty.events') }}</p>
-            </template>
-          </Card>
-
-          <Card class="host-profile__panel">
-            <template #title>{{ $t('profile.sections.recentOrganizers') }}</template>
-            <template #content>
-              <ul v-if="hostOverview.recentOrganizers.length" class="panel-list">
-                <li v-for="organizer in hostOverview.recentOrganizers" :key="organizer.id">
-                  <div class="panel-list__identity">
-                    <Avatar
-                      :image="organizer.avatar"
-                      :label="organizer.name.charAt(0)"
-                      size="large"
-                      shape="circle"
-                    />
-                    <div>
-                      <h4>{{ organizer.name }}</h4>
-                      <small>{{ organizer.specialty }}</small>
-                    </div>
-                  </div>
-                  <Rating :modelValue="organizer.rating" :readonly="true" :cancel="false" />
-                </li>
-              </ul>
-              <p v-else class="empty-text">{{ $t('profile.empty.organizers') }}</p>
-            </template>
-          </Card>
-        </div>
-
-        <div class="host-profile__quotes">
-          <div class="host-profile__quotes-header">
-            <h2>{{ $t('profile.sections.quotes') }}</h2>
-            <Button
-              :label="$t('profile.actions.viewAllQuotes')"
-              icon="pi pi-arrow-right"
-              class="p-button-text"
-              @click="goToQuotes"
-            />
-          </div>
-          <DataTable :value="hostQuotes" :loading="quotesLoading" responsiveLayout="scroll">
-            <Column field="organizerName" :header="$t('profile.columns.organizer')" />
-            <Column field="eventName" :header="$t('profile.columns.event')">
-              <template #body="{ data }">
-                <div class="quote-event">
-                  <span class="quote-event__name">{{ data.eventName }}</span>
-                  <small class="quote-event__type">{{ $t(`events.types.${data.eventType.toLowerCase()}`) }}</small>
-                </div>
-              </template>
-            </Column>
-            <Column field="eventDate" :header="$t('profile.columns.date')">
-              <template #body="{ data }">
-                {{ formatDate(data.eventDate) }}
-              </template>
-            </Column>
-            <Column field="total" :header="$t('profile.columns.amount')" />
-            <Column field="state" :header="$t('profile.columns.state')">
-              <template #body="{ data }">
-                <QuoteStateBadge :state="data.state" />
-              </template>
-            </Column>
-            <Column :header="$t('profile.columns.actions')">
-              <template #body="{ data }">
-                <Button
-                  :label="$t('profile.actions.viewQuote')"
-                  icon="pi pi-eye"
-                  text
-                  @click="viewQuoteDetail(data.id)"
-                />
-              </template>
-            </Column>
-            <template #empty>
-              <div class="empty-text">{{ $t('profile.empty.quotes') }}</div>
-            </template>
-          </DataTable>
-        </div>
-      </section>
-    </template>
-
+    <!-- Contenido del perfil -->
     <template v-else>
+      <!-- ====================== HEADER ====================== -->
       <div class="profile-header">
         <div class="grid grid-nogutter">
+
+          <!-- Avatar + Info -->
           <div class="col-12 md:col-4 lg:col-3 mb-4 md:mb-0">
             <div class="profile-avatar-section">
               <Avatar
@@ -172,21 +33,51 @@
                 shape="circle"
                 class="mb-3"
               />
+
               <h2 class="text-2xl font-bold text-gray-800">{{ profileData.name }}</h2>
               <p class="text-gray-600 text-sm">{{ profileData.email }}</p>
+
               <span class="inline-block mt-2 px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
                 {{ getRoleLabel(profileData.role) }}
               </span>
             </div>
-            <div class="col-6 md:col-3">
-              <div class="stat-card">
-                <div class="stat-value">{{ profileData.metrics.experienceYears ?? 0 }}</div>
-                <div class="stat-label">Años Exp.</div>
+          </div>
+
+          <!-- Stats -->
+          <div class="col-12 md:col-8 lg:col-9">
+            <div class="grid grid-nogutter gap-3">
+              <div class="col-6 md:col-3">
+                <div class="stat-card">
+                  <div class="stat-value">{{ profileData.metrics.eventsOrganized ?? 0 }}</div>
+                  <div class="stat-label">Eventos Organizados</div>
+                </div>
+              </div>
+
+              <div class="col-6 md:col-3">
+                <div class="stat-card">
+                  <div class="stat-value">{{ profileData.metrics.rating ?? 0 }}</div>
+                  <div class="stat-label">Calificación</div>
+                </div>
+              </div>
+
+              <div class="col-6 md:col-3">
+                <div class="stat-card">
+                  <div class="stat-value">{{ profileData.metrics.customers ?? 0 }}</div>
+                  <div class="stat-label">Clientes</div>
+                </div>
+              </div>
+
+              <div class="col-6 md:col-3">
+                <div class="stat-card">
+                  <div class="stat-value">{{ profileData.metrics.experienceYears ?? 0 }}</div>
+                  <div class="stat-label">Años Exp.</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- Botones -->
         <div class="flex flex-wrap gap-2 mt-4">
           <Button
             :label="$t('profile.actions.editProfile')"
@@ -209,27 +100,38 @@
         </div>
       </div>
 
+      <!-- ====================== CONTENIDO (TABS) ====================== -->
       <div class="profile-content mt-6">
         <TabView v-model:activeIndex="activeTab" class="profile-tabs">
+
+          <!-- ========== TAB: INFORMACIÓN PERSONAL ========== -->
           <TabPanel :header="$t('profile.tabs.information')" leftIcon="pi pi-info-circle">
             <div class="p-4">
+
               <div class="grid grid-nogutter gap-4">
+                <!-- Info personal -->
                 <div class="col-12 md:col-6">
                   <div class="info-section">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">{{ $t('profile.sections.personalInfo') }}</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                      {{ $t('profile.sections.personalInfo') }}
+                    </h3>
+
                     <div class="space-y-3">
                       <div class="info-item">
                         <span class="label">{{ $t('profile.labels.name') }}:</span>
                         <span class="value">{{ profileData.name }}</span>
                       </div>
+
                       <div class="info-item">
                         <span class="label">{{ $t('profile.labels.email') }}:</span>
                         <span class="value">{{ profileData.email }}</span>
                       </div>
+
                       <div class="info-item">
                         <span class="label">{{ $t('profile.labels.phone') }}:</span>
                         <span class="value">{{ profileData.phone || $t('profile.empty.notProvided') }}</span>
                       </div>
+
                       <div class="info-item">
                         <span class="label">{{ $t('profile.labels.city') }}:</span>
                         <span class="value">{{ profileData.city || $t('profile.empty.notProvided') }}</span>
@@ -238,9 +140,13 @@
                   </div>
                 </div>
 
+                <!-- Descripción -->
                 <div class="col-12 md:col-6">
                   <div class="info-section">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">{{ $t('profile.sections.description') }}</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                      {{ $t('profile.sections.description') }}
+                    </h3>
+
                     <p class="text-gray-700 text-sm leading-relaxed">
                       {{ profileData.description || $t('profile.empty.description') }}
                     </p>
@@ -248,8 +154,12 @@
                 </div>
               </div>
 
+              <!-- Redes sociales -->
               <div class="mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">{{ $t('profile.sections.social') }}</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                  {{ $t('profile.sections.social') }}
+                </h3>
+
                 <div class="flex flex-wrap gap-3">
                   <Button
                     v-for="social in socialLinks"
@@ -264,52 +174,65 @@
             </div>
           </TabPanel>
 
+          <!-- ========== TAB: SERVICIOS ========== -->
           <TabPanel :header="$t('profile.tabs.services')" leftIcon="pi pi-briefcase">
             <div class="p-4">
+
               <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">{{ $t('profile.sections.services') }}</h3>
-                <Button
-                  v-for="social in socialLinks"
-                  :key="social.type"
-                  :label="social.type"
-                  :icon="`pi pi-${getSocialIcon(social.type)}`"
-                  class="p-button-secondary p-button-sm"
-                  @click="openSocialLink(social.url)"
-                />
+                <h3 class="text-lg font-semibold text-gray-800">
+                  {{ $t('profile.sections.services') }}
+                </h3>
               </div>
 
               <div v-if="services.length" class="grid grid-nogutter gap-4">
-                <div v-for="service in services" :key="service.id" class="col-12 md:col-6 lg:col-4">
+
+                <div
+                  v-for="service in services"
+                  :key="service.id"
+                  class="col-12 md:col-6 lg:col-4"
+                >
                   <Card class="service-card">
+
                     <template #header>
                       <div class="service-icon">
                         <i :class="`pi pi-${service.icon || 'briefcase'}`"></i>
                       </div>
                     </template>
+
                     <template #title>{{ service.name }}</template>
+
                     <template #content>
                       <p class="text-sm text-gray-600 mb-2">{{ service.description }}</p>
+
                       <div class="flex justify-between items-center">
                         <span class="font-semibold text-blue-600">{{ service.price }}</span>
+
                         <Button
                           icon="pi pi-trash"
                           class="p-button-rounded p-button-danger p-button-text p-button-sm"
                         />
                       </div>
                     </template>
+
                   </Card>
                 </div>
               </div>
+
               <div v-else class="text-center py-8">
                 <p class="text-gray-500">{{ $t('profile.empty.services') }}</p>
               </div>
             </div>
           </TabPanel>
 
+          <!-- ========== TAB: ALBUMES ========== -->
           <TabPanel :header="$t('profile.tabs.albums')" leftIcon="pi pi-images">
             <div class="p-4">
+
               <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">{{ $t('profile.sections.albums') }}</h3>
+                <h3 class="text-lg font-semibold text-gray-800">
+                  {{ $t('profile.sections.albums') }}
+                </h3>
+
                 <Button
                   :label="$t('profile.actions.createAlbum')"
                   icon="pi pi-plus"
@@ -319,8 +242,16 @@
               </div>
 
               <div v-if="albums.length" class="grid grid-nogutter gap-4">
-                <div v-for="album in albums" :key="album.id" class="col-12 sm:col-6 md:col-4 lg:col-3">
-                  <Card class="album-card cursor-pointer hover:shadow-lg transition-shadow" @click="goToAlbum(album.id)">
+                <div
+                  v-for="album in albums"
+                  :key="album.id"
+                  class="col-12 sm:col-6 md:col-4 lg:col-3"
+                >
+                  <Card
+                    class="album-card cursor-pointer hover:shadow-lg transition-shadow"
+                    @click="goToAlbum(album.id)"
+                  >
+
                     <template #header>
                       <img
                         v-if="album.cover"
@@ -328,28 +259,44 @@
                         :alt="album.title"
                         class="w-full h-40 object-cover"
                       />
-                      <div v-else class="w-full h-40 bg-gray-200 flex items-center justify-center">
+
+                      <div
+                        v-else
+                        class="w-full h-40 bg-gray-200 flex items-center justify-center"
+                      >
                         <i class="pi pi-image text-gray-400 text-2xl"></i>
                       </div>
                     </template>
+
                     <template #title>{{ album.title }}</template>
+
                     <template #content>
-                      <p class="text-sm text-gray-600 line-clamp-2">{{ album.description }}</p>
-                      <small class="text-gray-500">{{ album.photos?.length || 0 }} {{ $t('profile.labels.photos') }}</small>
+                      <p class="text-sm text-gray-600 line-clamp-2">
+                        {{ album.description }}
+                      </p>
+
+                      <small class="text-gray-500">
+                        {{ album.photos?.length || 0 }} {{ $t('profile.labels.photos') }}
+                      </small>
                     </template>
+
                   </Card>
                 </div>
               </div>
+
               <div v-else class="text-center py-8">
                 <p class="text-gray-500">{{ $t('profile.empty.albums') }}</p>
               </div>
             </div>
           </TabPanel>
 
+          <!-- ========== TAB: RESEÑAS ========== -->
           <TabPanel :header="$t('profile.tabs.reviews')" leftIcon="pi pi-star">
             <div class="p-4">
+
               <div v-if="reviews.length" class="space-y-4">
                 <div v-for="review in reviews" :key="review.id" class="review-card">
+
                   <div class="flex justify-between items-start mb-2">
                     <div class="flex items-center gap-2">
                       <Avatar :image="review.authorImage" size="small" shape="circle" />
@@ -358,21 +305,27 @@
                         <small class="text-gray-500">{{ formatDate(review.date) }}</small>
                       </div>
                     </div>
+
                     <Rating :modelValue="review.rating" :readonly="true" :cancel="false" />
                   </div>
+
                   <p class="text-gray-700 text-sm">{{ review.comment }}</p>
                 </div>
               </div>
+
               <div v-else class="text-center py-8">
                 <p class="text-gray-500">{{ $t('profile.empty.reviews') }}</p>
               </div>
+
             </div>
           </TabPanel>
+
         </TabView>
       </div>
     </template>
   </div>
 </template>
+
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
