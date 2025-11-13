@@ -28,7 +28,9 @@
     "edit": "Edit",
     "delete": "Delete",
     "confirm": "Confirm",
-    "close": "Close"
+    "close": "Close",
+    "error": "Error",
+    "info": "Information"
   },
   "errors": {
     "pageNotFound": "Page not found",
@@ -150,6 +152,47 @@
     "messageSent": "Message sent successfully",
     "messageError": "Failed to send message"
   },
+  "eventManagement": {
+    "pageTitle": "Event Management",
+    "actions": {
+      "selectAll": "Select all",
+      "deleteSelected": "Delete selected ({count})",
+      "search": "Search events...",
+      "newEvent": "New Event",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "filters": {
+      "all": "All statuses",
+      "active": "Active",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "sort": {
+      "recent": "Most recent",
+      "oldest": "Oldest",
+      "title": "By title"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "of": "of",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "confirmation": {
+      "title": "Confirm deletion",
+      "message": "Are you sure you want to delete {count} event(s)? This action cannot be undone."
+    },
+    "messages": {
+      "noEvents": "No events available",
+      "forbiddenEvent": "You don't have permission to modify this event."
+    },
+    "status": {
+      "active": "Active",
+      "toBeConfirmed": "To be confirmed",
+      "cancelled": "Cancelled"
+    }
+  },
   "quotes": {
     "page": {
       "title": "Quotes",
@@ -251,85 +294,27 @@
       "loadedSuccessfully": "Quotes loaded successfully",
       "loadError": "Unable to load quotes. Please try again.",
       "createdSuccessfully": "Quote created successfully",
+      "createError": "Unable to create quote. Please try again.",
       "updatedSuccessfully": "Quote updated successfully",
-      "saveError": "We couldn't save the quote. Please check the information and try again.",
-      "sentSuccessfully": "Quote sent successfully",
-      "sendError": "We couldn't send the quote. Please try again later.",
-      "missingOwner": "You must be authenticated to manage this quote.",
-      "forbiddenQuote": "You don't have permission to access this quote.",
-      "stateApproved": "You approved the quote.",
-      "stateDeclined": "You declined the quote.",
-      "stateChangeError": "We couldn't update the quote state."
+      "updateError": "Unable to update quote. Please try again.",
+      "deletedSuccessfully": "Quote deleted successfully",
+      "deleteError": "Unable to delete quote. Please try again.",
+      "invalidData": "Quote data is invalid.",
+      "requiredFields": "Please complete all required fields."
     }
   },
-  "events": {
-    "types": {
-      "wedding": "Wedding",
-      "conference": "Conference",
-      "corporate_party": "Corporate Party",
-      "baby_shower": "Baby Shower",
-      "graduation": "Graduation",
-      "birthday": "Birthday",
-      "fifteen_years": "Fifteen Years",
-      "other": "Other"
-    }
-  },
-  "eventManagement": {
-    "pageTitle": "Event Management",
-    "actions": {
-      "selectAll": "Select all",
-      "deleteSelected": "Delete selected ({count})",
-      "search": "Search events...",
-      "newEvent": "New Event",
-      "cancel": "Cancel",
-      "delete": "Delete"
-    },
-    "filters": {
-      "all": "All statuses",
-      "active": "Active",
-      "pending": "Pending",
-      "cancelled": "Cancelled"
-    },
-    "sort": {
-      "recent": "Most recent",
-      "oldest": "Oldest",
-      "title": "By title"
-    },
-    "pagination": {
-      "showing": "Showing",
-      "of": "of",
-      "previous": "Previous",
-      "next": "Next"
-    },
-    "confirmation": {
-      "title": "Confirm deletion",
-      "message": "Are you sure you want to delete {count} event(s)? This action cannot be undone."
-    },
-    "messages": {
-      "noEvents": "No events available",
-      "forbiddenEvent": "You don't have permission to modify this event."
-    },
-    "status": {
-      "active": "Active",
-      "toBeConfirmed": "To be confirmed",
-      "cancelled": "Cancelled"
-    }
-  },
-  "messaging": {
-    "messages": "Messages",
-    "online": "Online",
-    "offline": "Offline",
-    "typing": "typing...",
+  "messages": {
+    "title": "Messages",
+    "subtitle": "Communicate with your clients and organizers",
+    "searchPlaceholder": "Search conversations...",
+    "newMessage": "New Message",
+    "noConversations": "No conversations",
+    "startConversation": "Start a conversation with your contacts",
     "typeMessage": "Type a message...",
     "send": "Send",
-    "newChat": "New chat",
-    "searchConversations": "Search conversations...",
-    "noConversations": "You have no conversations",
-    "startConversation": "Start conversation",
-    "selectConversation": "Select a conversation",
-    "selectConversationDescription": "Choose a conversation from the list or start a new one",
-    "backToList": "Back to list",
-    "noMessages": "No messages yet",
+    "online": "Online",
+    "offline": "Offline",
+    "typing": "Typing...",
     "messageSent": "Message sent",
     "messageError": "Error sending message",
     "loadingMessages": "Loading messages..."
@@ -343,8 +328,6 @@
     }
   },
   "auth": {
-    "loginTitle": "Welcome to EventGO",
-    "loginSubtitle": "Manage your events efficiently",
     "email": "Email",
     "password": "Password",
     "rememberMe": "Remember me on this device",
@@ -352,9 +335,6 @@
     "forgotPassword": "Forgot your password?",
     "noAccount": "Don't have an account?",
     "registerHere": "Register here",
-    "registerTitle": "Create Account",
-    "registerSubtitle": "Join EventGO and start organizing events",
-    "fullName": "Full Name",
     "securePassword": "Create a secure password",
     "minChars": "Minimum 8 characters",
     "confirmPassword": "Confirm Password",
@@ -376,7 +356,30 @@
     "errorEmailRegistered": "Email is already registered",
     "successLogin": "Login successful",
     "successRegister": "Account created successfully",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "loginTitle": "Sign In",
+    "loginSubtitle": "Access your EventGO account",
+    "registerTitle": "Create Account",
+    "registerSubtitle": "Join the EventGO community",
+    "emailPlaceholder": "you@email.com",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "selectRole": "Select your role",
+    "roleHostDescription": "I'm looking for organizers for my events",
+    "roleOrganizerDescription": "I offer event organization services",
+    "welcomeBack": "Hello {name}, great to see you again",
+    "welcomeHost": "Welcome {name}! Start finding perfect organizers for your events",
+    "welcomeOrganizer": "Welcome {name}! Start managing your quotes and events",
+    "errorFieldsRequired": "Please fill in all required fields",
+    "errorNameLength": "Name must be at least 3 characters",
+    "errorInvalidEmail": "Please enter a valid email address",
+    "errorCheckFields": "Please check the fields marked in red",
+    "errorInvalidCredentials": "Invalid email or password",
+    "errorEmailExists": "This email is already registered",
+    "errorNetwork": "Connection error. Please check your internet",
+    "passwordHint": "Minimum 8 characters, include letters and numbers"
   },
   "dashboard": {
     "welcome": "Welcome, {name}",
@@ -393,7 +396,7 @@
       },
       "pendingTasks": {
         "title": "Pending Tasks",
-        "subtitle": "{count} win today"
+        "subtitle": "{count} due today"
       },
       "quotes": {
         "title": "Quotes",
@@ -409,54 +412,69 @@
       "loadError": "We couldn't load the dashboard. Please try again."
     },
     "host": {
-      "welcome": "Hello, {name}",
-      "subtitle": "Discover organizers and manage your quotes",
-      "sidebar": {
-        "browseOrganizers": "Browse organizers",
-        "myEvents": "My events",
-        "quotes": "Quotes",
-        "messages": "Messages"
-      },
+      "welcome": "Welcome, {name}",
+      "subtitle": "Find the perfect organizer for your event",
       "hero": {
-        "title": "Find the perfect organizer for your event",
-        "subtitle": "Search by name, event type, or city to request a quote.",
-        "searchPlaceholder": "Search by name, event type, city...",
+        "mainTitle": "Find the perfect organizer for your event.",
+        "searchPlaceholder": "Search by name, event type, location...",
         "filters": "Filters",
-        "clearFilters": "Clear filters"
+        "typeOfEvent": "Type of event",
+        "classification": "Classification"
       },
-      "messages": {
-        "unableToNavigateQuotes": "We couldn't open the quotes section. Please try again."
+      "filters": {
+        "allTypes": "All event types",
+        "allClassifications": "All classifications",
+        "classifications": {
+          "premium": "Premium",
+          "verified": "Verified",
+          "new": "New"
+        }
+      },
+      "sidebar": {
+        "searchOrganizers": "Search Organizers",
+        "myEvents": "My Events",
+        "quotes": "Quotes",
+        "messages": "Messages",
+        "reviews": "Reviews",
+        "profile": "Profile",
+        "settings": "Settings"
+      },
+      "organizerBrowser": {
+        "viewProfile": "View profile",
+        "empty": "No organizers found matching your search criteria",
+        "allCategories": "All Categories"
+      },
+      "organizerDialog": {
+        "requestQuote": "Request Quote",
+        "sendMessage": "Send Message",
+        "tabs": {
+          "information": "Information",
+          "services": "Services",
+          "albums": "Albums",
+          "reviews": "Reviews"
+        },
+        "aboutTitle": "About {name}",
+        "specialties": "Specialties",
+        "experience": "Experience",
+        "eventifyOrganizer": "Eventify Organizer",
+        "present": "2019 - Present",
+        "experienceDescription": "Professional event organizer with {count} completed events. Specialized in creating memorable experiences tailored to each client's unique vision.",
+        "certifications": "Certifications",
+        "servicesOffered": "Services Offered",
+        "noServices": "No services information available at the moment.",
+        "priceRange": "Price Range",
+        "noAlbums": "Photo albums will be available soon.",
+        "featuredReviews": "Featured Reviews",
+        "sampleReview": "Outstanding service and attention to detail. The organizer exceeded all expectations and made our event truly unforgettable.",
+        "verifiedClient": "Verified Client, March 2025",
+        "noReviews": "No reviews available yet."
       },
       "pagination": {
         "label": "Page {page} of {total}"
       },
-      "actions": {
-        "viewQuotes": "Go to quotes"
-      },
-      "metrics": {
-        "totalQuotes": "Total quotes",
-        "totalQuotesSubtitle": "Requests sent",
-        "pendingQuotes": "Pending quotes",
-        "pendingQuotesSubtitle": "Waiting for your decision",
-        "approvedQuotes": "Approved quotes",
-        "approvedQuotesSubtitle": "Organizers ready",
-        "declinedQuotes": "Declined quotes",
-        "declinedQuotesSubtitle": "Requests dismissed"
-      },
-      "organizerBrowser": {
-        "title": "Explore organizers",
-        "subtitle": "Filter by event type and review their experience",
-        "search": "Search organizers...",
-        "filterPlaceholder": "Filter by category",
-        "allCategories": "All categories",
-        "viewProfile": "View profile",
-        "empty": "No organizers were found for those filters",
-        "details": {
-          "eventTypes": "Event types",
-          "location": "Location",
-          "contact": "Contact details",
-          "highlights": "Highlights"
-        }
+      "messages": {
+        "unableToNavigateQuotes": "Unable to navigate to quotes at this time",
+        "featureComingSoon": "This feature will be available soon"
       }
     }
   },

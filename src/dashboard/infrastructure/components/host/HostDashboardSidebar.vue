@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n';
 const props = defineProps({
   activeItem: {
     type: String,
-    default: 'organizers',
+    default: 'search-organizers',
   },
 });
 
@@ -15,24 +15,39 @@ const { t } = useI18n();
 
 const navigationItems = computed(() => [
   {
-    id: 'organizers',
+    id: 'search-organizers',
     icon: 'pi pi-search',
-    label: t('dashboard.host.sidebar.browseOrganizers'),
+    label: t('dashboard.host.sidebar.searchOrganizers'),
   },
   {
-    id: 'events',
+    id: 'my-events',
     icon: 'pi pi-calendar',
     label: t('dashboard.host.sidebar.myEvents'),
   },
   {
     id: 'quotes',
-    icon: 'pi pi-send',
+    icon: 'pi pi-file-edit',
     label: t('dashboard.host.sidebar.quotes'),
   },
   {
     id: 'messages',
     icon: 'pi pi-comments',
     label: t('dashboard.host.sidebar.messages'),
+  },
+  {
+    id: 'reviews',
+    icon: 'pi pi-star',
+    label: t('dashboard.host.sidebar.reviews'),
+  },
+  {
+    id: 'profile',
+    icon: 'pi pi-user',
+    label: t('dashboard.host.sidebar.profile'),
+  },
+  {
+    id: 'settings',
+    icon: 'pi pi-cog',
+    label: t('dashboard.host.sidebar.settings'),
   },
 ]);
 
@@ -43,7 +58,10 @@ const handleSelect = (itemId) => {
 
 <template>
   <aside class="host-sidebar">
-    <div class="host-sidebar__brand">EVENTIFY</div>
+    <div class="host-sidebar__brand">
+      <i class="pi pi-calendar-plus brand-icon"></i>
+      <span>EVENTGO</span>
+    </div>
     <nav class="host-sidebar__nav">
       <button
         v-for="item in navigationItems"
@@ -62,27 +80,37 @@ const handleSelect = (itemId) => {
 
 <style scoped>
 .host-sidebar {
-  width: 240px;
-  background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
-  color: #ffffff;
-  border-radius: 24px;
-  padding: 2rem 1.5rem;
+  width: 200px;
+  background: #f3f4f6;
+  color: #374151;
+  padding: 1.5rem 0;
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+  height: fit-content;
+  border-radius: 0;
 }
 
 .host-sidebar__brand {
-  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.05em;
+  color: #3A506B;
+}
+
+.brand-icon {
+  font-size: 1.5rem;
+  color: #5BC0BE;
 }
 
 .host-sidebar__nav {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.25rem;
 }
 
 .host-sidebar__item {
@@ -90,28 +118,34 @@ const handleSelect = (itemId) => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.9rem 1rem;
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 14px;
   background: transparent;
-  color: #d1d5db;
-  font-weight: 600;
+  color: #6b7280;
+  font-weight: 500;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
+  text-align: left;
 }
 
 .host-sidebar__item i {
-  font-size: 1.1rem;
+  font-size: 1rem;
+  width: 20px;
 }
 
 .host-sidebar__item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+  background: #e5e7eb;
+  color: #111827;
 }
 
 .host-sidebar__item--active {
-  background: rgba(99, 102, 241, 0.25);
+  background: #3A506B;
   color: #ffffff;
+}
+
+.host-sidebar__item--active:hover {
+  background: #2d3f54;
 }
 
 @media (max-width: 1024px) {

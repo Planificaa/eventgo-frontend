@@ -1,46 +1,47 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from '/src/auth-management/infrastructure/composables/useAuth.js'
-import { useI18n } from 'vue-i18n'
-import { useToast } from 'primevue/usetoast'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuth } from "@/auth-management/infrastructure/composables/useAuth.js";
+import { useI18n } from "vue-i18n";
+import { useToast } from "primevue/usetoast";
 
-const { t } = useI18n()
-const router = useRouter()
-const { login, isLoading } = useAuth()
-const toast = useToast()
+const { t } = useI18n();
+const router = useRouter();
+const toast = useToast();
 
-// Form data
-const email = ref('')
-const password = ref('')
-const rememberMe = ref(false)
+const { login, isLoading } = useAuth();
 
-// Error handling
-const errorMessage = ref('')
+const email = ref("");
+const password = ref("");
+const rememberMe = ref(false);
+const errorMessage = ref("");
 
 const handleSubmit = async () => {
-  errorMessage.value = ''
+  errorMessage.value = "";
 
   try {
-    await login(email.value, password.value, { remember: rememberMe.value })
+    const res = await login(email.value, password.value, {
+      remember: rememberMe.value,
+    });
+
+    // Redirección por rol
+    if (res.user.role === "host") router.push("/host/dashboard");
+    else router.push("/organizer/dashboard");
 
     toast.add({
-      severity: 'success',
-      summary: t('auth.successLogin'),
-      life: 3000
-    })
-
-    router.push('/dashboard')
+      severity: "success",
+      summary: t("auth.successLogin"),
+      detail: t("auth.welcomeBack", { name: res.user.name }),
+    });
   } catch (error) {
-    errorMessage.value = error.message || t('auth.errorLogin')
+    errorMessage.value = error.message;
     toast.add({
-      severity: 'error',
-      summary: 'Error',
+      severity: "error",
+      summary: t("common.error"),
       detail: errorMessage.value,
-      life: 5000
-    })
+    });
   }
-}
+};
 </script>
 
 <template>
@@ -58,6 +59,11 @@ const handleSubmit = async () => {
         <p class="auth-subtitle">{{ $t('auth.loginSubtitle') }}</p>
       </div>
 
+      <!-- Mensaje de error global -->
+      <Message v-if="errorMessage" severity="error" :closable="false" class="mb-4">
+        {{ errorMessage }}
+      </Message>
+
       <!-- Form -->
       <form @submit.prevent="handleSubmit" class="auth-form">
         <!-- Email Input -->
@@ -67,9 +73,11 @@ const handleSubmit = async () => {
             id="email"
             v-model="email"
             type="email"
-            :placeholder="$t('auth.email')"
+            :placeholder="$t('auth.emailPlaceholder')"
             required
+            autocomplete="email"
             class="w-full"
+            :disabled="isLoading"
           />
         </div>
 
@@ -79,18 +87,25 @@ const handleSubmit = async () => {
           <Password
             id="password"
             v-model="password"
-            :placeholder="$t('auth.password')"
+            :placeholder="$t('auth.passwordPlaceholder')"
             :feedback="false"
             toggleMask
             required
+            autocomplete="current-password"
             class="w-full"
+            :disabled="isLoading"
           />
         </div>
 
         <!-- Remember Me & Forgot Password -->
         <div class="form-options">
           <div class="remember-me">
-            <Checkbox v-model="rememberMe" inputId="remember" :binary="true" />
+            <Checkbox
+              v-model="rememberMe"
+              inputId="remember"
+              :binary="true"
+              :disabled="isLoading"
+            />
             <label for="remember">{{ $t('auth.rememberMe') }}</label>
           </div>
           <RouterLink to="/forgot-password" class="forgot-link">
@@ -104,6 +119,8 @@ const handleSubmit = async () => {
           :label="$t('auth.loginButton')"
           class="w-full submit-btn"
           :loading="isLoading"
+          :disabled="isLoading"
+          icon="pi pi-sign-in"
         />
       </form>
 
@@ -158,8 +175,8 @@ const handleSubmit = async () => {
 }
 
 .auth-logo img {
-  height: 48px;
-  width: auto;
+  width: 120px;
+  height: auto;
 }
 
 /* Header */
@@ -172,12 +189,13 @@ const handleSubmit = async () => {
   font-size: 2rem;
   font-weight: 700;
   color: #1c2541;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
 .auth-subtitle {
   font-size: 1rem;
   color: #6b7280;
+  margin: 0;
 }
 
 /* Form */
@@ -195,15 +213,16 @@ const handleSubmit = async () => {
 
 .form-label {
   font-weight: 600;
-  color: #1c2541;
+  color: #374151;
   font-size: 0.875rem;
 }
 
-/* Form options */
+/* Form Options */
 .form-options {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: -0.5rem;
 }
 
 .remember-me {
@@ -220,40 +239,50 @@ const handleSubmit = async () => {
 
 .forgot-link {
   font-size: 0.875rem;
-  color: #5bc0be;
+  color: #3a506b;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .forgot-link:hover {
-  color: #3a506b;
+  color: #5bc0be;
 }
 
-/* Submit button */
+/* Submit Button */
 .submit-btn {
-  background: #5bc0be !important;
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, #3a506b 0%, #5bc0be 100%) !important;
   border: none !important;
-  padding: 0.75rem !important;
+  padding: 0.875rem !important;
   font-weight: 600 !important;
   font-size: 1rem !important;
+  border-radius: 8px !important;
   transition: all 0.3s ease !important;
 }
 
-.submit-btn:hover {
-  background: #3a506b !important;
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(91, 192, 190, 0.3) !important;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Footer */
 .auth-footer {
   text-align: center;
   margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
   font-size: 0.875rem;
   color: #6b7280;
 }
 
 .register-link {
-  color: #5bc0be;
+  color: #3a506b;
   text-decoration: none;
   font-weight: 600;
   margin-left: 0.25rem;
@@ -261,62 +290,68 @@ const handleSubmit = async () => {
 }
 
 .register-link:hover {
-  color: #3a506b;
+  color: #5bc0be;
+}
+
+/* PrimeVue Overrides */
+:deep(.p-inputtext),
+:deep(.p-password-input) {
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.9375rem;
+  transition: all 0.3s ease;
+}
+
+:deep(.p-inputtext:enabled:focus),
+:deep(.p-password:not(.p-disabled).p-focus .p-password-input) {
+  border-color: #5bc0be;
+  box-shadow: 0 0 0 0.2rem rgba(91, 192, 190, 0.15);
+}
+
+:deep(.p-inputtext:disabled),
+:deep(.p-password-input:disabled) {
+  background-color: #f9fafb;
+  color: #9ca3af;
+}
+
+:deep(.p-checkbox .p-checkbox-box) {
+  border: 2px solid #e5e7eb;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+:deep(.p-checkbox .p-checkbox-box.p-highlight) {
+  border-color: #5bc0be;
+  background: #5bc0be;
+}
+
+:deep(.p-message) {
+  border-radius: 8px;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .auth-card {
-    padding: 2rem 1.5rem;
-  }
-
-  .auth-title {
-    font-size: 1.5rem;
-  }
-
-  .form-options {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .auth-container {
     padding: 1rem;
   }
 
   .auth-card {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
   }
-}
 
-/* PrimeVue deep selectors */
-.auth-form :deep(.p-inputtext),
-.auth-form :deep(.p-password-input) {
-  padding: 0.75rem;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  transition: all 0.3s ease;
-}
+  .auth-title {
+    font-size: 1.75rem;
+  }
 
-.auth-form :deep(.p-inputtext:focus),
-.auth-form :deep(.p-password-input:focus) {
-  border-color: #5bc0be;
-  box-shadow: 0 0 0 3px rgba(91, 192, 190, 0.1);
-}
+  .auth-logo img {
+    width: 100px;
+  }
 
-.auth-form :deep(.p-password) {
-  width: 100%;
-}
-
-.auth-form :deep(.p-checkbox .p-checkbox-box) {
-  border-radius: 4px;
-  border-color: #d1d5db;
-}
-
-.auth-form :deep(.p-checkbox .p-checkbox-box.p-highlight) {
-  background: #5bc0be;
-  border-color: #5bc0be;
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
 }
 </style>

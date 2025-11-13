@@ -349,9 +349,16 @@
       "avatar": "https://i.pravatar.cc/150?img=45",
       "location": "Miraflores, Lima",
       "description": "Experta en bodas románticas y celebraciones boutique con atención a cada detalle.",
-      "eventTypes": ["Bodas", "Aniversarios", "Elopements"],
+      "eventTypes": [
+        "Bodas",
+        "Aniversarios",
+        "Elopements"
+      ],
       "priceRange": "$$$",
-      "languages": ["Español", "Inglés"],
+      "languages": [
+        "Español",
+        "Inglés"
+      ],
       "contact": {
         "email": "julia.garcia@dreamweddings.pe",
         "phone": "+51 984 123 456"
@@ -360,7 +367,8 @@
         "Top Wedding Planner 2024",
         "Red de proveedores premium",
         "Experiencia en bodas destino"
-      ]
+      ],
+      "isPublic": true
     },
     {
       "id": "organizer_2",
@@ -371,9 +379,16 @@
       "avatar": "https://i.pravatar.cc/150?img=52",
       "location": "San Isidro, Lima",
       "description": "Organizador corporativo con enfoque en experiencias inmersivas y lanzamientos innovadores.",
-      "eventTypes": ["Conferencias", "Lanzamientos", "Capacitaciones"],
+      "eventTypes": [
+        "Conferencias",
+        "Lanzamientos",
+        "Capacitaciones"
+      ],
       "priceRange": "$$$",
-      "languages": ["Español", "Inglés"],
+      "languages": [
+        "Español",
+        "Inglés"
+      ],
       "contact": {
         "email": "cramirez@corporate360.pe",
         "phone": "+51 911 222 333"
@@ -382,7 +397,8 @@
         "Eventos híbridos de alto impacto",
         "Coordinación con speakers internacionales",
         "KPIs medibles para sponsors"
-      ]
+      ],
+      "isPublic": true
     },
     {
       "id": "2",
@@ -393,9 +409,16 @@
       "avatar": "https://i.pravatar.cc/150?img=62",
       "location": "Barranco, Lima",
       "description": "Organizador integral especializado en bodas, baby showers y eventos sociales con storytelling.",
-      "eventTypes": ["Bodas", "Baby shower", "Cumpleaños", "Eventos corporativos"],
+      "eventTypes": [
+        "Bodas",
+        "Baby shower",
+        "Cumpleaños",
+        "Eventos corporativos"
+      ],
       "priceRange": "$$",
-      "languages": ["Español"],
+      "languages": [
+        "Español"
+      ],
       "contact": {
         "email": "luis.contreras@eventgo.pe",
         "phone": "+51 990 432 109"
@@ -404,7 +427,8 @@
         "Más de 140 eventos realizados",
         "Equipo propio de producción",
         "Planificación financiera detallada"
-      ]
+      ],
+      "isPublic": true
     },
     {
       "id": "organizer_4",
@@ -415,9 +439,15 @@
       "avatar": "https://i.pravatar.cc/150?img=56",
       "location": "La Molina, Lima",
       "description": "Planificadora de eventos sociales, graduaciones y fiestas de 15 años con propuestas creativas.",
-      "eventTypes": ["Quinceaños", "Graduaciones", "Baby shower"],
+      "eventTypes": [
+        "Quinceaños",
+        "Graduaciones",
+        "Baby shower"
+      ],
       "priceRange": "$$",
-      "languages": ["Español"],
+      "languages": [
+        "Español"
+      ],
       "contact": {
         "email": "laura.mendoza@celebrate.pe",
         "phone": "+51 955 221 876"
@@ -426,7 +456,8 @@
         "Portafolio fotográfico profesional",
         "Decoración personalizada",
         "Alianzas con banqueteros locales"
-      ]
+      ],
+      "isPublic": true
     },
     {
       "id": "organizer_5",
@@ -437,9 +468,16 @@
       "avatar": "https://i.pravatar.cc/150?img=40",
       "location": "Surco, Lima",
       "description": "Organizador de torneos deportivos, carreras y activaciones fitness para marcas.",
-      "eventTypes": ["Eventos deportivos", "Activaciones", "Team building"],
+      "eventTypes": [
+        "Eventos deportivos",
+        "Activaciones",
+        "Team building"
+      ],
       "priceRange": "$$",
-      "languages": ["Español", "Inglés"],
+      "languages": [
+        "Español",
+        "Inglés"
+      ],
       "contact": {
         "email": "miguel.rivera@sportive.pe",
         "phone": "+51 913 445 980"
@@ -448,7 +486,8 @@
         "Coordinación logística completa",
         "Alianzas con auspiciadores",
         "Protocolos de seguridad"
-      ]
+      ],
+      "isPublic": true
     },
     {
       "id": "organizer_6",
@@ -459,9 +498,15 @@
       "avatar": "https://i.pravatar.cc/150?img=47",
       "location": "San Borja, Lima",
       "description": "Especialista en fiestas temáticas para quinceañeras con coreografías y producción integral.",
-      "eventTypes": ["Quinceaños", "Bodas", "Fiestas temáticas"],
+      "eventTypes": [
+        "Quinceaños",
+        "Bodas",
+        "Fiestas temáticas"
+      ],
       "priceRange": "$$$",
-      "languages": ["Español"],
+      "languages": [
+        "Español"
+      ],
       "contact": {
         "email": "ana.fuentes@glowevents.pe",
         "phone": "+51 918 765 234"
@@ -470,7 +515,8 @@
         "Diseño escénico personalizado",
         "Coaching de vals",
         "Iluminación inteligente"
-      ]
+      ],
+      "isPublic": true
     },
     {
       "id": "organizer_7",
@@ -481,9 +527,16 @@
       "avatar": "https://i.pravatar.cc/150?img=53",
       "location": "Cusco, Perú",
       "description": "Organizadora de bodas destino en Cusco y el Valle Sagrado con experiencias culturales.",
-      "eventTypes": ["Bodas", "Renovaciones", "Escapadas románticas"],
+      "eventTypes": [
+        "Bodas",
+        "Renovaciones",
+        "Escapadas románticas"
+      ],
       "priceRange": "$$$$",
-      "languages": ["Español", "Inglés"],
+      "languages": [
+        "Español",
+        "Inglés"
+      ],
       "contact": {
         "email": "sofia.lara@andeanweddings.pe",
         "phone": "+51 977 654 210"
@@ -492,7 +545,8 @@
         "Bodas en sitios arqueológicos",
         "Experiencias gastronómicas locales",
         "Proveedores certificados"
-      ]
+      ],
+      "isPublic": true
     },
     {
       "id": "organizer_8",
@@ -503,9 +557,17 @@
       "avatar": "https://i.pravatar.cc/150?img=39",
       "location": "Miami, USA",
       "description": "Planner para convenciones y viajes de incentivo con operación en Latinoamérica.",
-      "eventTypes": ["Convenciones", "Incentivos", "Roadshows"],
+      "eventTypes": [
+        "Convenciones",
+        "Incentivos",
+        "Roadshows"
+      ],
       "priceRange": "$$$$",
-      "languages": ["Español", "Inglés", "Portugués"],
+      "languages": [
+        "Español",
+        "Inglés",
+        "Portugués"
+      ],
       "contact": {
         "email": "pedro.gomez@globalmeetings.com",
         "phone": "+1 305 123 7788"
@@ -514,7 +576,8 @@
         "Cobertura internacional",
         "Gestión de viajes",
         "Asesoría en visas y logística"
-      ]
+      ],
+      "isPublic": true
     }
   ],
   "users": [
@@ -529,8 +592,14 @@
       "city": "Miraflores, Lima",
       "description": "Anfitriona apasionada por crear experiencias memorables para familia y amigos, con especial interés en eventos boutique.",
       "socialLinks": [
-        { "type": "instagram", "url": "https://instagram.com/maria.host" },
-        { "type": "facebook", "url": "https://facebook.com/mariahost" }
+        {
+          "type": "instagram",
+          "url": "https://instagram.com/maria.host"
+        },
+        {
+          "type": "facebook",
+          "url": "https://facebook.com/mariahost"
+        }
       ],
       "metrics": {
         "eventsOrganized": 6,
@@ -551,7 +620,11 @@
           "location": "Miraflores, Lima",
           "company": "Celebrations by María"
         },
-        "preferences": ["Bodas", "Cumpleaños", "Baby shower"],
+        "preferences": [
+          "Bodas",
+          "Cumpleaños",
+          "Baby shower"
+        ],
         "recentEvents": [
           {
             "id": "recent_event_1",
@@ -612,8 +685,14 @@
       "city": "Barranco, Lima",
       "description": "Organizador profesional especializado en bodas, baby showers y eventos corporativos con enfoque creativo.",
       "socialLinks": [
-        { "type": "linkedin", "url": "https://linkedin.com/in/luiscontreras" },
-        { "type": "instagram", "url": "https://instagram.com/contreras.events" }
+        {
+          "type": "linkedin",
+          "url": "https://linkedin.com/in/luiscontreras"
+        },
+        {
+          "type": "instagram",
+          "url": "https://instagram.com/contreras.events"
+        }
       ],
       "metrics": {
         "eventsOrganized": 142,

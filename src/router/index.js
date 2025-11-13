@@ -1,279 +1,186 @@
 // src/router/index.js
 
-import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '/src/auth-management/application/services/auth.store.js'
-import EventPage from '../../src/social-event-management/doman/presentation/pages/event-page.component.vue'
-import CreateAndEditEvent from '/src/social-event-management/doman/presentation/components/create-and-edit-event.component.vue'
-import pinia from '@/shared/stores/pinia.js'
-// Task Management Pages
-import TaskPage from '/src/task-management/presentation/pages/TaskPage.vue'
-import TaskCreatePage from '/src/task-management/presentation/pages/TaskCreatePage.vue'
-import TaskEditPage from '/src/task-management/presentation/pages/TaskEditPage.vue'
-import TaskDetailPage from '/src/task-management/presentation/pages/TaskDetailPage.vue'
-import QuotePage from '@/quote-management/presentation/pages/QuotePage.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import pinia from "@/shared/stores/pinia.js";
+import { useAuthStore } from "@/auth-management/application/services/auth.store.js";
+
+// IMPORTS DE PÁGINAS
+import EventPage from "@/social-event-management/doman/presentation/pages/event-page.component.vue";
+import CreateAndEditEvent from "@/social-event-management/doman/presentation/components/create-and-edit-event.component.vue";
+import TaskPage from "@/task-management/presentation/pages/TaskPage.vue";
+import TaskCreatePage from "@/task-management/presentation/pages/TaskCreatePage.vue";
+import TaskEditPage from "@/task-management/presentation/pages/TaskEditPage.vue";
+import TaskDetailPage from "@/task-management/presentation/pages/TaskDetailPage.vue";
+import QuotePage from "@/quote-management/presentation/pages/QuotePage.vue";
 
 const routes = [
   // ========================================
-  // RUTAS DE AUTENTICACIÓN
+  // LOGIN / REGISTRO
   // ========================================
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('/src/auth-management/presentation/pages/LoginPage.vue'),
-    meta: { title: 'Iniciar Sesión', requiresAuth: false }
+    path: "/login",
+    name: "Login",
+    component: () =>
+      import("@/auth-management/presentation/pages/LoginPage.vue"),
+    meta: { requiresAuth: false, redirectIfAuth: true },
   },
   {
-    path: '/register',
-    name: 'Register',
-    component: () => import('/src/auth-management/presentation/pages/RegisterPage.vue'),
-    meta: { title: 'Crear Cuenta', requiresAuth: false }
+    path: "/register",
+    name: "Register",
+    component: () =>
+      import("@/auth-management/presentation/pages/RegisterPage.vue"),
+    meta: { requiresAuth: false, redirectIfAuth: true },
+  },
+
+  // ========================================
+  // REDIRECCIÓN RAÍZ
+  // ========================================
+  {
+    path: "/",
+    redirect: () => {
+      const auth = useAuthStore(pinia);
+      if (auth.user?.role === "host") return "/host/dashboard";
+      if (auth.user?.role === "organizer") return "/organizer/dashboard";
+      return "/login";
+    },
+  },
+
+  // ========================================
+  // DASHBOARDS POR ROL
+  // ========================================
+  {
+    path: "/host/dashboard",
+    name: "host-dashboard",
+    component: () =>
+      import("@/dashboard/infrastructure/components/host/HostDashboard.vue"),
+    meta: {
+      requiresAuth: true,
+      requiresRole: "host",
+      title: "Panel Anfitrión",
+    },
   },
   {
-    path: '/',
-    redirect: '/dashboard',
+    path: "/organizer/dashboard",
+    name: "organizer-dashboard",
+    component: () =>
+      import("@/dashboard/infrastructure/components/organizer/OrganizerDashboard.vue"),
+    meta: {
+      requiresAuth: true,
+      requiresRole: "organizer",
+      title: "Panel Organizador",
+    },
   },
+
+  // ========================================
+  // EVENTOS
+  // ========================================
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import('/src/dashboard/infrastructure/components/DashboardView.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/events',
-    name: 'Events',
+    path: "/events",
+    name: "events",
     component: EventPage,
-    meta: {
-      title: 'Events Management',
-      requiresAuth: true
-    }
+    meta: { requiresAuth: true },
   },
   {
-    path: '/events/create',
-    name: 'Create Event',
+    path: "/events/create",
+    name: "events-create",
     component: CreateAndEditEvent,
-    meta: {
-      title: 'Create Event',
-      requiresAuth: true
-    }
-
-
-  },
-
-  // ==========================================
-  // TASK MANAGEMENT
-  // ==========================================
-  {
-    path: '/tasks',
-    name: 'tasks',
-    component: TaskPage,
-    meta: {
-      title: 'Gestión de Tareas',
-    }
+    meta: { requiresAuth: true },
   },
   {
-    path: '/tasks/create',
-    name: 'task-create',
-    component: TaskCreatePage,
-    meta: {
-      title: 'Crear Tarea',
-    }
-  },
-  {
-    path: '/tasks/:id/edit',
-    name: 'task-edit',
-    component: TaskEditPage,
+    path: "/events/:id/edit",
+    name: "events-edit",
+    component: CreateAndEditEvent,
     props: true,
-    meta: {
-      title: 'Editar Tarea',
-    }
+    meta: { requiresAuth: true },
+  },
+
+  // ========================================
+  // TAREAS (solo organizador)
+  // ========================================
+  {
+    path: "/tasks",
+    name: "tasks",
+    component: TaskPage,
+    meta: { requiresAuth: true, requiresRole: "organizer" },
   },
   {
-    path: '/tasks/:id',
-    name: 'task-detail',
+    path: "/tasks/create",
+    name: "task-create",
+    component: TaskCreatePage,
+    meta: { requiresAuth: true, requiresRole: "organizer" },
+  },
+  {
+    path: "/tasks/:id",
+    name: "task-detail",
     component: TaskDetailPage,
     props: true,
-    meta: {
-      title: 'Detalle de Tarea',
-    }
+    meta: { requiresAuth: true, requiresRole: "organizer" },
+  },
+  {
+    path: "/tasks/:id/edit",
+    name: "task-edit",
+    component: TaskEditPage,
+    props: true,
+    meta: { requiresAuth: true, requiresRole: "organizer" },
   },
 
   // ========================================
-  // RUTAS DE QUOTE MANAGEMENT
+  // NOT FOUND
   // ========================================
   {
-    path: '/quotes',
-    name: 'quotes',
-    component: QuotePage,
-    meta: {
-      title: 'Quotes',
-      requiresAuth: true
-    }
+    path: "/:pathMatch(.*)*",
+    component: () =>
+      import("@/shared/infrastructure/components/common/PageNotFound.vue"),
   },
-  {
-    path: '/quotes/create',
-    name: 'quote-create',
-    component: () => import('/src/quote-management/presentation/pages/QuoteCreatePage.vue'),
-    meta: {
-      title: 'Create Quote',
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/quotes/edit/:id',
-    name: 'quote-edit',
-    component: () => import('/src/quote-management/presentation/pages/QuoteEditPage.vue'),
-    props: true,
-    meta: {
-      title: 'Edit Quote',
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/quotes/detail/:id',
-    name: 'quote-detail',
-    component: () => import('/src/quote-management/presentation/pages/QuoteDetailPage.vue'),
-    props: true,
-    meta: {
-      title: 'Quote Detail',
-      requiresAuth: true
-    }
-  },
-  // ========================================
-  // FIN RUTAS QUOTE MANAGEMENT
-  // ========================================
-  {
-    path: '/messages',
-    name: 'Messages',
-    component: () => import('/src/direct-communication/presentation/views/MessagesView.vue'),
-    meta: { requiresAuth: true },
-    children: [
-      {
-        path: ':conversationId',
-        name: 'MessagesConversation',
-        component: () => import('/src/direct-communication/presentation/views/MessagesView.vue'),
-        props: true,
-      },
-    ],
-  },
-  {
-    path: '/chat/:userId',
-    name: 'DirectChat',
-    component: () => import('/src/direct-communication/presentation/views/ChatView.vue'),
-    props: true,
-    meta: { requiresAuth: true },
-  },
-  // ========================================
-  // RUTAS DE PERFIL DE ORGANIZADOR
-  // ========================================
-  {
-    path: '/profile',
-    name: 'OrganizerProfilePage',
-    component: () => import('/src/profile-management/presentation/pages/OrganizerProfilePage.vue'),
-    meta: { title: 'Perfil del Organizador', requiresAuth: true }
-  },
-  {
-    path: '/profile/edit',
-    name: 'OrganizerProfileEditPage',
-    component: () => import('/src/profile-management/presentation/pages/OrganizerProfileEditPage.vue'),
-    meta: { title: 'Editar Perfil', requiresAuth: true }
-  },
-  {
-    path: '/profile/chat',
-    name: 'OrganizerChatPage',
-    component: () => import('/src/profile-management/presentation/pages/OrganizerChatPage.vue'),
-    meta: { title: 'Chat con Clientes', requiresAuth: true }
-  },
-  // ========================================
-  // RUTAS DE ALBUMES
-  // ========================================
-  {
-    path: '/profile/albums',
-    name: 'OrganizerAlbumPage',
-    component: () => import('/src/profile-management/presentation/pages/OrganizerAlbumPage.vue'),
-    meta: { title: 'Albumes', requiresAuth: true }
-  },
-  {
-    path: '/profile/albums/create',
-    name: 'OrganizerAlbumCreatePage',
-    component: () => import('/src/profile-management/presentation/pages/OrganizerAlbumCreatePage.vue'),
-    meta: { title: 'Crear Album', requiresAuth: true }
-  },
-  {
-    path: '/profile/albums/:id/edit',
-    name: 'OrganizerAlbumEditPage',
-    component: () => import('/src/profile-management/presentation/pages/OrganizerAlbumEditPage.vue'),
-    props: true,
-    meta: { title: 'Editar Album', requiresAuth: true }
-  },
-  // ========================================
-  // RUTAS DE CONFIGURACIÓN Y NOTIFICACIONES
-  // ========================================
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: () => import('/src/profile-management/presentation/pages/SettingsPage.vue'),
-    meta: { title: 'Configuración', requiresAuth: true }
-  },
-  {
-    path: '/notifications',
-    name: 'Notifications',
-    component: () => import('/src/profile-management/presentation/pages/NotificationsPage.vue'),
-    meta: { title: 'Notificaciones', requiresAuth: true }
-  },
+];
 
-  // Ruta 404
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'PageNotFound',
-    component: () => import('/src/shared/infrastructure/components/common/PageNotFound.vue'),
-    meta: { title: 'Página no encontrada' }
-  },
-]
-
+// ========================================
+// CONFIGURACIÓN DEL ROUTER
+// ========================================
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(to, from, savedPosition) {
-    return savedPosition || { top: 0 }
-  },
-})
+});
 
-// Inicializar Pinia para poder usar el store fuera de un componente
-const authStore = useAuthStore(pinia)
-const getPersistedToken = () => {
-  if (typeof window === 'undefined') return null;
-  return window.localStorage.getItem('authToken') || window.sessionStorage.getItem('authToken');
-};
-// Guarda de navegación global
+// ========================================
+// GUARD DE NAVEGACIÓN
+// ========================================
 router.beforeEach(async (to, from, next) => {
-  // 1. Restaurar sesión al inicio (solo si aún no se ha restaurado)
-  if (!authStore.isAuthenticated && getPersistedToken()) {
-    try {
-      await authStore.restoreSession()
-    } catch (error) {
-      console.error('Error restoring session:', error)
+  const auth = useAuthStore(pinia);
+
+  const requiresAuth = to.meta.requiresAuth ?? true;
+  const requiresRole = to.meta.requiresRole;
+
+  // Intentar restaurar sesión si hay token
+  if (!auth.isAuthenticated) {
+    const persisted =
+      localStorage.getItem("authToken") ||
+      sessionStorage.getItem("authToken");
+
+    if (persisted) {
+      await auth.restoreSession();
     }
   }
 
-  const requiresAuth = to.meta.requiresAuth !== false // Por defecto, todas las rutas requieren autenticación
-  const isAuthenticated = authStore.isAuthenticated
-
-  // 2. Cambiar el título dinámicamente
-  document.title = to.meta.title ? `${to.meta.title} - EventGo` : 'EventGo'
-
-  // 3. Lógica de redirección
-  if (requiresAuth && !isAuthenticated) {
-    // Si la ruta requiere autenticación y el usuario no está logeado
-    console.log(' Access denied - Redirecting to login')
-    next({ name: 'Login', query: { redirect: to.fullPath } })
-  } else if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
-    // Si el usuario está logeado y trata de acceder a Login o Register
-    console.log('Already authenticated - Redirecting to dashboard')
-    next({ name: 'Dashboard' })
-  } else {
-    // Permitir navegación
-    next()
+  // Rutas que no requieren auth
+  if (!requiresAuth) {
+    if (to.meta.redirectIfAuth && auth.isAuthenticated) {
+      if (auth.user.role === "host") return next("/host/dashboard");
+      if (auth.user.role === "organizer") return next("/organizer/dashboard");
+    }
+    return next();
   }
-})
 
-export default router
+  // Si requiere auth y no está logueado
+  if (!auth.isAuthenticated) return next("/login");
+
+  // Si requiere rol
+  if (requiresRole && auth.user.role !== requiresRole) {
+    if (auth.user.role === "host") return next("/host/dashboard");
+    return next("/organizer/dashboard");
+  }
+
+  next();
+});
+
+export default router;

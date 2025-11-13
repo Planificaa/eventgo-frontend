@@ -28,7 +28,9 @@
     "edit": "Editar",
     "delete": "Eliminar",
     "confirm": "Confirmar",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "error": "Error",
+    "info": "Información"
   },
   "errors": {
     "pageNotFound": "Página no encontrada",
@@ -254,7 +256,7 @@
       "quantity": "Cantidad",
       "unitPrice": "Precio Unitario",
       "total": "Total",
-      "noServices": "No hay servicios agregados",
+      "noServices": "No se han agregado servicios",
       "services": "servicios"
     },
     "financial": {
@@ -263,7 +265,7 @@
       "vat": "IGV",
       "total": "Total",
       "services": "servicios",
-      "paymentTerms": "Términos de pago: 50% adelanto, 50% al finalizar"
+      "paymentTerms": "Condiciones de pago: 50% adelanto, 50% al finalizar"
     },
     "actions": {
       "title": "Acciones",
@@ -285,66 +287,47 @@
       "location": "Ubicación",
       "guests": "Invitados",
       "tel": "Tel",
-      "editAgain": "Editar de Nuevo",
+      "editAgain": "Editar Nuevamente",
       "saveAndSend": "Guardar y Enviar"
     },
     "messages": {
-      "loadedSuccessfully": "Cotizaciones cargadas correctamente",
+      "loadedSuccessfully": "Cotizaciones cargadas exitosamente",
       "loadError": "No se pudieron cargar las cotizaciones. Inténtalo nuevamente.",
-      "createdSuccessfully": "Cotización creada correctamente",
-      "updatedSuccessfully": "Cotización actualizada correctamente",
-      "saveError": "No pudimos guardar la cotización. Verifica la información e inténtalo otra vez.",
-      "sentSuccessfully": "Cotización enviada correctamente",
-      "sendError": "No pudimos enviar la cotización. Intenta más tarde.",
-      "missingOwner": "Debes iniciar sesión para gestionar esta cotización.",
-      "forbiddenQuote": "No tienes permisos para acceder a esta cotización.",
-      "stateApproved": "Has aprobado la cotización.",
-      "stateDeclined": "Has rechazado la cotización.",
-      "stateChangeError": "No se pudo actualizar el estado de la cotización."
+      "createdSuccessfully": "Cotización creada exitosamente",
+      "createError": "No se pudo crear la cotización. Inténtalo nuevamente.",
+      "updatedSuccessfully": "Cotización actualizada exitosamente",
+      "updateError": "No se pudo actualizar la cotización. Inténtalo nuevamente.",
+      "deletedSuccessfully": "Cotización eliminada exitosamente",
+      "deleteError": "No se pudo eliminar la cotización. Inténtalo nuevamente.",
+      "invalidData": "Los datos de la cotización son inválidos.",
+      "requiredFields": "Por favor completa todos los campos requeridos."
     }
   },
-  "events": {
-    "types": {
-      "wedding": "Boda",
-      "conference": "Conferencia",
-      "corporate_party": "Fiesta Corporativa",
-      "baby_shower": "Baby Shower",
-      "graduation": "Graduación",
-      "birthday": "Cumpleaños",
-      "fifteen_years": "Quinceaños",
-      "other": "Otro"
-    }
+  "messages": {
+    "title": "Mensajes",
+    "subtitle": "Comunícate con tus clientes y organizadores",
+    "searchPlaceholder": "Buscar conversaciones...",
+    "newMessage": "Nuevo Mensaje",
+    "noConversations": "No hay conversaciones",
+    "startConversation": "Inicia una conversación con tus contactos",
+    "typeMessage": "Escribe un mensaje...",
+    "send": "Enviar",
+    "online": "En línea",
+    "offline": "Desconectado",
+    "typing": "Escribiendo...",
+    "messageSent": "Mensaje enviado",
+    "messageError": "Error al enviar el mensaje",
+    "loadingMessages": "Cargando mensajes..."
   },
   "tasks": {
     "status": {
       "todo": "Por Hacer",
       "inprogress": "En Progreso",
-      "done": "Completada",
-      "cancelled": "Cancelada"
+      "done": "Completado",
+      "cancelled": "Cancelado"
     }
   },
-  "messaging": {
-    "messages": "Mensajes",
-    "online": "En línea",
-    "offline": "Desconectado",
-    "typing": "escribiendo...",
-    "typeMessage": "Escribe un mensaje...",
-    "send": "Enviar",
-    "newChat": "Nuevo chat",
-    "searchConversations": "Buscar conversaciones...",
-    "noConversations": "No tienes conversaciones",
-    "startConversation": "Iniciar conversación",
-    "selectConversation": "Selecciona una conversación",
-    "selectConversationDescription": "Elige una conversación de la lista o inicia una nueva",
-    "backToList": "Volver a la lista",
-    "noMessages": "No hay mensajes aún",
-    "messageSent": "Mensaje enviado",
-    "messageError": "Error al enviar mensaje",
-    "loadingMessages": "Cargando mensajes..."
-  },
   "auth": {
-    "loginTitle": "Bienvenido a EventGO",
-    "loginSubtitle": "Gestiona tus eventos de forma eficiente",
     "email": "Email",
     "password": "Contraseña",
     "rememberMe": "Recuérdame en este dispositivo",
@@ -352,9 +335,6 @@
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "noAccount": "¿No tienes cuenta?",
     "registerHere": "Regístrate aquí",
-    "registerTitle": "Crear Cuenta",
-    "registerSubtitle": "Únete a EventGO y comienza a organizar eventos",
-    "fullName": "Nombre Completo",
     "securePassword": "Crea una contraseña segura",
     "minChars": "Mínimo 8 caracteres",
     "confirmPassword": "Confirmar Contraseña",
@@ -376,7 +356,30 @@
     "successLogin": "Inicio de sesión exitoso",
     "successRegister": "Cuenta creada exitosamente",
     "signOut": "Cerrar Sesión",
-    "and": "y la"
+    "and": "y la",
+    "loginTitle": "Iniciar Sesión",
+    "loginSubtitle": "Accede a tu cuenta de EventGO",
+    "registerTitle": "Crear Cuenta",
+    "registerSubtitle": "Únete a la comunidad de EventGO",
+    "emailPlaceholder": "tu@email.com",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "confirmPasswordPlaceholder": "Confirma tu contraseña",
+    "fullName": "Nombre Completo",
+    "fullNamePlaceholder": "Juan Pérez",
+    "selectRole": "Selecciona tu rol",
+    "roleHostDescription": "Busco organizadores para mis eventos",
+    "roleOrganizerDescription": "Ofrezco servicios de organización",
+    "welcomeBack": "Hola {name}, nos alegra verte de nuevo",
+    "welcomeHost": "¡Bienvenido {name}! Empieza a buscar organizadores perfectos para tus eventos",
+    "welcomeOrganizer": "¡Bienvenido {name}! Empieza a gestionar tus cotizaciones y eventos",
+    "errorFieldsRequired": "Por favor completa todos los campos requeridos",
+    "errorNameLength": "El nombre debe tener al menos 3 caracteres",
+    "errorInvalidEmail": "Por favor ingresa un correo electrónico válido",
+    "errorCheckFields": "Por favor revisa los campos marcados en rojo",
+    "errorInvalidCredentials": "Correo o contraseña incorrectos",
+    "errorEmailExists": "Este correo electrónico ya está registrado",
+    "errorNetwork": "Error de conexión. Por favor verifica tu internet",
+    "passwordHint": "Mínimo 8 caracteres, incluye letras y números"
   },
   "dashboard": {
     "welcome": "Bienvenido, {name}",
@@ -393,7 +396,7 @@
       },
       "pendingTasks": {
         "title": "Tareas Pendientes",
-        "subtitle": "{count} ganan hoy"
+        "subtitle": "{count} vencen hoy"
       },
       "quotes": {
         "title": "Cotizaciones",
@@ -409,54 +412,69 @@
       "loadError": "No se pudo cargar el tablero. Inténtalo nuevamente."
     },
     "host": {
-      "welcome": "Hola, {name}",
-      "subtitle": "Encuentra organizadores y gestiona tus cotizaciones",
+      "welcome": "Bienvenido, {name}",
+      "subtitle": "Encuentra el organizador perfecto para tu evento",
+      "hero": {
+        "mainTitle": "Encuentra el organizador perfecto para tu evento.",
+        "searchPlaceholder": "Buscar por nombre, tipo de evento, ubicación...",
+        "filters": "Filtros",
+        "typeOfEvent": "Tipo de evento",
+        "classification": "Clasificación"
+      },
+      "filters": {
+        "allTypes": "Todos los tipos",
+        "allClassifications": "Todas las clasificaciones",
+        "classifications": {
+          "premium": "Premium",
+          "verified": "Verificado",
+          "new": "Nuevo"
+        }
+      },
       "sidebar": {
-        "browseOrganizers": "Buscar Organizadores",
+        "searchOrganizers": "Buscar Organizadores",
         "myEvents": "Mis Eventos",
         "quotes": "Cotizaciones",
-        "messages": "Mensajes"
+        "messages": "Mensajes",
+        "reviews": "Reseñas",
+        "profile": "Perfil",
+        "settings": "Configuración"
       },
-      "hero": {
-        "title": "Encuentra el organizador perfecto para tu evento",
-        "subtitle": "Busca por nombre, tipo de evento o ciudad para solicitar una cotización.",
-        "searchPlaceholder": "Buscar por nombre, tipo de evento, ciudad...",
-        "filters": "Filtros",
-        "clearFilters": "Limpiar filtros"
+      "organizerBrowser": {
+        "viewProfile": "Ver perfil",
+        "empty": "No se encontraron organizadores con esos criterios",
+        "allCategories": "Todas las Categorías"
       },
-      "messages": {
-        "unableToNavigateQuotes": "No pudimos abrir la sección de cotizaciones. Inténtalo nuevamente."
+      "organizerDialog": {
+        "requestQuote": "Solicitar Cotización",
+        "sendMessage": "Enviar Mensaje",
+        "tabs": {
+          "information": "Información",
+          "services": "Servicios",
+          "albums": "Álbumes",
+          "reviews": "Reseñas"
+        },
+        "aboutTitle": "Acerca de {name}",
+        "specialties": "Especialidades",
+        "experience": "Experiencia",
+        "eventifyOrganizer": "Organizador Eventify",
+        "present": "2019 - Presente",
+        "experienceDescription": "Organizador profesional de eventos con {count} eventos completados. Especializado en crear experiencias memorables adaptadas a la visión única de cada cliente.",
+        "certifications": "Certificaciones",
+        "servicesOffered": "Servicios Ofrecidos",
+        "noServices": "No hay información de servicios disponible por el momento.",
+        "priceRange": "Rango de Precios",
+        "noAlbums": "Los álbumes de fotos estarán disponibles próximamente.",
+        "featuredReviews": "Reseñas Destacadas",
+        "sampleReview": "Servicio excepcional y atención al detalle. El organizador superó todas las expectativas e hizo que nuestro evento fuera verdaderamente inolvidable.",
+        "verifiedClient": "Cliente Verificado, Marzo 2025",
+        "noReviews": "Aún no hay reseñas disponibles."
       },
       "pagination": {
         "label": "Página {page} de {total}"
       },
-      "actions": {
-        "viewQuotes": "Ir a cotizaciones"
-      },
-      "metrics": {
-        "totalQuotes": "Cotizaciones totales",
-        "totalQuotesSubtitle": "Solicitudes enviadas",
-        "pendingQuotes": "Cotizaciones pendientes",
-        "pendingQuotesSubtitle": "Esperando tu decisión",
-        "approvedQuotes": "Cotizaciones aprobadas",
-        "approvedQuotesSubtitle": "Organizadores listos",
-        "declinedQuotes": "Cotizaciones rechazadas",
-        "declinedQuotesSubtitle": "Solicitudes descartadas"
-      },
-      "organizerBrowser": {
-        "title": "Explora organizadores",
-        "subtitle": "Filtra por tipo de evento y revisa su experiencia",
-        "search": "Buscar organizadores...",
-        "filterPlaceholder": "Filtrar por categoría",
-        "allCategories": "Todas las categorías",
-        "viewProfile": "Ver perfil",
-        "empty": "No se encontraron organizadores con esos filtros",
-        "details": {
-          "eventTypes": "Tipos de eventos",
-          "location": "Ubicación",
-          "contact": "Datos de contacto",
-          "highlights": "Destacados"
-        }
+      "messages": {
+        "unableToNavigateQuotes": "No se pudo navegar a cotizaciones en este momento",
+        "featureComingSoon": "Esta función estará disponible pronto"
       }
     }
   },

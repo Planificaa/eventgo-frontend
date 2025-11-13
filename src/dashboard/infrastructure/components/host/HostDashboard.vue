@@ -1,374 +1,214 @@
-<script setup>
-import { computed, onMounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
-import { useToast } from 'primevue/usetoast';
-
-import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
-import { ProfileApiService } from '@/profile-management/application/profile-api.service.js';
-import { QuoteApiService } from '@/quote-management/application/services/quote-api.service.js';
-import { QuoteOrder } from '@/quote-management/domain/model';
-
-import HostDashboardSidebar from './HostDashboardSidebar.vue';
-import HostHeroFilters from './HostHeroFilters.vue';
-import HostQuoteMetrics from './HostQuoteMetrics.vue';
-import HostOrganizerBrowser from './HostOrganizerBrowser.vue';
-import HostOrganizerDialog from './HostOrganizerDialog.vue';
-
-const router = useRouter();
-const { t } = useI18n();
-const toast = useToast();
-const { user, restoreSession, isHost } = useAuth();
-
-const isLoading = ref(false);
-const hostOrganizers = ref([]);
-const searchTerm = ref('');
-const selectedCategory = ref('all');
-const currentPage = ref(1);
-const itemsPerPage = 6;
-const filtersExpanded = ref(true);
-const selectedOrganizer = ref(null);
-const organizerDialogVisible = ref(false);
-const hostDataLoaded = ref(false);
-const quoteStats = ref({ total: 0, approved: 0, pending: 0, declined: 0 });
-const activeSidebarItem = ref('organizers');
-
-const ensureSession = async () => {
-  if (!user.value) {
-    await restoreSession();
-  }
-};
-
-const hostCategories = computed(() => {
-  const categories = new Set();
-  hostOrganizers.value.forEach((organizer) => {
-    if (Array.isArray(organizer.eventTypes)) {
-      organizer.eventTypes.forEach((type) => categories.add(type));
-    }
-  });
-  return ['all', ...categories];
-});
-
-const filteredOrganizers = computed(() => {
-  const term = searchTerm.value.trim().toLowerCase();
-  const category = selectedCategory.value;
-
-  return hostOrganizers.value.filter((organizer) => {
-    const texts = [
-      organizer.name,
-      organizer.specialty,
-      organizer.description,
-      organizer.location,
-      ...(organizer.eventTypes || []),
-    ]
-      .filter(Boolean)
-      .map((text) => text.toLowerCase());
-
-    const matchesTerm = !term || texts.some((text) => text.includes(term));
-    const matchesCategory =
-      category === 'all' ||
-      (organizer.eventTypes || []).some(
-        (type) => type.toLowerCase() === category.toLowerCase(),
-      );
-
-    return matchesTerm && matchesCategory;
-  });
-});
-
-const totalPages = computed(() => {
-  const total = filteredOrganizers.value.length;
-  return total > 0 ? Math.ceil(total / itemsPerPage) : 1;
-});
-
-const paginatedOrganizers = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return filteredOrganizers.value.slice(start, end);
-});
-
-const canClearFilters = computed(
-  () => selectedCategory.value !== 'all' || searchTerm.value.trim().length > 0,
-);
-
-const toggleFilters = () => {
-  filtersExpanded.value = !filtersExpanded.value;
-};
-
-const resetFilters = () => {
-  searchTerm.value = '';
-  selectedCategory.value = 'all';
-};
-
-const openOrganizerProfile = (organizer) => {
-  selectedOrganizer.value = organizer;
-  organizerDialogVisible.value = true;
-};
-
-const navigateToQuotes = () => {
-  router.push({ name: 'quotes' }).catch(() => {
-    toast.add({
-      severity: 'warn',
-      summary: t('common.warning'),
-      detail: t('dashboard.host.messages.unableToNavigateQuotes'),
-      life: 3000,
-    });
-  });
-};
-
-const deriveQuoteStats = (quotes = []) => {
-  const stats = quotes.reduce(
-    (acc, quoteOrder) => {
-      acc.total += 1;
-      if (quoteOrder.state === QuoteOrder.STATES.APPROVED) {
-        acc.approved += 1;
-      } else if (quoteOrder.state === QuoteOrder.STATES.PENDING) {
-        acc.pending += 1;
-      } else if (quoteOrder.state === QuoteOrder.STATES.DECLINED) {
-        acc.declined += 1;
-      }
-      return acc;
-    },
-    { total: 0, approved: 0, pending: 0, declined: 0 },
-  );
-
-  quoteStats.value = stats;
-};
-
-const loadHostDashboard = async () => {
-  isLoading.value = true;
-  hostDataLoaded.value = false;
-  try {
-    await ensureSession();
-
-    const [organizersResponse, quotesResponse] = await Promise.all([
-      ProfileApiService.getAll(),
-      QuoteApiService.getAll(),
-    ]);
-
-    const normalizedOrganizers = Array.isArray(organizersResponse)
-      ? organizersResponse.map((organizer) => ({
-          id: organizer.id,
-          name: organizer.name,
-          specialty: organizer.specialty || organizer.role || '',
-          rating: organizer.rating || 0,
-          completedEvents: organizer.completedEvents || 0,
-          avatar: organizer.avatar || '',
-          location: organizer.location || '',
-          description: organizer.description || '',
-          eventTypes: organizer.eventTypes || [],
-          priceRange: organizer.priceRange || '',
-          languages: organizer.languages || [],
-          contact: organizer.contact || {},
-          highlights: organizer.highlights || [],
-        }))
-      : [];
-
-    hostOrganizers.value = normalizedOrganizers;
-    currentPage.value = 1;
-
-    const hostId = user.value?.id ? String(user.value.id) : null;
-    const hostQuotes = Array.isArray(quotesResponse)
-      ? quotesResponse
-          .map((data) => QuoteOrder.fromJSON(data))
-          .filter((quoteOrder) => {
-            const ownerId = quoteOrder.ownerId ? String(quoteOrder.ownerId) : null;
-            return ownerId && hostId && ownerId === hostId;
-          })
-      : [];
-
-    deriveQuoteStats(hostQuotes);
-
-    hostDataLoaded.value = true;
-  } catch (error) {
-    console.error('Error loading host dashboard:', error);
-    toast.add({
-      severity: 'error',
-      summary: t('common.error'),
-      detail: error.message || t('dashboard.messages.loadError'),
-      life: 5000,
-    });
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-onMounted(() => {
-  if (isHost.value) {
-    loadHostDashboard();
-  }
-});
-
-watch(isHost, (value) => {
-  if (value) {
-    loadHostDashboard();
-  }
-});
-
-watch(organizerDialogVisible, (visible) => {
-  if (!visible) {
-    selectedOrganizer.value = null;
-  }
-});
-
-watch([searchTerm, selectedCategory], () => {
-  currentPage.value = 1;
-});
-
-watch(
-  () => filteredOrganizers.value.length,
-  (length) => {
-    const maxPage = Math.max(1, Math.ceil(length / itemsPerPage));
-    if (currentPage.value > maxPage) {
-      currentPage.value = maxPage;
-    }
-  },
-);
-
-const goToPreviousPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value -= 1;
-  }
-};
-
-const goToNextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value += 1;
-  }
-};
-
-const handleSidebarSelection = (itemId) => {
-  activeSidebarItem.value = itemId;
-  if (itemId === 'quotes') {
-    navigateToQuotes();
-  }
-};
-</script>
-
 <template>
-  <div class="host-dashboard">
-    <HostDashboardSidebar
-      :active-item="activeSidebarItem"
-      @select="handleSidebarSelection"
-    />
+  <div class="dashboard-container">
+    <h1 class="page-title">Panel de Anfitrión</h1>
+    <p class="page-subtitle">Explora y conecta con los organizadores disponibles</p>
 
-    <section class="host-dashboard__main">
-      <HostHeroFilters
-        :search-term="searchTerm"
-        :selected-category="selectedCategory"
-        :categories="hostCategories"
-        :filters-expanded="filtersExpanded"
-        :can-clear-filters="canClearFilters"
-        @update:searchTerm="(value) => (searchTerm.value = value)"
-        @update:selectedCategory="(value) => (selectedCategory.value = value)"
-        @toggle-filters="toggleFilters"
-        @reset-filters="resetFilters"
-      />
+    <!-- Loading State -->
+    <div v-if="loading" class="loading-box">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Cargando organizadores...</span>
+    </div>
 
-      <HostQuoteMetrics :stats="quoteStats" @view-quotes="navigateToQuotes" />
+    <!-- Error State -->
+    <div v-if="error" class="error-box">
+      {{ error }}
+    </div>
 
-      <HostOrganizerBrowser
-        :organizers="paginatedOrganizers"
-        :loading="isLoading"
-        :data-loaded="hostDataLoaded"
-        :skeleton-count="itemsPerPage"
-        @view-profile="openOrganizerProfile"
-      />
+    <!-- Organizer Grid -->
+    <div class="organizer-grid" v-if="organizers.length > 0">
+      <div v-for="org in organizers" :key="org.id" class="organizer-card">
+        <img
+          :src="org.profileImage || defaultAvatar"
+          alt="Organizer"
+          class="card-avatar"
+        />
 
-      <div
-        v-if="hostDataLoaded && filteredOrganizers.length > 0 && totalPages > 1"
-        class="host-dashboard__pagination"
-      >
-        <button
-          class="pagination-button"
-          type="button"
-          :disabled="currentPage === 1"
-          @click="goToPreviousPage"
-        >
-          <i class="pi pi-chevron-left" />
-        </button>
-        <span class="pagination-label">
-          {{ t('dashboard.host.pagination.label', { page: currentPage, total: totalPages }) }}
-        </span>
-        <button
-          class="pagination-button"
-          type="button"
-          :disabled="currentPage === totalPages"
-          @click="goToNextPage"
-        >
-          <i class="pi pi-chevron-right" />
-        </button>
+        <div class="card-info">
+          <h3 class="card-name">{{ org.name }}</h3>
+          <p class="card-email">{{ org.email }}</p>
+          <p class="card-role">Organizador</p>
+        </div>
+
+        <div class="card-actions">
+          <Button
+            label="Ver Perfil"
+            icon="pi pi-user"
+            class="p-button-info w-full"
+            @click="openProfile(org)"
+          />
+        </div>
       </div>
-    </section>
+    </div>
 
-    <HostOrganizerDialog
-      :organizer="selectedOrganizer"
-      v-model:visible="organizerDialogVisible"
-    />
+    <!-- Empty State -->
+    <div v-if="!loading && organizers.length === 0" class="empty-box">
+      <i class="pi pi-users"></i>
+      <p>No hay organizadores registrados aún.</p>
+    </div>
+
+    <!-- Organizer Modal -->
+    <Dialog
+      v-model:visible="showModal"
+      modal
+      header="Perfil del Organizador"
+      :style="{ width: '450px' }"
+    >
+      <div v-if="selected">
+        <div class="profile-header">
+          <img
+            :src="selected.profileImage || defaultAvatar"
+            class="profile-avatar"
+          />
+          <h2>{{ selected.name }}</h2>
+          <p>{{ selected.email }}</p>
+        </div>
+
+        <Divider />
+
+        <h3 class="profile-subtitle">Información</h3>
+        <ul class="profile-list">
+          <li><strong>Rol:</strong> Organizador</li>
+          <li><strong>ID:</strong> {{ selected.id }}</li>
+          <li><strong>Estado:</strong> {{ selected.status }}</li>
+        </ul>
+
+        <Divider />
+
+        <Button
+          label="Enviar Cotización"
+          icon="pi pi-send"
+          class="p-button-success w-full"
+          @click="goToQuote(selected)"
+        />
+      </div>
+    </Dialog>
   </div>
 </template>
 
+<script setup>
+import { ref, onMounted } from "vue";
+import api from "@/shared/infrastructure/http/axios.config.js";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const organizers = ref([]);
+const loading = ref(true);
+const error = ref(null);
+const showModal = ref(false);
+const selected = ref(null);
+
+const defaultAvatar =
+  "https://cdn-icons-png.flaticon.com/512/3177/3177440.png";
+
+// Cargar organizadores desde API
+const loadOrganizers = async () => {
+  try {
+    const response = await api.get("/users", {
+      params: { role: "organizer" },
+    });
+    organizers.value = response.data;
+  } catch (err) {
+    error.value = "Error al cargar organizadores";
+  } finally {
+    loading.value = false;
+  }
+};
+
+const openProfile = (org) => {
+  selected.value = org;
+  showModal.value = true;
+};
+
+const goToQuote = (org) => {
+  router.push({
+    name: "quote-create",
+    query: { organizerId: org.id },
+  });
+};
+
+onMounted(loadOrganizers);
+</script>
+
 <style scoped>
-.host-dashboard {
-  display: flex;
-  gap: 2rem;
-  align-items: flex-start;
+.dashboard-container {
+  padding: 2.5rem;
+}
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.page-subtitle {
+  color: #666;
+  margin-bottom: 2rem;
 }
 
-.host-dashboard__main {
-  flex: 1;
-  background: #ffffff;
-  border-radius: 24px;
-  padding: 2rem;
+.loading-box,
+.error-box,
+.empty-box {
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.organizer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.2rem;
+}
+
+.organizer-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
-}
-
-.host-dashboard__pagination {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
 }
 
-.pagination-button {
-  width: 44px;
-  height: 44px;
+.card-avatar {
+  width: 85px;
+  height: 85px;
   border-radius: 50%;
-  border: none;
-  background: #f3f4f6;
-  color: #374151;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  margin-bottom: 1rem;
 }
 
-.pagination-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+.card-info {
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
-.pagination-button:not(:disabled):hover {
-  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
-  color: #ffffff;
+.card-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.card-email {
+  color: #777;
+  font-size: 0.9rem;
 }
 
-.pagination-label {
-  font-weight: 600;
-  color: #1f2937;
+.card-actions {
+  width: 100%;
+  margin-top: auto;
 }
 
-@media (max-width: 1024px) {
-  .host-dashboard {
-    flex-direction: column;
-  }
+.profile-header {
+  text-align: center;
+}
+.profile-avatar {
+  width: 95px;
+  height: 95px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
 
-  .host-dashboard__main {
-    padding: 1.5rem;
-  }
+.profile-list {
+  list-style: none;
+  padding: 0;
+}
+.profile-list li {
+  margin-bottom: 6px;
 }
 </style>

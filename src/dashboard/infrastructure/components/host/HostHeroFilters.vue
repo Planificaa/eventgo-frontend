@@ -1,7 +1,9 @@
 <script setup>
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import Dropdown from 'primevue/dropdown';
 import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
 
 const props = defineProps({
   searchTerm: {
@@ -16,78 +18,88 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  filtersExpanded: {
-    type: Boolean,
-    default: true,
+  selectedClassification: {
+    type: String,
+    default: 'all',
   },
-  canClearFilters: {
-    type: Boolean,
-    default: false,
+  classifications: {
+    type: Array,
+    default: () => ['all', 'premium', 'verified', 'new'],
   },
 });
 
 const emit = defineEmits([
   'update:searchTerm',
   'update:selectedCategory',
-  'toggle-filters',
-  'reset-filters',
+  'update:selectedClassification',
 ]);
 
 const { t } = useI18n();
 
-const categoryLabel = (category) =>
-  category === 'all'
-    ? t('dashboard.host.organizerBrowser.allCategories')
-    : category;
+const categoryOptions = computed(() =>
+  props.categories.map((category) => ({
+    label:
+      category === 'all'
+        ? t('dashboard.host.filters.allTypes')
+        : category,
+    value: category,
+  })),
+);
+
+const classificationOptions = computed(() =>
+  props.classifications.map((classification) => ({
+    label:
+      classification === 'all'
+        ? t('dashboard.host.filters.allClassifications')
+        : t(`dashboard.host.filters.classifications.${classification}`),
+    value: classification,
+  })),
+);
 </script>
 
 <template>
   <div class="host-hero">
-    <div class="host-hero__copy">
-      <h2>{{ t('dashboard.host.hero.title') }}</h2>
-      <p>{{ t('dashboard.host.hero.subtitle') }}</p>
+    <div class="host-hero__header">
+      <h1>{{ t('dashboard.host.hero.mainTitle') }}</h1>
     </div>
-    <div class="host-hero__actions">
+
+    <div class="host-hero__filters-row">
       <span class="p-input-icon-left host-hero__search">
         <i class="pi pi-search" />
         <InputText
           :modelValue="props.searchTerm"
           :placeholder="t('dashboard.host.hero.searchPlaceholder')"
           @update:modelValue="(value) => emit('update:searchTerm', value)"
+          class="search-input"
         />
       </span>
+
       <Button
-        class="filters-toggle"
+        class="filter-btn"
         outlined
-        icon="pi pi-filter"
+        icon="pi pi-sliders-h"
         :label="t('dashboard.host.hero.filters')"
-        @click="emit('toggle-filters')"
       />
-      <Button
-        class="clear-filters"
-        text
-        icon="pi pi-times"
-        :label="t('dashboard.host.hero.clearFilters')"
-        :disabled="!props.canClearFilters"
-        @click="emit('reset-filters')"
+
+      <Dropdown
+        :modelValue="props.selectedCategory"
+        :options="categoryOptions"
+        optionLabel="label"
+        optionValue="value"
+        :placeholder="t('dashboard.host.hero.typeOfEvent')"
+        @update:modelValue="(value) => emit('update:selectedCategory', value)"
+        class="filter-dropdown"
       />
-    </div>
-    <div
-      :class="[
-        'host-hero__filters',
-        { 'host-hero__filters--collapsed': !props.filtersExpanded },
-      ]"
-    >
-      <button
-        v-for="category in props.categories"
-        :key="category"
-        class="filters-chip"
-        :class="{ 'filters-chip--active': props.selectedCategory === category }"
-        type="button"
-        @click="emit('update:selectedCategory', category)"
-      >
-        {{ categoryLabel(category) }}
-      </button>
+
+      <Dropdown
+        :modelValue="props.selectedClassification"
+        :options="classificationOptions"
+        optionLabel="label"
+        optionValue="value"
+        :placeholder="t('dashboard.host.hero.classification')"
+        @update:modelValue="(value) => emit('update:selectedClassification', value)"
+        class="filter-dropdown"
+      />
     </div>
   </div>
 </template>
@@ -97,72 +109,87 @@ const categoryLabel = (category) =>
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.host-hero__copy h2 {
+.host-hero__header h1 {
   margin: 0;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1f2937;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
 }
 
-.host-hero__copy p {
-  margin: 0.5rem 0 0;
-  color: #4b5563;
-  font-size: 1rem;
-}
-
-.host-hero__actions {
+.host-hero__filters-row {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .host-hero__search {
-  flex: 1 1 260px;
+  flex: 1 1 300px;
+  min-width: 250px;
 }
 
-.host-hero__search input {
+.search-input {
   width: 100%;
-  padding-left: 2.5rem;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
 }
 
-.filters-toggle {
+.search-input:focus {
+  border-color: #3A506B;
+  box-shadow: 0 0 0 1px #3A506B;
+}
+
+.filter-btn {
   border-color: #d1d5db;
-  color: #1f2937;
+  color: #374151;
+  background: #ffffff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 500;
 }
 
-.clear-filters {
-  color: #6b7280;
+.filter-btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
 }
 
-.host-hero__filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  transition: max-height 0.25s ease;
-  max-height: 260px;
-  overflow: hidden;
+.filter-dropdown {
+  min-width: 180px;
+  border-radius: 8px;
 }
 
-.host-hero__filters--collapsed {
-  max-height: 0;
+.filter-dropdown :deep(.p-dropdown) {
+  border-color: #d1d5db;
+  border-radius: 8px;
 }
 
-.filters-chip {
-  border: none;
-  background: #f3f4f6;
-  color: #4b5563;
-  padding: 0.55rem 1.25rem;
-  border-radius: 999px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+.filter-dropdown :deep(.p-dropdown:not(.p-disabled):hover) {
+  border-color: #9ca3af;
 }
 
-.filters-chip--active {
-  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
-  color: #ffffff;
+.filter-dropdown :deep(.p-dropdown:not(.p-disabled).p-focus) {
+  border-color: #3A506B;
+  box-shadow: 0 0 0 1px #3A506B;
+}
+
+@media (max-width: 768px) {
+  .host-hero__header h1 {
+    font-size: 1.5rem;
+  }
+
+  .host-hero__filters-row {
+    flex-direction: column;
+  }
+
+  .host-hero__search,
+  .filter-btn,
+  .filter-dropdown {
+    width: 100%;
+  }
 }
 </style>
