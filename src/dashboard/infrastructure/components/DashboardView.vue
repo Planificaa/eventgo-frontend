@@ -5,20 +5,14 @@ import { useI18n } from 'vue-i18n';
 import Card from 'primevue/card';
 import Calendar from 'primevue/calendar';
 import Button from 'primevue/button';
-import Avatar from 'primevue/avatar';
-import Dialog from 'primevue/dialog';
-import Dropdown from 'primevue/dropdown';
-import InputText from 'primevue/inputtext';
-import Rating from 'primevue/rating';
 import Skeleton from 'primevue/skeleton';
-import Tag from 'primevue/tag';
 import { useToast } from 'primevue/usetoast';
 
 import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
 import { AuthApiService } from '@/auth-management/application/auth-api.service.js';
 import { QuoteApiService } from '@/quote-management/application/services/quote-api.service.js';
 import { QuoteOrder } from '@/quote-management/domain/model';
-import { ProfileApiService } from '@/profile-management/application/profile-api.service.js';
+import HostDashboard from './host/HostDashboard.vue';
 
 const router = useRouter();
 const { t } = useI18n();
@@ -27,11 +21,6 @@ const { user, restoreSession, isOrganizer, isHost } = useAuth();
 
 const selectedDate = ref(new Date());
 const isLoading = ref(false);
-const hostOrganizers = ref([]);
-const searchTerm = ref('');
-const selectedCategory = ref('all');
-const selectedOrganizer = ref(null);
-const organizerDialogVisible = ref(false);
 const organizerDashboard = ref({
   activeEvents: 0,
   eventsThisWeek: 0,
@@ -41,48 +30,7 @@ const organizerDashboard = ref({
   newQuotesWeek: 0,
 });
 const organizerMessages = ref([]);
-const hostQuoteStats = ref({
-  total: 0,
-  approved: 0,
-  pending: 0,
-  declined: 0,
-});
-const hostDataLoaded = ref(false);
 const organizerDataLoaded = ref(false);
-
-const hostCategories = computed(() => {
-  const categories = new Set();
-  hostOrganizers.value.forEach((organizer) => {
-    if (Array.isArray(organizer.eventTypes)) {
-      organizer.eventTypes.forEach((type) => categories.add(type));
-    }
-  });
-  return ['all', ...categories];
-});
-
-const filteredOrganizers = computed(() => {
-  const term = searchTerm.value.trim().toLowerCase();
-  const category = selectedCategory.value;
-  return hostOrganizers.value.filter((organizer) => {
-    const texts = [
-      organizer.name,
-      organizer.specialty,
-      organizer.description,
-      ...(organizer.eventTypes || []),
-    ]
-      .filter(Boolean)
-      .map((text) => text.toLowerCase());
-
-    const matchesTerm = !term || texts.some((text) => text.includes(term));
-    const matchesCategory =
-      category === 'all' ||
-      (organizer.eventTypes || []).some(
-        (type) => type.toLowerCase() === category.toLowerCase(),
-      );
-
-    return matchesTerm && matchesCategory;
-  });
-});
 
 const currentUserName = computed(
   () => user.value?.name || t('dashboard.user.defaultName'),
@@ -93,95 +41,6 @@ const showHostView = computed(() => isHost.value);
 const ensureSession = async () => {
   if (!user.value) {
     await restoreSession();
-  }
-};
-
-const loadHostDashboard = async () => {
-  isLoading.value = true;
-  hostDataLoaded.value = false;
-  try {
-    await ensureSession();
-
-    const [organizersResponse, quotesResponse, apiUser] = await Promise.all([
-      ProfileApiService.getAll(),
-      QuoteApiService.getAll(),
-      user.value?.id ? AuthApiService.fetchUsers({ id: user.value.id }) : [],
-    ]);
-
-    const normalizedOrganizers = Array.isArray(organizersResponse)
-      ? organizersResponse.map((organizer) => ({
-          id: organizer.id,
-          name: organizer.name,
-          specialty: organizer.specialty || organizer.role || '',
-          rating: organizer.rating || 0,
-          completedEvents: organizer.completedEvents || 0,
-          avatar: organizer.avatar || '',
-          location: organizer.location || '',
-          description: organizer.description || '',
-          eventTypes: organizer.eventTypes || [],
-          priceRange: organizer.priceRange || '',
-          languages: organizer.languages || [],
-          contact: organizer.contact || {},
-          highlights: organizer.highlights || [],
-        }))
-      : [];
-
-    hostOrganizers.value = normalizedOrganizers;
-
-    const userId = user.value?.id ? String(user.value.id) : null;
-    const userQuotes = Array.isArray(quotesResponse)
-      ? quotesResponse
-          .map((data) => QuoteOrder.fromJSON(data))
-          .filter((quoteOrder) => {
-            const customerId = quoteOrder.customer?.id
-              ? String(quoteOrder.customer.id)
-              : null;
-            const ownerId = quoteOrder.ownerId ? String(quoteOrder.ownerId) : null;
-            return customerId === userId || ownerId === userId;
-          })
-      : [];
-
-    const stats = userQuotes.reduce(
-      (acc, quoteOrder) => {
-        acc.total += 1;
-        if (quoteOrder.state === QuoteOrder.STATES.APPROVED) {
-          acc.approved += 1;
-        } else if (quoteOrder.state === QuoteOrder.STATES.PENDING) {
-          acc.pending += 1;
-        } else if (quoteOrder.state === QuoteOrder.STATES.DECLINED) {
-          acc.declined += 1;
-        }
-        return acc;
-      },
-      { total: 0, approved: 0, pending: 0, declined: 0 },
-    );
-
-    hostQuoteStats.value = stats;
-
-    const [hostRecord] = Array.isArray(apiUser) ? apiUser : [];
-    if (hostRecord?.dashboard) {
-      const { dashboard } = hostRecord;
-      hostQuoteStats.value.total =
-        dashboard.totalQuotes ?? hostQuoteStats.value.total;
-      hostQuoteStats.value.approved =
-        dashboard.approvedQuotes ?? hostQuoteStats.value.approved;
-      hostQuoteStats.value.pending =
-        dashboard.pendingQuotes ?? hostQuoteStats.value.pending;
-      hostQuoteStats.value.declined =
-        dashboard.declinedQuotes ?? hostQuoteStats.value.declined;
-    }
-
-    hostDataLoaded.value = true;
-  } catch (error) {
-    console.error('Error loading host dashboard:', error);
-    toast.add({
-      severity: 'error',
-      summary: t('common.error'),
-      detail: error.message || t('dashboard.messages.loadError'),
-      life: 5000,
-    });
-  } finally {
-    isLoading.value = false;
   }
 };
 
@@ -262,16 +121,8 @@ const loadOrganizerDashboard = async () => {
 };
 
 onMounted(() => {
-  if (showHostView.value) {
-    loadHostDashboard();
-  } else {
+  if (!showHostView.value) {
     loadOrganizerDashboard();
-  }
-});
-
-watch(isHost, (value) => {
-  if (value) {
-    loadHostDashboard();
   }
 });
 
@@ -280,17 +131,6 @@ watch(isOrganizer, (value) => {
     loadOrganizerDashboard();
   }
 });
-
-watch(organizerDialogVisible, (visible) => {
-  if (!visible) {
-    selectedOrganizer.value = null;
-  }
-});
-
-const handleOrganizerProfile = (organizer) => {
-  selectedOrganizer.value = organizer;
-  organizerDialogVisible.value = true;
-};
 
 const goToQuotes = () => {
   router.push({ name: 'quotes' });
@@ -323,133 +163,7 @@ const goToQuotes = () => {
 
     <main v-else class="dashboard-content">
       <template v-if="showHostView">
-        <section class="host-metrics">
-          <Card class="metric-card">
-            <template #content>
-              <div class="metric-content">
-                <h3 class="metric-title">{{ t('dashboard.host.metrics.totalQuotes') }}</h3>
-                <p class="metric-value metric-value--primary">{{ hostQuoteStats.total }}</p>
-                <p class="metric-subtitle">{{ t('dashboard.host.metrics.totalQuotesSubtitle') }}</p>
-                <Button text class="metric-link" @click="goToQuotes">
-                  {{ t('dashboard.host.actions.viewQuotes') }}
-                </Button>
-              </div>
-            </template>
-          </Card>
-
-          <Card class="metric-card">
-            <template #content>
-              <div class="metric-content">
-                <h3 class="metric-title">{{ t('dashboard.host.metrics.pendingQuotes') }}</h3>
-                <p class="metric-value metric-value--warning">{{ hostQuoteStats.pending }}</p>
-                <p class="metric-subtitle">{{ t('dashboard.host.metrics.pendingQuotesSubtitle') }}</p>
-              </div>
-            </template>
-          </Card>
-
-          <Card class="metric-card">
-            <template #content>
-              <div class="metric-content">
-                <h3 class="metric-title">{{ t('dashboard.host.metrics.approvedQuotes') }}</h3>
-                <p class="metric-value metric-value--success">{{ hostQuoteStats.approved }}</p>
-                <p class="metric-subtitle">{{ t('dashboard.host.metrics.approvedQuotesSubtitle') }}</p>
-              </div>
-            </template>
-          </Card>
-
-          <Card class="metric-card">
-            <template #content>
-              <div class="metric-content">
-                <h3 class="metric-title">{{ t('dashboard.host.metrics.declinedQuotes') }}</h3>
-                <p class="metric-value metric-value--danger">{{ hostQuoteStats.declined }}</p>
-                <p class="metric-subtitle">{{ t('dashboard.host.metrics.declinedQuotesSubtitle') }}</p>
-              </div>
-            </template>
-          </Card>
-        </section>
-
-        <section class="organizer-browser">
-          <div class="browser-header">
-            <div>
-              <h2 class="section-title">{{ t('dashboard.host.organizerBrowser.title') }}</h2>
-              <p class="section-subtitle">{{ t('dashboard.host.organizerBrowser.subtitle') }}</p>
-            </div>
-            <div class="browser-filters">
-              <span class="p-input-icon-left search-wrapper">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="searchTerm"
-                  :placeholder="t('dashboard.host.organizerBrowser.search')"
-                />
-              </span>
-              <Dropdown
-                v-model="selectedCategory"
-                :options="hostCategories"
-                :placeholder="t('dashboard.host.organizerBrowser.filterPlaceholder')"
-                optionLabel=""
-                class="category-dropdown"
-              >
-                <template #value="{ value }">
-                  <span>{{ value === 'all' ? t('dashboard.host.organizerBrowser.allCategories') : value }}</span>
-                </template>
-                <template #option="{ option }">
-                  <span>{{ option === 'all' ? t('dashboard.host.organizerBrowser.allCategories') : option }}</span>
-                </template>
-              </Dropdown>
-            </div>
-          </div>
-
-          <div v-if="hostDataLoaded && filteredOrganizers.length" class="organizer-grid">
-            <Card
-              v-for="organizer in filteredOrganizers"
-              :key="organizer.id"
-              class="organizer-card"
-            >
-              <template #content>
-                <div class="organizer-card__header">
-                  <Avatar
-                    :image="organizer.avatar"
-                    :label="organizer.name.charAt(0)"
-                    size="large"
-                    shape="circle"
-                  />
-                  <div>
-                    <h3 class="organizer-name">{{ organizer.name }}</h3>
-                    <p class="organizer-specialty">{{ organizer.specialty }}</p>
-                  </div>
-                </div>
-                <div class="organizer-card__body">
-                  <div class="organizer-rating">
-                    <Rating :modelValue="organizer.rating" :readonly="true" :cancel="false" />
-                    <span class="rating-value">{{ organizer.rating.toFixed(1) }}</span>
-                  </div>
-                  <p class="organizer-description">{{ organizer.description }}</p>
-                  <div class="organizer-tags">
-                    <Tag
-                      v-for="type in organizer.eventTypes"
-                      :key="type"
-                      severity="info"
-                      :value="type"
-                      rounded
-                    />
-                  </div>
-                </div>
-                <div class="organizer-card__footer">
-                  <Button
-                    :label="t('dashboard.host.organizerBrowser.viewProfile')"
-                    class="view-profile-btn"
-                    @click="handleOrganizerProfile(organizer)"
-                  />
-                </div>
-              </template>
-            </Card>
-          </div>
-
-          <div v-else-if="hostDataLoaded" class="empty-organizers">
-            <i class="pi pi-users" />
-            <p>{{ t('dashboard.host.organizerBrowser.empty') }}</p>
-          </div>
-        </section>
+        <HostDashboard />
       </template>
 
       <template v-else>
@@ -554,78 +268,6 @@ const goToQuotes = () => {
         </section>
       </template>
     </main>
-
-    <Dialog
-      v-model:visible="organizerDialogVisible"
-      modal
-      :style="{ width: '480px' }"
-      :header="selectedOrganizer?.name || ''"
-    >
-      <template v-if="selectedOrganizer">
-        <div class="organizer-dialog">
-          <div class="organizer-dialog__header">
-            <Avatar
-              :image="selectedOrganizer.avatar"
-              :label="selectedOrganizer.name.charAt(0)"
-              size="xlarge"
-              shape="circle"
-            />
-            <div>
-              <h3>{{ selectedOrganizer.name }}</h3>
-              <p>{{ selectedOrganizer.specialty }}</p>
-              <div class="organizer-rating">
-                <Rating :modelValue="selectedOrganizer.rating" :readonly="true" :cancel="false" />
-                <span class="rating-value">{{ selectedOrganizer.rating.toFixed(1) }}</span>
-              </div>
-            </div>
-          </div>
-
-          <p class="organizer-dialog__description">{{ selectedOrganizer.description }}</p>
-
-          <div class="organizer-dialog__section">
-            <h4>{{ t('dashboard.host.organizerBrowser.details.eventTypes') }}</h4>
-            <div class="organizer-tags">
-              <Tag
-                v-for="type in selectedOrganizer.eventTypes"
-                :key="type"
-                severity="info"
-                :value="type"
-                rounded
-              />
-            </div>
-          </div>
-
-          <div class="organizer-dialog__section" v-if="selectedOrganizer.location">
-            <h4>{{ t('dashboard.host.organizerBrowser.details.location') }}</h4>
-            <p>{{ selectedOrganizer.location }}</p>
-          </div>
-
-          <div class="organizer-dialog__section" v-if="selectedOrganizer.contact?.email || selectedOrganizer.contact?.phone">
-            <h4>{{ t('dashboard.host.organizerBrowser.details.contact') }}</h4>
-            <ul class="organizer-contact">
-              <li v-if="selectedOrganizer.contact?.email">
-                <i class="pi pi-envelope"></i>
-                <span>{{ selectedOrganizer.contact.email }}</span>
-              </li>
-              <li v-if="selectedOrganizer.contact?.phone">
-                <i class="pi pi-phone"></i>
-                <span>{{ selectedOrganizer.contact.phone }}</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="organizer-dialog__section" v-if="selectedOrganizer.highlights?.length">
-            <h4>{{ t('dashboard.host.organizerBrowser.details.highlights') }}</h4>
-            <ul class="organizer-highlights">
-              <li v-for="highlight in selectedOrganizer.highlights" :key="highlight">
-                <i class="pi pi-check-circle"></i>
-                <span>{{ highlight }}</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </template>
-    </Dialog>
   </div>
 </template>
 
@@ -667,8 +309,7 @@ const goToQuotes = () => {
   gap: 2.5rem;
 }
 
-.metrics-section,
-.host-metrics {
+.metrics-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
@@ -743,156 +384,11 @@ const goToQuotes = () => {
   color: #5bc0be;
 }
 
-.organizer-browser {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.browser-header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 1rem;
-}
-
 .section-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #1c2541;
   margin: 0;
-}
-
-.section-subtitle {
-  color: #6b7280;
-  margin: 0.25rem 0 0;
-}
-
-.browser-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.search-wrapper {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 9999px;
-  background-color: #ffffff;
-  padding-left: 1rem;
-  box-shadow: 0 12px 24px rgba(16, 24, 40, 0.1);
-}
-
-.search-wrapper :deep(.p-inputtext) {
-  border: none;
-  background: transparent;
-}
-
-.category-dropdown {
-  min-width: 180px;
-}
-
-.organizer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-}
-
-.organizer-card {
-  border-radius: 18px;
-  box-shadow: 0 20px 40px rgba(28, 37, 65, 0.08);
-  border: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.organizer-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 50px rgba(28, 37, 65, 0.15);
-}
-
-.organizer-card__header {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.organizer-name {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin: 0;
-  color: #1c2541;
-}
-
-.organizer-specialty {
-  margin: 0.15rem 0 0;
-  color: #6b7280;
-  font-size: 0.95rem;
-}
-
-.organizer-card__body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  color: #4b5563;
-}
-
-.organizer-rating {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #f59e0b;
-}
-
-.rating-value {
-  font-weight: 600;
-  color: #1c2541;
-}
-
-.organizer-description {
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: #4b5563;
-}
-
-.organizer-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.organizer-card__footer {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.view-profile-btn {
-  background-color: #3a506b;
-  border: none;
-  color: #ffffff;
-}
-
-.view-profile-btn:hover {
-  background-color: #5bc0be;
-}
-
-.empty-organizers {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 3rem;
-  border-radius: 16px;
-  background-color: #ffffff;
-  box-shadow: 0 16px 32px rgba(28, 37, 65, 0.08);
-  color: #6b7280;
-  text-align: center;
-}
-
-.empty-organizers i {
-  font-size: 2rem;
-  color: #3a506b;
 }
 
 .content-grid {
@@ -966,47 +462,6 @@ const goToQuotes = () => {
   color: #5bc0be;
 }
 
-.organizer-dialog {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.organizer-dialog__header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.organizer-dialog__description {
-  color: #4b5563;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.organizer-dialog__section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.organizer-contact,
-.organizer-highlights {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  color: #4b5563;
-}
-
-.organizer-contact i,
-.organizer-highlights i {
-  margin-right: 0.5rem;
-  color: #3a506b;
-}
-
 @media (max-width: 992px) {
   .content-grid {
     grid-template-columns: 1fr;
@@ -1022,8 +477,7 @@ const goToQuotes = () => {
     font-size: 1.8rem;
   }
 
-  .metrics-section,
-  .host-metrics {
+  .metrics-section {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }
