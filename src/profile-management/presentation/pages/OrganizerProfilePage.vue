@@ -1,5 +1,11 @@
 <template>
   <div class="profile-container">
+    <div v-if="isProfileLoading" class="mb-4 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-700">
+      Cargando información del perfil...
+    </div>
+    <div v-if="profileError" class="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+      {{ profileError }}
+    </div>
     <!-- Header con información del perfil -->
     <div class="profile-header">
       <div class="grid grid-nogutter">
@@ -26,25 +32,25 @@
           <div class="grid grid-nogutter gap-3">
             <div class="col-6 md:col-3">
               <div class="stat-card">
-                <div class="stat-value">24</div>
+                <div class="stat-value">{{ profileData.metrics.eventsOrganized ?? 0 }}</div>
                 <div class="stat-label">Eventos Organizados</div>
               </div>
             </div>
             <div class="col-6 md:col-3">
               <div class="stat-card">
-                <div class="stat-value">4.8</div>
+                <div class="stat-value">{{ profileData.metrics.rating ?? 0 }}</div>
                 <div class="stat-label">Calificación</div>
               </div>
             </div>
             <div class="col-6 md:col-3">
               <div class="stat-card">
-                <div class="stat-value">150+</div>
+                <div class="stat-value">{{ profileData.metrics.customers ?? 0 }}</div>
                 <div class="stat-label">Clientes</div>
               </div>
             </div>
             <div class="col-6 md:col-3">
               <div class="stat-card">
-                <div class="stat-value">5</div>
+                <div class="stat-value">{{ profileData.metrics.experienceYears ?? 0 }}</div>
                 <div class="stat-label">Años Exp.</div>
               </div>
             </div>
@@ -126,7 +132,7 @@
               <h3 class="text-lg font-semibold text-gray-800 mb-3">Redes Sociales</h3>
               <div class="flex flex-wrap gap-3">
                 <Button
-                  v-for="social in profileData.socialLinks"
+                  v-for="social in socialLinks"
                   :key="social.type"
                   :label="social.type"
                   :icon="`pi pi-${getSocialIcon(social.type)}`"
@@ -248,9 +254,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
+import { AuthApiService } from '@/auth-management/application/auth-api.service.js';
 import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
 import TabView from 'primevue/tabview';
@@ -259,97 +266,95 @@ import Card from 'primevue/card';
 import Rating from 'primevue/rating';
 
 const router = useRouter();
-const { logout } = useAuth();
+const { logout, user } = useAuth();
 const activeTab = ref(0);
 
-const profileData = ref({
-  id: 'user_2',
-  name: 'Roberto García',
-  email: 'organizador@example.com',
-  phone: '+51 962531478',
-  city: 'Surco, Lima',
-  role: 'organizer',
-  profileImage: 'https://i.pravatar.cc/150?img=2',
-  description: 'Empresa especializada en organización de eventos musicales con más de 10 años de experiencia en bodas, conciertos y festivales.',
-  socialLinks: [
-    { type: 'instagram', url: 'https://instagram.com' },
-    { type: 'facebook', url: 'https://facebook.com' },
-    { type: 'linkedin', url: 'https://linkedin.com' },
-  ],
+const defaultMetrics = Object.freeze({
+  eventsOrganized: 0,
+  rating: 0,
+  customers: 0,
+  experienceYears: 0,
 });
 
-const services = ref([
-  {
-    id: 1,
-    name: 'Catering Premium',
-    description: 'Servicio de catering para eventos de hasta 500 personas',
-    price: 5000,
-    icon: 'utensils',
-  },
-  {
-    id: 2,
-    name: 'Decoración Floral',
-    description: 'Diseño y decoración floral personalizada',
-    price: 3000,
-    icon: 'leaf',
-  },
-  {
-    id: 3,
-    name: 'Sonido e Iluminación',
-    description: 'Equipos de sonido e iluminación profesional',
-    price: 4000,
-    icon: 'volume-up',
-  },
-]);
+const defaultProfile = Object.freeze({
+  id: '',
+  name: '',
+  email: '',
+  phone: '',
+  city: '',
+  role: '',
+  profileImage: '',
+  description: '',
+  socialLinks: [],
+  metrics: defaultMetrics,
+});
 
-const albums = ref([
-  {
-    id: 1,
-    title: 'Boda Elegante 2024',
-    description: 'Fotos de la boda elegante en jardín',
-    cover: 'https://via.placeholder.com/300x200?text=Album+1',
-    photos: Array(12).fill(null),
-  },
-  {
-    id: 2,
-    title: 'Eventos Corporativos',
-    description: 'Eventos empresariales y conferencias',
-    cover: 'https://via.placeholder.com/300x200?text=Album+2',
-    photos: Array(8).fill(null),
-  },
-]);
+const profileData = ref({ ...defaultProfile });
+const isProfileLoading = ref(false);
+const profileError = ref(null);
 
-const reviews = ref([
-  {
-    id: 1,
-    author: 'María García',
-    authorImage: 'https://i.pravatar.cc/150?img=5',
-    rating: 5,
-    comment: 'Excelente servicio, muy profesional y atento a los detalles. Recomendado 100%',
-    date: '2025-10-15',
+const services = ref([]);
+const albums = ref([]);
+const reviews = ref([]);
+
+const normalizeProfile = (rawProfile = {}) => ({
+  ...defaultProfile,
+  ...rawProfile,
+  socialLinks: Array.isArray(rawProfile.socialLinks) ? rawProfile.socialLinks : [],
+  metrics: {
+    ...defaultMetrics,
+    ...(rawProfile.metrics || {}),
   },
-  {
-    id: 2,
-    author: 'Carlos López',
-    authorImage: 'https://i.pravatar.cc/150?img=6',
-    rating: 4,
-    comment: 'Muy buen trabajo, aunque podría mejorar en la comunicación',
-    date: '2025-09-20',
-  },
-]);
+});
+
+const loadProfile = async () => {
+  const currentUser = user.value;
+
+  if (!currentUser) {
+    profileData.value = { ...defaultProfile };
+    return;
+  }
+
+  isProfileLoading.value = true;
+  profileError.value = null;
+
+  try {
+    if (currentUser.id) {
+      const [apiUser] = await AuthApiService.fetchUsers({ id: currentUser.id });
+      const normalizedUser = apiUser ? AuthApiService.sanitizeUser(apiUser) : currentUser;
+      profileData.value = normalizeProfile({ ...currentUser, ...normalizedUser });
+    } else {
+      profileData.value = normalizeProfile(currentUser);
+    }
+  } catch (error) {
+    profileError.value = error.message || 'No se pudo cargar la información del perfil.';
+    profileData.value = normalizeProfile(currentUser);
+  } finally {
+    isProfileLoading.value = false;
+  }
+};
+
+onMounted(loadProfile);
+watch(user, () => {
+  loadProfile();
+});
+
+const socialLinks = computed(() => profileData.value.socialLinks);
 
 // Métodos
 const getInitials = (name) => {
+  if (!name) return '';
   return name
     .split(' ')
-    .map(n => n[0])
+    .filter(Boolean)
+    .map((part) => part[0])
     .join('')
     .toUpperCase();
 };
 
 const getRoleLabel = (role) => {
   const labels = {
-    user: 'Cliente',
+    host: 'Anfitrión',
     organizer: 'Organizador',
     admin: 'Administrador',
   };
@@ -391,7 +396,8 @@ const goToAlbum = (id) => {
 };
 
 const openSocialLink = (url) => {
-  window.open(url, '_blank');
+  if (!url) return;
+  window.open(url, '_blank', 'noopener');
 };
 
 const handleLogout = async () => {

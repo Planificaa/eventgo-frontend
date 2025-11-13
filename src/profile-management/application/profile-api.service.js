@@ -1,4 +1,4 @@
-import apiClient from '@/shared/infrastructure/components/http/axios.config.js';
+import apiClient from '@/shared/infrastructure/http/axios.config.js';
 
 export class ProfileApiService {
   static ENDPOINT = '/organizers';

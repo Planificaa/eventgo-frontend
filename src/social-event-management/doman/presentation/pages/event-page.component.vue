@@ -19,7 +19,7 @@ import EventCard from '../../presentation/components/event-card.component.vue';
 
 // Services
 import EventService from '../../../../social-event-management/application/services/event.service.js';
-import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js'
+import { useAuth } from '/src/auth-management/infrastructure/composables/useAuth.js'
 
 // Composables
 const router = useRouter();

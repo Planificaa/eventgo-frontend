@@ -122,7 +122,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
@@ -134,34 +134,19 @@ import Button from 'primevue/button';
 
 const router = useRouter();
 const { register, isLoading, error } = useAuth();
-
-const roleOptions = [
-  { label: t('auth.roleClient'), value: 'user' },
-  { label: t('auth.roleOrganizer'), value: 'organizer' },
-];
-
-const formData = ref({
-  name: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  role: 'user',
-  agreeTerms: false,
-});
-
 const { t } = useI18n();
 
-const roleOptions = [
-  { label: t('auth.roleClient'), value: 'user' },
+const roleOptions = computed(() => [
+  { label: t('auth.roleHost'), value: 'host' },
   { label: t('auth.roleOrganizer'), value: 'organizer' },
-];
+]);
 
 const formData = ref({
   name: '',
   email: '',
   password: '',
   confirmPassword: '',
-  role: 'user',
+  role: 'host',
   agreeTerms: false,
 });
 
