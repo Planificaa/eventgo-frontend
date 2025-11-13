@@ -2,16 +2,15 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '/src/auth-management/application/services/auth.store.js'
-import { createPinia } from 'pinia'
-import QuotePage from '/src/quote-management/presentation/pages/QuotePage.vue'
-
 import EventPage from '../../src/social-event-management/doman/presentation/pages/event-page.component.vue'
 import CreateAndEditEvent from '/src/social-event-management/doman/presentation/components/create-and-edit-event.component.vue'
+import pinia from '@/shared/stores/pinia.js'
 // Task Management Pages
 import TaskPage from '/src/task-management/presentation/pages/TaskPage.vue'
 import TaskCreatePage from '/src/task-management/presentation/pages/TaskCreatePage.vue'
 import TaskEditPage from '/src/task-management/presentation/pages/TaskEditPage.vue'
 import TaskDetailPage from '/src/task-management/presentation/pages/TaskDetailPage.vue'
+import QuotePage from '@/quote-management/presentation/pages/QuotePage.vue'
 
 const routes = [
   // ========================================
@@ -21,7 +20,7 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('/src/auth-management/presentation/pages/LoginPage.vue'),
-    meta: { title: 'Iniciar SesiÃ³n', requiresAuth: false }
+    meta: { title: 'Iniciar Sesión', requiresAuth: false }
   },
   {
     path: '/register',
@@ -240,7 +239,6 @@ const router = createRouter({
 })
 
 // Inicializar Pinia para poder usar el store fuera de un componente
-const pinia = createPinia()
 const authStore = useAuthStore(pinia)
 const getPersistedToken = () => {
   if (typeof window === 'undefined') return null;

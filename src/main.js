@@ -2,11 +2,10 @@
 // IMPORTS PRINCIPALES
 // ========================================
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import App from '@/App.vue'
 import router from '@/router'
 import i18n from '@/locales/index.js'
-
+import pinia from '@/shared/stores/pinia.js'
 // ========================================
 // PRIMEVUE CONFIGURACIÓN
 // ========================================
@@ -41,7 +40,6 @@ import ToastService from 'primevue/toastservice'
 // CREACIÓN DE LA APP
 // ========================================
 const app = createApp(App)
-const pinia = createPinia()
 
 // ========================================
 // CONFIGURACIÓN DE PRIMEVUE Y PLUGINS
