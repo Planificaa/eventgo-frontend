@@ -1,33 +1,61 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js'
+import Divider from 'primevue/divider'
 
 const { locale } = useI18n()
 
 // Idiomas
 const languageOptions = ref([
-  { name: 'English', code: 'en', flag: '🇺🇸' },
-  { name: 'Spanish', code: 'es', flag: '🇪🇸' },
+  { name: 'English', code: 'en', flag: 'ðŸ‡ºðŸ‡¸' },
+  { name: 'Spanish', code: 'es', flag: 'ðŸ‡ªðŸ‡¸' },
 ])
 const selectedLanguage = ref(languageOptions.value.find((lang) => lang.code === locale.value))
 const changeLanguage = (language) => {
   locale.value = language.code
   selectedLanguage.value = language
+  localStorage.setItem('locale', language.code)
 }
 
 // Sidebar
 const sidebarVisible = ref(false)
 const toggleSidebar = () => { sidebarVisible.value = !sidebarVisible.value }
 
+const router = useRouter()
+const { logout, isAuthenticated, user } = useAuth()
+
+// Computed para obtener nombre y primer apellido del usuario
+const userDisplayName = computed(() => {
+  if (!user.value) return ''
+
+  const fullName = user.value.fullName || user.value.name || ''
+  const nameParts = fullName.trim().split(' ')
+
+  // Retornar nombre y primer apellido (primeras 2 palabras)
+  return nameParts.slice(0, 2).join(' ')
+})
+
 const closeSidebar = () => {
   sidebarVisible.value = false
+}
+
+const handleLogout = async () => {
+  try {
+    closeSidebar()
+    await logout()
+    router.push('/login')
+  } catch (error) {
+    console.error('Error during logout:', error)
+  }
 }
 </script>
 
 <template>
   <header class="app-header">
     <div class="header-container">
-      <!-- Botón hamburger -->
+      <!-- BotÃ³n hamburger -->
       <Button icon="pi pi-bars" @click="toggleSidebar" class="menu-toggle-btn" text />
 
       <!-- Logo -->
@@ -35,7 +63,7 @@ const closeSidebar = () => {
         <img src="/src/assets/img/EventGO_logo.png" alt="EventGO" class="logo" />
       </div>
 
-      <!-- Navegación principal -->
+      <!-- NavegaciÃ³n principal -->
       <nav class="main-navigation">
         <RouterLink to="/dashboard" class="nav-item">
           <i class="pi pi-home"></i>
@@ -78,20 +106,34 @@ const closeSidebar = () => {
           </template>
         </Dropdown>
 
-        <Button icon="pi pi-cog" class="user-action-btn" text />
+        <RouterLink to="/notifications" class="user-action-btn" title="Notificaciones">
+          <i class="pi pi-bell"></i>
+        </RouterLink>
 
-        <RouterLink to="/profile" class="user-profile">
+        <RouterLink to="/settings" class="user-action-btn" title="ConfiguraciÃ³n">
+          <i class="pi pi-cog"></i>
+        </RouterLink>
+
+        <RouterLink to="/profile" class="user-profile" v-if="isAuthenticated">
           <Avatar
             class="user-avatar"
             shape="circle"
             image="https://www.gravatar.com/avatar/05dfd4b41340d09cae045235eb0893c3?d=mp"
           />
-          <span class="user-name">Roberto Fox</span>
+          <span class="user-name">{{ userDisplayName }}</span>
         </RouterLink>
+
+        <Button
+          v-if="isAuthenticated"
+          icon="pi pi-sign-out"
+          label="Sign Out"
+          @click="handleLogout"
+          class="p-button-danger p-button-sm"
+        />
       </div>
     </div>
 
-    <!-- Sidebar para móvil -->
+    <!-- Sidebar para mÃ³vil -->
     <Sidebar v-model:visible="sidebarVisible" position="left" class="custom-sidebar">
       <template #header>
         <div class="sidebar-header">
@@ -122,6 +164,22 @@ const closeSidebar = () => {
           <i class="pi pi-envelope"></i>
           <span>{{ $t('header.messages') }}</span>
         </RouterLink>
+        <Divider />
+        <RouterLink to="/notifications" class="sidebar-nav-item" @click="closeSidebar">
+          <i class="pi pi-bell"></i>
+          <span>Notificaciones</span>
+        </RouterLink>
+        <RouterLink to="/settings" class="sidebar-nav-item" @click="closeSidebar">
+          <i class="pi pi-cog"></i>
+          <span>ConfiguraciÃ³n</span>
+        </RouterLink>
+        <Divider />
+        <Button
+          label="Cerrar SesiÃ³n"
+          icon="pi pi-sign-out"
+          @click="handleLogout"
+          class="p-button-danger p-button-text w-full text-left p-3"
+        />
       </nav>
     </Sidebar>
 
@@ -169,7 +227,7 @@ const closeSidebar = () => {
   width: auto;
 }
 
-/* Botón hamburger - oculto en desktop */
+/* BotÃ³n hamburger - oculto en desktop */
 .menu-toggle-btn {
   display: none;
   color: #6fffe9 !important;
@@ -178,7 +236,7 @@ const closeSidebar = () => {
   padding: 0.5rem !important;
 }
 
-/* Navegación principal - visible en desktop */
+/* NavegaciÃ³n principal - visible en desktop */
 .main-navigation {
   display: flex;
   gap: 0.5rem;
@@ -275,9 +333,9 @@ const closeSidebar = () => {
   color: #1c2541;
 }
 
-/* RESPONSIVE - Móvil */
+/* RESPONSIVE - MÃ³vil */
 @media (max-width: 768px) {
-  /* Mostrar hamburger, ocultar navegación */
+  /* Mostrar hamburger, ocultar navegaciÃ³n */
   .menu-toggle-btn {
     display: flex !important;
   }
@@ -286,7 +344,7 @@ const closeSidebar = () => {
     display: none;
   }
 
-  /* Ocultar nombre de usuario en móvil */
+  /* Ocultar nombre de usuario en mÃ³vil */
   .user-name {
     display: none;
   }
@@ -401,7 +459,7 @@ const closeSidebar = () => {
   color: #1c2541 !important;
 }
 
-/* Responsive - ocultar en móvil si es necesario */
+/* Responsive - ocultar en mÃ³vil si es necesario */
 @media (max-width: 768px) {
   .language-selector {
     min-width: 50px !important;

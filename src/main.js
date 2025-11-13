@@ -2,6 +2,7 @@
 // IMPORTS PRINCIPALES
 // ========================================
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from '@/App.vue'
 import router from '@/router'
 import i18n from '@/locales/index.js'
@@ -27,7 +28,7 @@ import '@/profile-management/presentation/styles/global.css'
 // ========================================
 import Menubar from 'primevue/menubar'
 // Importar componentes
-import {DataTable, Dialog, InputText } from 'primevue'
+import {DataTable, Dialog, InputText, TabView, TabPanel, Card, Rating, Divider, ToggleButton, Password, Message, Checkbox, Paginator } from 'primevue'
 import Button from 'primevue/button'
 import Avatar from 'primevue/avatar'
 import Sidebar from 'primevue/sidebar'
@@ -40,10 +41,12 @@ import ToastService from 'primevue/toastservice'
 // CREACIÓN DE LA APP
 // ========================================
 const app = createApp(App)
+const pinia = createPinia()
 
 // ========================================
 // CONFIGURACIÓN DE PRIMEVUE Y PLUGINS
 // ========================================
+app.use(pinia)
 app.use(PrimeVue, {
   theme: {
     preset: Aura,
@@ -64,7 +67,7 @@ app.use(PrimeVue, {
   .component('InputText', InputText)
   .component('Dialog', Dialog)
   .component('Table',DataTable)
-.use(ToastService)
+  .use(ToastService)
 
 // ========================================
 // REGISTRO GLOBAL DE COMPONENTES
@@ -74,7 +77,17 @@ app.component('AppButton', Button)
 app.component('AppAvatar', Avatar)
 app.component('AppSidebar', Sidebar)
 app.component('AppDropdown', Dropdown)
-app.component('AppToast', Toast)
+  .component('AppToast', Toast)
+  .component('Checkbox', Checkbox)
+  .component('Password', Password)
+  .component('ToggleButton', ToggleButton)
+  .component('Divider', Divider)
+  .component('Rating', Rating)
+  .component('Card', Card)
+  .component('TabView', TabView)
+  .component('TabPanel', TabPanel)
+  .component('Message', Message)
+  .component('Paginator', Paginator)
 
 // ========================================
 // MONTAJE DE LA APP

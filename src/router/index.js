@@ -1,17 +1,34 @@
 // src/router/index.js
 
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '/src/auth-management/application/services/auth.store.js'
+import { createPinia } from 'pinia'
 import QuotePage from '/src/quote-management/presentation/pages/QuotePage.vue'
 
 import EventPage from '../../src/social-event-management/doman/presentation/pages/event-page.component.vue'
 import CreateAndEditEvent from '/src/social-event-management/doman/presentation/components/create-and-edit-event.component.vue'
 // Task Management Pages
-import TaskPage from '@/task-management/presentation/pages/TaskPage.vue'
-import TaskCreatePage from '@/task-management/presentation/pages/TaskCreatePage.vue'
-import TaskEditPage from '@/task-management/presentation/pages/TaskEditPage.vue'
-import TaskDetailPage from '@/task-management/presentation/pages/TaskDetailPage.vue'
+import TaskPage from '/src/task-management/presentation/pages/TaskPage.vue'
+import TaskCreatePage from '/src/task-management/presentation/pages/TaskCreatePage.vue'
+import TaskEditPage from '/src/task-management/presentation/pages/TaskEditPage.vue'
+import TaskDetailPage from '/src/task-management/presentation/pages/TaskDetailPage.vue'
 
 const routes = [
+  // ========================================
+  // RUTAS DE AUTENTICACIÃ“N
+  // ========================================
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('/src/auth-management/presentation/pages/LoginPage.vue'),
+    meta: { title: 'Iniciar SesiÃ³n', requiresAuth: false }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('/src/auth-management/presentation/pages/RegisterPage.vue'),
+    meta: { title: 'Crear Cuenta', requiresAuth: false }
+  },
   {
     path: '/',
     redirect: '/dashboard',
@@ -51,7 +68,7 @@ const routes = [
     name: 'tasks',
     component: TaskPage,
     meta: {
-      title: 'Gestión de Tareas',
+      title: 'GestiÃ³n de Tareas',
     }
   },
   {
@@ -152,7 +169,7 @@ const routes = [
   {
     path: '/profile',
     name: 'OrganizerProfilePage',
-    component: () => import('@/profile-management/presentation/pages/OrganizerProfilePage.vue'),
+    component: () => import('/src/profile-management/presentation/pages/OrganizerProfilePage.vue'),
     meta: { title: 'Perfil del Organizador', requiresAuth: true }
   },
   {
@@ -164,30 +181,45 @@ const routes = [
   {
     path: '/profile/chat',
     name: 'OrganizerChatPage',
-    component: () => import('@/profile-management/presentation/pages/OrganizerChatPage.vue'),
+    component: () => import('/src/profile-management/presentation/pages/OrganizerChatPage.vue'),
     meta: { title: 'Chat con Clientes', requiresAuth: true }
   },
   // ========================================
-  // RUTAS DE ÁLBUMES
+  // RUTAS DE ÃLBUMES
   // ========================================
   {
     path: '/profile/albums',
     name: 'OrganizerAlbumPage',
     component: () => import('/src/profile-management/presentation/pages/OrganizerAlbumPage.vue'),
-    meta: { title: 'Álbumes', requiresAuth: true }
+    meta: { title: 'Ãlbumes', requiresAuth: true }
   },
   {
     path: '/profile/albums/create',
     name: 'OrganizerAlbumCreatePage',
     component: () => import('/src/profile-management/presentation/pages/OrganizerAlbumCreatePage.vue'),
-    meta: { title: 'Crear Álbum', requiresAuth: true }
+    meta: { title: 'Crear Ãlbum', requiresAuth: true }
   },
   {
     path: '/profile/albums/:id/edit',
     name: 'OrganizerAlbumEditPage',
     component: () => import('/src/profile-management/presentation/pages/OrganizerAlbumEditPage.vue'),
     props: true,
-    meta: { title: 'Editar Álbum', requiresAuth: true }
+    meta: { title: 'Editar Ãlbum', requiresAuth: true }
+  },
+  // ========================================
+  // RUTAS DE CONFIGURACIÃ“N Y NOTIFICACIONES
+  // ========================================
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: () => import('/src/profile-management/presentation/pages/SettingsPage.vue'),
+    meta: { title: 'ConfiguraciÃ³n', requiresAuth: true }
+  },
+  {
+    path: '/notifications',
+    name: 'Notifications',
+    component: () => import('/src/profile-management/presentation/pages/NotificationsPage.vue'),
+    meta: { title: 'Notificaciones', requiresAuth: true }
   },
 
   // Ruta 404
@@ -195,7 +227,7 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'PageNotFound',
     component: () => import('/src/shared/infrastructure/components/common/PageNotFound.vue'),
-    meta: { title: 'Página no encontrada' }
+    meta: { title: 'PÃ¡gina no encontrada' }
   },
 ]
 
@@ -207,10 +239,40 @@ const router = createRouter({
   },
 })
 
-// Cambiar el título dinámicamente
-router.beforeEach((to, from, next) => {
+// Inicializar Pinia para poder usar el store fuera de un componente
+const pinia = createPinia()
+const authStore = useAuthStore(pinia)
+
+// Guarda de navegación global
+router.beforeEach(async (to, from, next) => {
+  // 1. Restaurar sesión al inicio (solo si aún no se ha restaurado)
+  if (!authStore.isAuthenticated && (localStorage.getItem('token') || sessionStorage.getItem('token'))) {
+    try {
+      authStore.restoreSession()
+    } catch (error) {
+      console.error('Error restoring session:', error)
+    }
+  }
+
+  const requiresAuth = to.meta.requiresAuth !== false // Por defecto, todas las rutas requieren autenticación
+  const isAuthenticated = authStore.isAuthenticated
+
+  // 2. Cambiar el título dinámicamente
   document.title = to.meta.title ? `${to.meta.title} - EventGo` : 'EventGo'
-  next()
+
+  // 3. Lógica de redirección
+  if (requiresAuth && !isAuthenticated) {
+    // Si la ruta requiere autenticación y el usuario no está logeado
+    console.log('🚫 Access denied - Redirecting to login')
+    next({ name: 'Login', query: { redirect: to.fullPath } })
+  } else if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
+    // Si el usuario está logeado y trata de acceder a Login o Register
+    console.log('Already authenticated - Redirecting to dashboard')
+    next({ name: 'Dashboard' })
+  } else {
+    // Permitir navegación
+    next()
+  }
 })
 
 export default router
