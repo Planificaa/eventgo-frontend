@@ -26,6 +26,66 @@ const toggleSidebar = () => { sidebarVisible.value = !sidebarVisible.value }
 const router = useRouter()
 const { logout, isAuthenticated, user } = useAuth()
 
+const userRole = computed(() => user.value?.role ?? null)
+
+const resolveDashboardRoute = (role) => {
+  if (role === 'organizer') return '/organizer/dashboard'
+  if (role === 'host') return '/host/dashboard'
+  return '/'
+}
+
+const NAVIGATION_DEFINITIONS = [
+  {
+    key: 'dashboard',
+    icon: 'pi pi-home',
+    labelKey: 'header.dashboard',
+    to: (role) => resolveDashboardRoute(role),
+    roles: ['organizer', 'host'],
+  },
+  {
+    key: 'events',
+    icon: 'pi pi-calendar',
+    labelKey: 'header.events',
+    to: '/events',
+    roles: ['organizer', 'host'],
+  },
+  {
+    key: 'tasks',
+    icon: 'pi pi-check-square',
+    labelKey: 'header.task',
+    to: '/tasks',
+    roles: ['organizer'],
+  },
+  {
+    key: 'quotes',
+    icon: 'pi pi-file-edit',
+    labelKey: 'header.quotes',
+    to: '/quotes',
+    roles: ['organizer', 'host'],
+  },
+  {
+    key: 'messages',
+    icon: 'pi pi-envelope',
+    labelKey: 'header.messages',
+    to: '/messages',
+    roles: ['organizer', 'host'],
+  },
+]
+
+const navigationItems = computed(() => {
+  if (!isAuthenticated.value) return []
+
+  const role = userRole.value
+
+  return NAVIGATION_DEFINITIONS.filter((item) => {
+    if (!item.roles || item.roles.length === 0) return true
+    return role ? item.roles.includes(role) : false
+  }).map((item) => ({
+    ...item,
+    to: typeof item.to === 'function' ? item.to(role) : item.to,
+  }))
+})
+
 // Computed para obtener nombre y primer apellido del usuario
 const userDisplayName = computed(() => {
   if (!user.value) return ''
@@ -65,28 +125,15 @@ const handleLogout = async () => {
 
       <!-- NavegaciÃ³n principal -->
       <nav class="main-navigation">
-        <RouterLink to="/dashboard" class="nav-item">
-          <i class="pi pi-home"></i>
-          <span>{{ $t('header.dashboard') }}</span>
+        <RouterLink
+          v-for="item in navigationItems"
+          :key="item.key"
+          :to="item.to"
+          class="nav-item"
+        >
+          <i :class="item.icon"></i>
+          <span>{{ $t(item.labelKey) }}</span>
         </RouterLink>
-        <RouterLink to="/events" class="nav-item">
-          <i class="pi pi-calendar"></i>
-          <span>{{ $t('header.events') }}</span>
-        </RouterLink>
-        <RouterLink to="/tasks" class="nav-item">
-          <i class="pi pi-check-square"></i>
-          <span>{{ $t('header.task') }}</span>
-        </RouterLink>
-        <RouterLink to="/quotes" class="nav-item">
-          <i class="pi pi-file-edit"></i>
-          <span>{{ $t('header.quotes') }}</span>
-        </RouterLink>
-        <RouterLink to="/messages" class="nav-item">
-          <i class="pi pi-envelope"></i>
-          <span>{{ $t('header.messages') }}</span>
-        </RouterLink>
-
-
       </nav>
 
       <!-- Zona de usuario -->
@@ -144,25 +191,15 @@ const handleLogout = async () => {
       </template>
 
       <nav class="sidebar-navigation">
-        <RouterLink to="/dashboard" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-home"></i>
-          <span>{{ $t('header.dashboard') }}</span>
-        </RouterLink>
-        <RouterLink to="/events" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-calendar"></i>
-          <span>{{ $t('header.events') }}</span>
-        </RouterLink>
-        <RouterLink to="/tasks" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-check-square"></i>
-          <span>{{ $t('header.task') }}</span>
-        </RouterLink>
-        <RouterLink to="/quotes" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-file-edit"></i>
-          <span>{{ $t('header.quotes') }}</span>
-        </RouterLink>
-        <RouterLink to="/messages" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-envelope"></i>
-          <span>{{ $t('header.messages') }}</span>
+        <RouterLink
+          v-for="item in navigationItems"
+          :key="item.key"
+          :to="item.to"
+          class="sidebar-nav-item"
+          @click="closeSidebar"
+        >
+          <i :class="item.icon"></i>
+          <span>{{ $t(item.labelKey) }}</span>
         </RouterLink>
         <Divider />
         <RouterLink to="/notifications" class="sidebar-nav-item" @click="closeSidebar">
