@@ -30,7 +30,9 @@
     "confirm": "Confirm",
     "close": "Close",
     "error": "Error",
-    "info": "Information"
+    "info": "Information",
+    "backToList": "Back to list",
+    "success": "Success"
   },
   "errors": {
     "pageNotFound": "Page not found",
@@ -126,6 +128,88 @@
       "pending": "Pending",
       "completed": "Completed",
       "cancelled": "Cancelled"
+    }
+  },
+  "host-profile": {
+    "title": "My Profile",
+    "editTitle": "Edit My Profile",
+    "description": "Manage your personal information and event preferences.",
+    "name": "Name",
+    "specialty": "Specialty",
+    "location": "Location",
+    "about": "About me",
+    "editProfileButton": "Edit Profile",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Error updating profile",
+    "noDescription": "This host hasn't added a description yet.",
+    "loading": "Loading profile information...",
+    "roles": {
+      "host": "Host",
+      "organizer": "Organizer",
+      "admin": "Administrator"
+    },
+    "actions": {
+      "editProfile": "Edit Profile",
+      "manageQuotes": "Manage Quotes",
+      "logout": "Logout",
+      "viewAllQuotes": "View All",
+      "viewQuote": "View Details",
+      "settings": "Settings",
+      "addService": "Request Quote",
+      "createAlbum": "Create Album"
+    },
+    "sections": {
+      "contactInfo": "Contact Information",
+      "preferences": "Event Preferences",
+      "recentEvents": "Recent Events",
+      "recentOrganizers": "Recent Organizers",
+      "quotes": "Quotes",
+      "personalInfo": "Personal Information",
+      "description": "Description",
+      "social": "Social Networks",
+      "services": "Services Offered",
+      "albums": "My Albums"
+    },
+    "hostMetrics": {
+      "totalQuotes": "Total Quotes",
+      "totalQuotesSubtitle": "Requests Sent",
+      "pendingQuotes": "Pending Quotes",
+      "pendingQuotesSubtitle": "Waiting for your decision",
+      "approvedQuotes": "Approved Quotes",
+      "approvedQuotesSubtitle": "Organizers ready to work",
+      "declinedQuotes": "Declined Quotes",
+      "declinedQuotesSubtitle": "Discarded requests"
+    },
+    "columns": {
+      "organizer": "Organizer",
+      "event": "Event",
+      "date": "Date",
+      "amount": "Amount",
+      "state": "Status",
+      "actions": "Actions"
+    },
+    "tabs": {
+      "information": "Information",
+      "services": "Services",
+      "albums": "Albums",
+      "reviews": "Reviews"
+    },
+    "labels": {
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "city": "City",
+      "photos": "photos"
+    },
+    "empty": {
+      "preferences": "You haven't selected any preferences yet.",
+      "events": "You don't have any recent events yet.",
+      "organizers": "You haven't worked with any organizers yet.",
+      "quotes": "You haven't requested any quotes yet.",
+      "services": "You haven't added any services yet.",
+      "albums": "You don't have any albums yet.",
+      "reviews": "No reviews available.",
+      "description": "No description available."
     }
   },
   "albums": {
@@ -290,6 +374,16 @@
       "editAgain": "Edit Again",
       "saveAndSend": "Save and Send"
     },
+    "detail": {
+      "title": "Quote detail",
+      "information": "Information",
+      "organizer": "Organizer",
+      "created": "Created",
+      "lastUpdate": "Last update",
+      "quoteId": "Quote ID",
+      "notFound": "Quote not found",
+      "notFoundMessage": "We couldn't find the requested quote."
+    },
     "messages": {
       "loadedSuccessfully": "Quotes loaded successfully",
       "loadError": "Unable to load quotes. Please try again.",
@@ -300,7 +394,13 @@
       "deletedSuccessfully": "Quote deleted successfully",
       "deleteError": "Unable to delete quote. Please try again.",
       "invalidData": "Quote data is invalid.",
-      "requiredFields": "Please complete all required fields."
+      "requiredFields": "Please complete all required fields.",
+      "sentSuccessfully": "Quote sent successfully",
+      "sendError": "Could not send quote",
+      "stateApproved": "Quote approved",
+      "stateDeclined": "Quote declined",
+      "stateChangeError": "Error updating state",
+      "forbiddenQuote": "You do not have permission to view this quote"
     }
   },
   "messages": {
@@ -320,6 +420,10 @@
     "loadingMessages": "Loading messages..."
   },
   "tasks": {
+    "title": "Tasks",
+    "pending": "Pending",
+    "in_progress": "In progress",
+    "done": "Completed",
     "status": {
       "todo": "To Do",
       "inprogress": "In Progress",
@@ -361,7 +465,7 @@
     "loginSubtitle": "Access your EventGO account",
     "registerTitle": "Create Account",
     "registerSubtitle": "Join the EventGO community",
-    "emailPlaceholder": "you@@email.com",
+    "emailPlaceholder": "you@email.com",
     "passwordPlaceholder": "Enter your password",
     "confirmPasswordPlaceholder": "Confirm your password",
     "fullName": "Full Name",
@@ -472,10 +576,13 @@
       "pagination": {
         "label": "Page {page} of {total}"
       },
-      "messages": {
+      "organizerBrowserMessages": {
         "unableToNavigateQuotes": "Unable to navigate to quotes at this time",
         "featureComingSoon": "This feature will be available soon"
       }
+    },
+    "organizer": {
+      "welcome": "Welcome, {name}"
     }
   },
   "settings": {
@@ -524,6 +631,19 @@
       "message": "Message",
       "quote": "Quote",
       "system": "System"
+    }
+  },
+  "events": {
+    "types": {
+      "boda": "Wedding",
+      "social": "Social event",
+      "cumpleaños": "Birthday",
+      "corporativo": "Corporate",
+      "wedding": "Wedding",
+      "baby_shower": "Baby Shower",
+      "birthday": "Birthday",
+      "conference": "Conference",
+      "other": "Event"
     }
   }
 }

@@ -30,7 +30,9 @@
     "confirm": "Confirmar",
     "close": "Cerrar",
     "error": "Error",
-    "info": "Información"
+    "info": "Información",
+    "backToList": "Volver a la lista",
+    "success": "Éxito"
   },
   "errors": {
     "pageNotFound": "Página no encontrada",
@@ -126,6 +128,88 @@
       "pending": "Pendiente",
       "completed": "Completado",
       "cancelled": "Cancelado"
+    }
+  },
+  "host-profile": {
+    "title": "Mi Perfil",
+    "editTitle": "Editar Mi Perfil",
+    "description": "Administra tu información personal y preferencias de eventos.",
+    "name": "Nombre",
+    "specialty": "Especialidad",
+    "location": "Ubicación",
+    "about": "Sobre mí",
+    "editProfileButton": "Editar Perfil",
+    "updateSuccess": "Perfil actualizado con éxito",
+    "updateError": "Error al actualizar el perfil",
+    "noDescription": "Este anfitrión aún no tiene descripción.",
+    "loading": "Cargando información del perfil...",
+    "roles": {
+      "host": "Anfitrión",
+      "organizer": "Organizador",
+      "admin": "Administrador"
+    },
+    "actions": {
+      "editProfile": "Editar Perfil",
+      "manageQuotes": "Gestionar cotizaciones",
+      "logout": "Cerrar sesión",
+      "viewAllQuotes": "Ver todos",
+      "viewQuote": "Ver detalle",
+      "settings": "Configuración",
+      "addService": "Solicitar Cotización",
+      "createAlbum": "Crear álbum"
+    },
+    "sections": {
+      "contactInfo": "Información de Contacto",
+      "preferences": "Preferencias para Eventos",
+      "recentEvents": "Eventos Recientes",
+      "recentOrganizers": "Organizadores Recientes",
+      "quotes": "Cotizaciones",
+      "personalInfo": "Información Personal",
+      "description": "Descripción",
+      "social": "Redes Sociales",
+      "services": "Servicios Ofrecidos",
+      "albums": "Mis Álbumes"
+    },
+    "hostMetrics": {
+      "totalQuotes": "Cotizaciones Totales",
+      "totalQuotesSubtitle": "Solicitudes Enviadas",
+      "pendingQuotes": "Cotizaciones Pendientes",
+      "pendingQuotesSubtitle": "Esperando tu decisión",
+      "approvedQuotes": "Cotizaciones Aprobadas",
+      "approvedQuotesSubtitle": "Organizadores listos para trabajar",
+      "declinedQuotes": "Cotizaciones Rechazadas",
+      "declinedQuotesSubtitle": "Solicitudes descartadas"
+    },
+    "columns": {
+      "organizer": "Organizador",
+      "event": "Evento",
+      "date": "Fecha",
+      "amount": "Monto",
+      "state": "Estado",
+      "actions": "Acciones"
+    },
+    "tabs": {
+      "information": "Información",
+      "services": "Servicios",
+      "albums": "Álbumes",
+      "reviews": "Reseñas"
+    },
+    "labels": {
+      "name": "Nombre Completo",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono",
+      "city": "Ciudad",
+      "photos": "fotos"
+    },
+    "empty": {
+      "preferences": "Aún no has seleccionado preferencias.",
+      "events": "Todavía no tienes eventos recientes.",
+      "organizers": "Aún no has trabajado con ningún organizador.",
+      "quotes": "Todavía no has solicitado cotizaciones.",
+      "services": "No has agregado servicios aún.",
+      "albums": "No tienes álbumes aún.",
+      "reviews": "No hay reseñas disponibles.",
+      "description": "Sin descripción disponible."
     }
   },
   "albums": {
@@ -290,6 +374,16 @@
       "editAgain": "Editar Nuevamente",
       "saveAndSend": "Guardar y Enviar"
     },
+    "detail": {
+      "title": "Detalle de la cotización",
+      "information": "Información",
+      "organizer": "Organizador",
+      "created": "Creada",
+      "lastUpdate": "Última actualización",
+      "quoteId": "ID de cotización",
+      "notFound": "Cotización no encontrada",
+      "notFoundMessage": "No pudimos encontrar la cotización solicitada."
+    },
     "messages": {
       "loadedSuccessfully": "Cotizaciones cargadas exitosamente",
       "loadError": "No se pudieron cargar las cotizaciones. Inténtalo nuevamente.",
@@ -300,7 +394,13 @@
       "deletedSuccessfully": "Cotización eliminada exitosamente",
       "deleteError": "No se pudo eliminar la cotización. Inténtalo nuevamente.",
       "invalidData": "Los datos de la cotización son inválidos.",
-      "requiredFields": "Por favor completa todos los campos requeridos."
+      "requiredFields": "Por favor completa todos los campos requeridos.",
+      "sentSuccessfully": "Cotización enviada correctamente",
+      "sendError": "No se pudo enviar la cotización",
+      "stateApproved": "Cotización aprobada",
+      "stateDeclined": "Cotización rechazada",
+      "stateChangeError": "Error al actualizar el estado",
+      "forbiddenQuote": "No tienes permiso para ver esta cotización"
     }
   },
   "messages": {
@@ -320,6 +420,10 @@
     "loadingMessages": "Cargando mensajes..."
   },
   "tasks": {
+    "title": "Tareas",
+    "pending": "Pendiente",
+    "in_progress": "En progreso",
+    "done": "Completada",
     "status": {
       "todo": "Por Hacer",
       "inprogress": "En Progreso",
@@ -356,12 +460,12 @@
     "successLogin": "Inicio de sesión exitoso",
     "successRegister": "Cuenta creada exitosamente",
     "signOut": "Cerrar Sesión",
-    "and": "y la",
+    "and": "y",
     "loginTitle": "Iniciar Sesión",
     "loginSubtitle": "Accede a tu cuenta de EventGO",
     "registerTitle": "Crear Cuenta",
     "registerSubtitle": "Únete a la comunidad de EventGO",
-    "emailPlaceholder": "tu@@email.com",
+    "emailPlaceholder": "tu@email.com",
     "passwordPlaceholder": "Ingresa tu contraseña",
     "confirmPasswordPlaceholder": "Confirma tu contraseña",
     "fullName": "Nombre Completo",
@@ -472,10 +576,13 @@
       "pagination": {
         "label": "Página {page} de {total}"
       },
-      "messages": {
+      "organizerBrowserMessages": {
         "unableToNavigateQuotes": "No se pudo navegar a cotizaciones en este momento",
         "featureComingSoon": "Esta función estará disponible pronto"
       }
+    },
+    "organizer": {
+      "welcome": "Bienvenido, {name}"
     }
   },
   "settings": {
@@ -524,6 +631,19 @@
       "message": "Mensaje",
       "quote": "Cotización",
       "system": "Sistema"
+    }
+  },
+  "events": {
+    "types": {
+      "boda": "Boda",
+      "social": "Social",
+      "cumpleaños": "Cumpleaños",
+      "corporativo": "Corporativo",
+      "wedding": "Boda",
+      "baby_shower": "Baby Shower",
+      "birthday": "Cumpleaños",
+      "conference": "Conferencia",
+      "other": "Evento"
     }
   }
 }

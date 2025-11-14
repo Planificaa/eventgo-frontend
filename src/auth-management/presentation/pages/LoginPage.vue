@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "@/auth-management/infrastructure/composables/useAuth.js";
 import { useI18n } from "vue-i18n";
@@ -9,37 +9,56 @@ const { t } = useI18n();
 const router = useRouter();
 const toast = useToast();
 
-const { login, isLoading } = useAuth();
+const { login, user, isAuthenticated } = useAuth();
 
 const email = ref("");
 const password = ref("");
 const rememberMe = ref(false);
 const errorMessage = ref("");
 
+const isLoading = ref(false);
+
+// 🔥 FUNCIÓN DE LOGIN CORRECTA
 const handleSubmit = async () => {
   errorMessage.value = "";
+  isLoading.value = true;
 
   try {
-    const res = await login(email.value, password.value, {
-      remember: rememberMe.value,
-    });
+    await login(
+      email.value,
+      password.value,
+      rememberMe.value ? "local" : "session"
+    );
 
-    // Redirección por rol
-    if (res.user.role === "host") router.push("/host/dashboard");
-    else router.push("/organizer/dashboard");
+    // Esperar a que Pinia actualice el usuario
+    const role = user.value?.role;
+
+    if (!role) {
+      throw new Error("No se pudo obtener el rol del usuario");
+    }
+
+    // 🔥 Redirección correcta según rol
+    if (role === "host") {
+      router.push("/host/dashboard");
+    } else if (role === "organizer") {
+      router.push("/organizer/dashboard");
+    }
 
     toast.add({
       severity: "success",
       summary: t("auth.successLogin"),
-      detail: t("auth.welcomeBack", { name: res.user.name }),
+      detail: t("auth.welcomeBack", { name: user.value?.name }),
     });
+
   } catch (error) {
-    errorMessage.value = error.message;
+    errorMessage.value = error.message || t("auth.errorInvalidCredentials");
     toast.add({
       severity: "error",
       summary: t("common.error"),
       detail: errorMessage.value,
     });
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
@@ -47,6 +66,7 @@ const handleSubmit = async () => {
 <template>
   <div class="auth-container">
     <Toast />
+
     <div class="auth-card">
       <!-- Logo -->
       <div class="auth-logo">
@@ -55,8 +75,8 @@ const handleSubmit = async () => {
 
       <!-- Header -->
       <div class="auth-header">
-        <h1 class="auth-title">{{ $t('auth.loginTitle') }}</h1>
-        <p class="auth-subtitle">{{ $t('auth.loginSubtitle') }}</p>
+        <h1 class="auth-title">{{ $t("auth.loginTitle") }}</h1>
+        <p class="auth-subtitle">{{ $t("auth.loginSubtitle") }}</p>
       </div>
 
       <!-- Mensaje de error global -->
@@ -66,9 +86,9 @@ const handleSubmit = async () => {
 
       <!-- Form -->
       <form @submit.prevent="handleSubmit" class="auth-form">
-        <!-- Email Input -->
+        <!-- Email -->
         <div class="form-field">
-          <label for="email" class="form-label">{{ $t('auth.email') }}</label>
+          <label for="email" class="form-label">{{ $t("auth.email") }}</label>
           <InputText
             id="email"
             v-model="email"
@@ -81,9 +101,9 @@ const handleSubmit = async () => {
           />
         </div>
 
-        <!-- Password Input -->
+        <!-- Password -->
         <div class="form-field">
-          <label for="password" class="form-label">{{ $t('auth.password') }}</label>
+          <label for="password" class="form-label">{{ $t("auth.password") }}</label>
           <Password
             id="password"
             v-model="password"
@@ -97,7 +117,7 @@ const handleSubmit = async () => {
           />
         </div>
 
-        <!-- Remember Me & Forgot Password -->
+        <!-- Remember me -->
         <div class="form-options">
           <div class="remember-me">
             <Checkbox
@@ -106,14 +126,15 @@ const handleSubmit = async () => {
               :binary="true"
               :disabled="isLoading"
             />
-            <label for="remember">{{ $t('auth.rememberMe') }}</label>
+            <label for="remember">{{ $t("auth.rememberMe") }}</label>
           </div>
+
           <RouterLink to="/forgot-password" class="forgot-link">
-            {{ $t('auth.forgotPassword') }}
+            {{ $t("auth.forgotPassword") }}
           </RouterLink>
         </div>
 
-        <!-- Submit Button -->
+        <!-- Submit -->
         <Button
           type="submit"
           :label="$t('auth.loginButton')"
@@ -126,9 +147,9 @@ const handleSubmit = async () => {
 
       <!-- Register Link -->
       <div class="auth-footer">
-        <span>{{ $t('auth.noAccount') }}</span>
+        <span>{{ $t("auth.noAccount") }}</span>
         <RouterLink to="/register" class="register-link">
-          {{ $t('auth.registerHere') }}
+          {{ $t("auth.registerHere") }}
         </RouterLink>
       </div>
     </div>

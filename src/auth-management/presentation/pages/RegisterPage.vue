@@ -9,7 +9,7 @@ const { t } = useI18n();
 const router = useRouter();
 const toast = useToast();
 
-const { register, isLoading } = useAuth();
+const { register, user, isAuthenticated } = useAuth();
 
 const form = ref({
   name: "",
@@ -22,6 +22,9 @@ const form = ref({
 
 const errors = ref({});
 
+// ----------------------
+// VALIDACIONES
+// ----------------------
 const validate = () => {
   errors.value = {};
 
@@ -43,34 +46,52 @@ const validate = () => {
   return Object.keys(errors.value).length === 0;
 };
 
+// ----------------------
+// ENVIAR FORMULARIO
+// ----------------------
+const isLoading = ref(false);
+
 const handleSubmit = async () => {
   if (!validate()) return;
 
+  isLoading.value = true;
+
   try {
-    const data = {
+    const payload = {
       name: form.value.name.trim(),
       email: form.value.email.trim().toLowerCase(),
       password: form.value.password,
       role: form.value.role,
     };
 
-    const res = await register(data, { remember: true });
+    // Registrar usuario (NO retorna user)
+    await register(payload, "local");
 
-    // Redirigir por rol
-    if (res.user.role === "host") router.push("/host/dashboard");
+    // Obtener rol desde Pinia
+    const role = user.value?.role;
+
+    if (!role) {
+      throw new Error("No se pudo obtener el rol del usuario");
+    }
+
+    // Redirección automática
+    if (role === "host") router.push("/host/dashboard");
     else router.push("/organizer/dashboard");
 
     toast.add({
       severity: "success",
       summary: t("auth.successRegister"),
-      detail: t("auth.welcomeHost"),
+      detail: t("auth.welcomeBack", { name: user.value?.name }),
     });
+
   } catch (error) {
     toast.add({
       severity: "error",
       summary: t("common.error"),
-      detail: error.message,
+      detail: error.message || t("auth.errorUnknown"),
     });
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
@@ -78,6 +99,7 @@ const handleSubmit = async () => {
 <template>
   <div class="auth-container">
     <Toast />
+
     <div class="auth-card">
       <!-- Logo -->
       <div class="auth-logo">
@@ -86,155 +108,128 @@ const handleSubmit = async () => {
 
       <!-- Header -->
       <div class="auth-header">
-        <h1 class="auth-title">{{ $t('auth.registerTitle') }}</h1>
-        <p class="auth-subtitle">{{ $t('auth.registerSubtitle') }}</p>
+        <h1 class="auth-title">{{ $t("auth.registerTitle") }}</h1>
+        <p class="auth-subtitle">{{ $t("auth.registerSubtitle") }}</p>
       </div>
 
       <!-- Form -->
       <form @submit.prevent="handleSubmit" class="auth-form">
-        <!-- Name Input -->
+
+        <!-- NAME -->
         <div class="form-field">
-          <label for="name" class="form-label">
-            {{ $t('auth.fullName') }}
-            <span class="required">*</span>
+          <label class="form-label">
+            {{ $t("auth.fullName") }} <span class="required">*</span>
           </label>
+
           <InputText
-            id="name"
-            v-model="formData.name"
-            type="text"
+            v-model="form.name"
             :placeholder="$t('auth.fullNamePlaceholder')"
-            required
-            autocomplete="name"
             :class="{ 'p-invalid': errors.name }"
             :disabled="isLoading"
-            @input="clearError('name')"
           />
+
           <small v-if="errors.name" class="p-error">{{ errors.name }}</small>
         </div>
 
-        <!-- Email Input -->
+        <!-- EMAIL -->
         <div class="form-field">
-          <label for="email" class="form-label">
-            {{ $t('auth.email') }}
-            <span class="required">*</span>
+          <label class="form-label">
+            {{ $t("auth.email") }} <span class="required">*</span>
           </label>
+
           <InputText
-            id="email"
-            v-model="formData.email"
+            v-model="form.email"
             type="email"
             :placeholder="$t('auth.emailPlaceholder')"
-            required
-            autocomplete="email"
             :class="{ 'p-invalid': errors.email }"
             :disabled="isLoading"
-            @input="clearError('email')"
           />
+
           <small v-if="errors.email" class="p-error">{{ errors.email }}</small>
         </div>
 
-        <!-- Password Input -->
+        <!-- PASSWORD -->
         <div class="form-field">
-          <label for="password" class="form-label">
-            {{ $t('auth.password') }}
-            <span class="required">*</span>
+          <label class="form-label">
+            {{ $t("auth.password") }} <span class="required">*</span>
           </label>
+
           <Password
-            id="password"
-            v-model="formData.password"
+            v-model="form.password"
             :placeholder="$t('auth.passwordPlaceholder')"
             toggleMask
             :feedback="true"
-            required
-            autocomplete="new-password"
             :class="{ 'p-invalid': errors.password }"
             :disabled="isLoading"
-            @input="clearError('password')"
-          >
-            <template #footer>
-              <p class="password-hint">{{ $t('auth.passwordHint') }}</p>
-            </template>
-          </Password>
+          />
+
           <small v-if="errors.password" class="p-error">{{ errors.password }}</small>
         </div>
 
-        <!-- Confirm Password Input -->
+        <!-- CONFIRM PASSWORD -->
         <div class="form-field">
-          <label for="confirmPassword" class="form-label">
-            {{ $t('auth.confirmPassword') }}
-            <span class="required">*</span>
+          <label class="form-label">
+            {{ $t("auth.confirmPassword") }} <span class="required">*</span>
           </label>
+
           <Password
-            id="confirmPassword"
-            v-model="formData.confirmPassword"
+            v-model="form.confirmPassword"
             :placeholder="$t('auth.confirmPasswordPlaceholder')"
             toggleMask
             :feedback="false"
-            required
-            autocomplete="new-password"
             :class="{ 'p-invalid': errors.confirmPassword }"
             :disabled="isLoading"
-            @input="clearError('confirmPassword')"
           />
+
           <small v-if="errors.confirmPassword" class="p-error">{{ errors.confirmPassword }}</small>
         </div>
 
-        <!-- Role Selection -->
+        <!-- ROLE -->
         <div class="form-field">
           <label class="form-label">
-            {{ $t('auth.selectRole') }}
-            <span class="required">*</span>
+            {{ $t("auth.selectRole") }} <span class="required">*</span>
           </label>
+
           <div class="role-selection">
             <div
-              v-for="option in roleOptions"
-              :key="option.value"
               class="role-option"
-              :class="{ 'role-option--selected': formData.role === option.value }"
-              @click="!isLoading && (formData.role = option.value)"
+              :class="{ 'role-option--selected': form.role === 'host' }"
+              @click="form.role = 'host'"
             >
-              <input
-                type="radio"
-                :id="`role-${option.value}`"
-                :value="option.value"
-                v-model="formData.role"
-                :disabled="isLoading"
-                class="role-radio"
-              />
-              <label :for="`role-${option.value}`" class="role-label">
-                <i
-                  class="role-icon pi"
-                  :class="option.value === 'host' ? 'pi-users' : 'pi-briefcase'"
-                ></i>
-                <div class="role-info">
-                  <span class="role-title">{{ option.label }}</span>
-                  <span class="role-description">{{ option.description }}</span>
-                </div>
-              </label>
+              <i class="pi pi-users role-icon"></i>
+              <span>{{ $t("auth.roleHost") }}</span>
+            </div>
+
+            <div
+              class="role-option"
+              :class="{ 'role-option--selected': form.role === 'organizer' }"
+              @click="form.role = 'organizer'"
+            >
+              <i class="pi pi-briefcase role-icon"></i>
+              <span>{{ $t("auth.roleOrganizer") }}</span>
             </div>
           </div>
         </div>
 
-        <!-- Terms & Conditions -->
+        <!-- TERMS -->
         <div class="form-field">
           <div class="terms-container">
             <Checkbox
-              v-model="formData.acceptTerms"
+              v-model="form.acceptTerms"
               inputId="terms"
               :binary="true"
               :class="{ 'p-invalid': errors.acceptTerms }"
               :disabled="isLoading"
             />
             <label for="terms" class="terms-label">
-              {{ $t('auth.agreeTerms') }}
-              <a href="#" class="terms-link">{{ $t('auth.terms') }}</a>
-              {{ $t('auth.and') }}
-              <a href="#" class="terms-link">{{ $t('auth.privacyPolicy') }}</a>
+              {{ $t("auth.agreeTerms") }}
             </label>
           </div>
+
           <small v-if="errors.acceptTerms" class="p-error">{{ errors.acceptTerms }}</small>
         </div>
 
-        <!-- Submit Button -->
+        <!-- SUBMIT -->
         <Button
           type="submit"
           :label="$t('auth.registerButton')"
@@ -247,9 +242,9 @@ const handleSubmit = async () => {
 
       <!-- Login Link -->
       <div class="auth-footer">
-        <span>{{ $t('auth.alreadyAccount') }}</span>
+        <span>{{ $t("auth.alreadyAccount") }}</span>
         <RouterLink to="/login" class="login-link">
-          {{ $t('auth.loginHere') }}
+          {{ $t("auth.loginHere") }}
         </RouterLink>
       </div>
     </div>

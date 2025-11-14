@@ -79,6 +79,36 @@ const routes = [
   },
 
   // ========================================
+  // PERFIL - ANFITRIÓN
+  // ========================================
+  {
+    path: "/host/profile",
+    name: "host-profile",
+    component: () =>
+      import("@/profile-management/presentation/pages/HostProfilePage.vue"),
+    meta: {
+      requiresAuth: true,
+      requiresRole: "host",
+      title: "Mi Perfil",
+    },
+  },
+
+  // ========================================
+  // PERFIL - ORGANIZADOR
+  // ========================================
+  {
+    path: "/organizer/profile",
+    name: "organizer-profile",
+    component: () =>
+      import("@/profile-management/presentation/pages/OrganizerProfilePage.vue"),
+    meta: {
+      requiresAuth: true,
+      requiresRole: "organizer",
+      title: "Mi Perfil",
+    },
+  },
+
+  // ========================================
   // EVENTOS
   // ========================================
   {
