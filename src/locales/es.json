@@ -248,7 +248,8 @@
       "search": "Buscar eventos...",
       "newEvent": "Nuevo evento",
       "cancel": "Cancelar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "edit": "Editar"
     },
     "filters": {
       "all": "Todos los estados",
@@ -277,8 +278,12 @@
     },
     "status": {
       "active": "Activo",
-      "toBeConfirmed": "Por confirmar",
+      "pending": "Por confirmar",
       "cancelled": "Cancelado"
+    },
+    "labels": {
+      "customer": "Cliente",
+      "location": "Lugar"
     }
   },
 

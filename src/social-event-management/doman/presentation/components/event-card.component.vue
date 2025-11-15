@@ -1,39 +1,64 @@
 <script>
 export default {
-  name: 'EventCard',
+  name: "EventCard",
   props: {
     event: {
       type: Object,
-      required: true
+      required: true,
     },
     selected: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  computed: {
-    formattedDate() {
-      if (!this.event.date) return '';
 
-      const date = new Date(this.event.date);
-      return date.toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+  computed: {
+    // Mapear fecha
+    formattedDate() {
+      if (!this.event.date) return "";
+
+      return new Date(this.event.date).toLocaleDateString("es-ES", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     },
+
+    // 1️⃣ Normalizar ESTADO desde JSON Server
+    // (convertimos ES → internal)
+    normalizedStatus() {
+      const raw = (this.event.status || "").toLowerCase();
+
+      if (raw === "activo") return "active";
+      if (raw === "pendiente") return "pending";
+      if (raw === "cancelado") return "cancelled";
+
+      return raw;
+    },
+
+    // 2️⃣ Convertir el estado normalizado → texto traducido con i18n
+    translatedStatus() {
+      return this.$t(`eventManagement.status.${this.normalizedStatus}`);
+    },
+
+    // 3️⃣ Clases CSS según estado interno
     headerClass() {
       return {
-        'header-active': this.event.status === 'Active',
-        'header-pending': this.event.status === 'To be confirmed',
-        'header-cancelled': this.event.status === 'Cancelled',
-        'header-new': this.event.isNew // Clase para eventos nuevos
+        "header-active": this.normalizedStatus === "active",
+        "header-pending": this.normalizedStatus === "pending",
+        "header-cancelled": this.normalizedStatus === "cancelled",
       };
-    }
-  }
+    },
+
+    statusClass() {
+      return {
+        "status-active": this.normalizedStatus === "active",
+        "status-pending": this.normalizedStatus === "pending",
+        "status-cancelled": this.normalizedStatus === "cancelled",
+      };
+    },
+  },
 };
-
-
 </script>
 
 <template>
@@ -45,32 +70,28 @@ export default {
 
     <div class="event-details">
       <div class="detail-row">
-        <span class="detail-label">Customer:</span>
-        <span class="detail-value">{{ event.customer }}</span>
+        <span class="detail-label">{{ $t('eventManagement.labels.customer') }}:</span>
+        <span class="detail-value">{{ event.customerName }}</span>
       </div>
 
       <div class="detail-row">
-        <span class="detail-label">Place:</span>
+        <span class="detail-label">{{ $t('eventManagement.labels.location') }}:</span>
         <span class="detail-value">{{ event.location }}</span>
       </div>
 
       <div class="status-row">
-        <span
-          class="event-status"
-          :class="{
-            'status-active': event.status === 'Active',
-            'status-pending': event.status === 'To be confirmed',
-            'status-cancelled': event.status === 'Cancelled'
-          }"
-        >
-          {{ event.status }}
+        <span class="event-status" :class="statusClass">
+          {{ translatedStatus }}
         </span>
-        <button class="edit-btn" @click="$emit('edit')">Edit</button>
+
+        <button class="edit-btn" @click="$emit('edit')">
+          {{ $t('eventManagement.actions.edit') }}
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
+/* Tus estilos pueden ir aquí */
 </style>

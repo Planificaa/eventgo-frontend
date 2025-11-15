@@ -1,50 +1,58 @@
 // event.service.js
-import axios from 'axios';
+import apiClient from '/src/shared/infrastructure/http/axios.config.js';
 
-const API_URL = 'https://data-jaon-eventgo.onrender.com';
+const RESOURCE = '/social-events'; // <-- CORREGIDO
 
 class EventService {
+
   async getEvents(params = {}) {
-    return await axios.get(`${API_URL}/events`, { params });
+    const { data } = await apiClient.get(RESOURCE, { params });
+    return data; // JSON Server devuelve array plano
   }
 
   async getEvent(id) {
-    return await axios.get(`${API_URL}/events/${id}`);
+    const { data } = await apiClient.get(`${RESOURCE}/${id}`);
+    return data;
   }
 
-  async getEventsByUser(userId) {
-    if (!userId) {
-      return await this.getEvents();
-    }
+  async getEventsByUser(ownerId) {
+    if (!ownerId) return await this.getEvents();
 
-    return await this.getEvents({ userId });
+    // JSON Server filtra por ?ownerId=xx
+    const { data } = await apiClient.get(RESOURCE, { params: { ownerId } });
+    return data;
   }
 
   async createEvent(eventData) {
-    return await axios.post(`${API_URL}/events`, eventData);
+    const { data } = await apiClient.post(RESOURCE, eventData);
+    return data;
   }
 
   async updateEvent(id, eventData) {
-    return await axios.put(`${API_URL}/events/${id}`, eventData);
+    const { data } = await apiClient.put(`${RESOURCE}/${id}`, eventData);
+    return data;
   }
 
   async deleteEvent(id) {
-    return await axios.delete(`${API_URL}/events/${id}`);
+    const { data } = await apiClient.delete(`${RESOURCE}/${id}`);
+    return data;
   }
 
   async deleteMultipleEvents(eventIds) {
     const deletePromises = eventIds.map(id =>
-      axios.delete(`${API_URL}/events/${id}`)
+      apiClient.delete(`${RESOURCE}/${id}`)
     );
     return await Promise.all(deletePromises);
   }
 
   async searchEvents(query) {
-    return await axios.get(`${API_URL}/events?q=${query}`);
+    const { data } = await apiClient.get(`${RESOURCE}?q=${query}`);
+    return data;
   }
 
   async filterEventsByStatus(status) {
-    return await axios.get(`${API_URL}/events?status=${status}`);
+    const { data } = await apiClient.get(`${RESOURCE}?status=${status}`);
+    return data;
   }
 }
 

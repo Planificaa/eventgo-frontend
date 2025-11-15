@@ -3,20 +3,24 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 
-// Servicios
 import EventService from '@/social-event-management/application/services/event.service.js';
 import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
 
-// Composables
 const router = useRouter();
 const { t } = useI18n();
 const { user, restoreSession } = useAuth();
 
+/* ================================
+   Current User
+================================ */
 const currentUserId = computed(() => {
-  const value = user.value?.id;
-  return value != null ? String(value) : null;
+  const id = user.value?.id;
+  return id != null ? String(id) : null;
 });
-// Props
+
+/* ================================
+   Props
+================================ */
 const props = defineProps({
   id: {
     type: [String, Number],
@@ -24,29 +28,34 @@ const props = defineProps({
   }
 });
 
-// Estado reactivo
+/* ================================
+   Form State
+================================ */
 const eventData = ref({
   title: '',
   date: '',
   customerName: '',
   location: '',
-  status: 'Active',
-  userId: currentUserId.value
+  status: 'Activo',
+  ownerId: currentUserId.value
 });
 
 const loading = ref(false);
 
-// Opciones para el dropdown de status
-const statusOptions = computed(() => [
-  { label: t('events.status.active'), value: 'Active' },
-  { label: t('events.status.toBeConfirmed'), value: 'To be confirmed' },
-  { label: t('events.status.cancelled'), value: 'Cancelled' }
-]);
+/* ================================
+   Status options (db.json friendly)
+================================ */
+const statusOptions = [
+  { label: 'Activo', value: 'Activo' },
+  { label: 'Pendiente', value: 'Pendiente' },
+  { label: 'Cancelado', value: 'Cancelado' }
+];
 
-// Computed: verificar si estamos en modo edición
 const isEditMode = computed(() => !!props.id);
 
-// Métodos
+/* ================================
+   FETCH EVENT
+================================ */
 const fetchEvent = async () => {
   if (!isEditMode.value) return;
 
@@ -57,57 +66,56 @@ const fetchEvent = async () => {
     }
 
     const response = await EventService.getEvent(props.id);
-    // Convertir la fecha del backend al formato de Calendar
-    const eventDataFromServer = { ...response.data };
+    const data = { ...response };
 
-    const ownerId = eventDataFromServer.userId != null ? String(eventDataFromServer.userId) : null;
-    const userId = currentUserId.value;
+    // Convertir fecha
+    if (typeof data.date === 'string') {
+      data.date = data.date.substring(0, 10);
+    }
 
-    if (!userId || (ownerId && ownerId !== userId)) {
+    // Owner
+    const ownerId = data.ownerId != null ? String(data.ownerId) : null;
+
+    if (!currentUserId.value || ownerId !== currentUserId.value) {
       throw new Error(t('eventManagement.messages.forbiddenEvent'));
     }
 
-    // Si la fecha viene como string, convertirla a objeto Date
-    if (eventDataFromServer.date && typeof eventDataFromServer.date === 'string') {
-      eventDataFromServer.date = new Date(eventDataFromServer.date);
-    }
-
     eventData.value = {
-      ...eventDataFromServer,
-      userId: ownerId || userId
+      ...data,
+      ownerId
     };
+
   } catch (error) {
     console.error('Error fetching event:', error);
-    router.push('/events');
+    router.push('/social-events');
   } finally {
     loading.value = false;
   }
 };
 
+/* ================================
+   SAVE EVENT
+================================ */
 const saveEvent = async () => {
   loading.value = true;
   try {
-    // Preparar datos para enviar al backend
-    const dataToSend = { ...eventData.value };
+    const payload = { ...eventData.value };
 
-    // Convertir Date object a string si es necesario
-    if (dataToSend.date instanceof Date) {
-      dataToSend.date = dataToSend.date.toISOString().split('T')[0];
-    }
-    if (!currentUserId.value) {
-      throw new Error(t('eventManagement.messages.forbiddenEvent'));
-    }
+    // Asegurar ownerId
+    payload.ownerId = currentUserId.value;
 
-    dataToSend.userId = currentUserId.value;
+    // Convertir fecha para JSON Server
+    if (payload.date instanceof Date) {
+      payload.date = payload.date.toISOString().split('T')[0];
+    }
 
     if (isEditMode.value) {
-      await EventService.updateEvent(props.id, dataToSend);
+      await EventService.updateEvent(props.id, payload);
     } else {
-      await EventService.createEvent(dataToSend);
+      await EventService.createEvent(payload);
     }
 
-    // Redirect to events list after saving
-    router.push('/events');
+    router.push('/social-events');
   } catch (error) {
     console.error('Error saving event:', error);
   } finally {
@@ -115,21 +123,22 @@ const saveEvent = async () => {
   }
 };
 
-const goBack = () => {
-  router.push('/events');
-};
+/* ================================
+   Go Back
+================================ */
+const goBack = () => router.push('/social-events');
 
-// Lifecycle: cargar datos si estamos en modo edición
+/* ================================
+   On Mounted
+================================ */
 onMounted(async () => {
   if (!user.value) {
     await restoreSession();
-    eventData.value.userId = currentUserId.value;
+    eventData.value.ownerId = currentUserId.value;
   }
-
   fetchEvent();
 });
 </script>
-
 <template>
 
   <div class="event-form-container">
@@ -185,7 +194,7 @@ onMounted(async () => {
         <label for="status">Status</label>
         <select id="status" v-model="eventData.status" required>
           <option value="Active">Active</option>
-          <option value="To be confirmed">To be confirmed</option>
+          <option value="Pending">Pending</option>
           <option value="Cancelled">Cancelled</option>
         </select>
       </div>

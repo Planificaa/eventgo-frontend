@@ -244,7 +244,8 @@
       "search": "Search events...",
       "newEvent": "New Event",
       "cancel": "Cancel",
-      "delete": "Delete"
+      "delete": "Delete",
+      "edit": "Edit"
     },
     "filters": {
       "all": "All statuses",
@@ -273,8 +274,12 @@
     },
     "status": {
       "active": "Active",
-      "toBeConfirmed": "To be confirmed",
+      "pending": "To be confirmed",
       "cancelled": "Cancelled"
+    },
+    "labels": {
+      "customer": "Customer",
+      "location": "Location"
     }
   },
   "quotes": {

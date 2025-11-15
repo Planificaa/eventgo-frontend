@@ -5,7 +5,7 @@
 export class EventStatus {
   // Status constants
   static ACTIVE = 'Active';
-  static PENDING = 'To be confirmed';
+  static PENDING = 'Pending';
   static CONFIRMED = 'Confirmed';
   static CANCELLED = 'Cancelled';
 

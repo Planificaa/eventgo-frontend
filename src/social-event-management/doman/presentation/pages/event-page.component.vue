@@ -76,7 +76,7 @@ const filteredEvents = computed(() => {
   if (selectedFilter.value !== 'all') {
     filtered = filtered.filter(event => {
       if (selectedFilter.value === 'active') return event.status === t('eventManagement.status.active');
-      if (selectedFilter.value === 'pending') return event.status === t('eventManagement.status.toBeConfirmed');
+      if (selectedFilter.value === 'pending') return event.status === t('eventManagement.status.pending');
       if (selectedFilter.value === 'cancelled') return event.status === t('eventManagement.status.cancelled');
       return true;
     });
@@ -117,8 +117,8 @@ const fetchEvents = async () => {
     }
 
     const userId = currentUserId.value;
-    const response = await EventService.getEventsByUser(userId);
-    const data = Array.isArray(response.data) ? response.data : [];
+    const data = await EventService.getEventsByUser(userId);
+
 
     if (!userId) {
       events.value = [];
@@ -126,7 +126,7 @@ const fetchEvents = async () => {
     }
 
     events.value = data.filter((event) => {
-      const ownerId = event.userId != null ? String(event.userId) : null;
+      const ownerId = event.ownerId != null ? String(event.ownerId) : null;
       return ownerId === userId;
     });
     } catch (error) {
@@ -178,11 +178,11 @@ const onPageChange = (event) => {
 };
 
 const navigateToCreateEvent = () => {
-  router.push('/events/create');
+  router.push('/social-events/create');
 };
 
 const navigateToEditEvent = (eventId) => {
-  router.push(`/events/${eventId}/edit`);
+  router.push(`/social-events/${eventId}/edit`);
 };
 
 // Lifecycle

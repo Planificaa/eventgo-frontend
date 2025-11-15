@@ -112,20 +112,20 @@ const routes = [
   // EVENTOS
   // ========================================
   {
-    path: "/events",
-    name: "events",
+    path: "/social-events",
+    name: "social-events",
     component: EventPage,
     meta: { requiresAuth: true },
   },
   {
-    path: "/events/create",
-    name: "events-create",
+    path: "/social-events/create",
+    name: "social-events-create",
     component: CreateAndEditEvent,
     meta: { requiresAuth: true },
   },
   {
-    path: "/events/:id/edit",
-    name: "events-edit",
+    path: "/social-events/:id/edit",
+    name: "social-events-edit",
     component: CreateAndEditEvent,
     props: true,
     meta: { requiresAuth: true },

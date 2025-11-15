@@ -313,9 +313,16 @@
       "password": "Admin123!",
       "role": "organizer",
       "id": 22
+    },
+    {
+      "name": "July",
+      "email": "july26@gmail.com",
+      "password": "july123!",
+      "role": "organizer",
+      "id": 23
     }
   ],
-  "events": [
+  "social-events": [
     {
       "id": 1,
       "title": "Event 1",
@@ -328,7 +335,7 @@
       "budget": 7754,
       "createdAt": "2025-10-28T00:00:00",
       "updatedAt": "2025-11-30T00:00:00",
-      "ownerId": 13
+      "ownerId": "22"
     },
     {
       "id": 2,
@@ -595,6 +602,60 @@
       "createdAt": "2024-01-31T00:00:00",
       "updatedAt": "2024-08-23T00:00:00",
       "ownerId": 4
+    },
+    {
+      "title": "Cumpleaños",
+      "date": "2026-03-16",
+      "customerName": "July Paico",
+      "location": "Cedros de Villa",
+      "status": "Active",
+      "userId": "23",
+      "id": 21
+    },
+    {
+      "title": "af",
+      "date": "2025-11-27",
+      "customerName": "July Paico",
+      "location": "Chorrillos",
+      "status": "Active",
+      "ownerId": "23",
+      "id": 22
+    },
+    {
+      "title": "dfjhjh",
+      "date": "2025-11-20",
+      "customerName": "July Paico",
+      "location": "Chorrillos",
+      "status": "Active",
+      "ownerId": "23",
+      "id": 23
+    },
+    {
+      "title": "tyg",
+      "date": "2025-11-15",
+      "customerName": "July Paico",
+      "location": "Chorrillos",
+      "status": "Active",
+      "ownerId": "23",
+      "id": 24
+    },
+    {
+      "title": "Hola",
+      "date": "2025-11-24",
+      "customerName": "July Paico",
+      "location": "Piura",
+      "status": "Pending",
+      "ownerId": "23",
+      "id": 25
+    },
+    {
+      "title": "Nuevo",
+      "date": "2025-11-24",
+      "customerName": "Yo",
+      "location": "Chorrillos",
+      "status": "Cancelled",
+      "ownerId": "23",
+      "id": 26
     }
   ],
   "organizers": [
@@ -1120,6 +1181,67 @@
       "updatedAt": "2025-11-15T12:51:18.649Z",
       "ownerId": "22",
       "organizerId": "22",
+      "customerId": "21"
+    },
+    {
+      "id": "quote_1763215006457_eprn5w2cd",
+      "customer": {
+        "id": "21",
+        "name": "July Zelmira",
+        "email": "dacc7056@gmail.com",
+        "phone": ""
+      },
+      "event": {
+        "id": "event_1763215006457_e9xps91vc",
+        "type": "BIRTHDAY",
+        "name": "",
+        "date": "2026-03-16T05:00:00.000Z",
+        "location": "Cedros de Villa",
+        "numberOfGuests": 50
+      },
+      "organizer": {
+        "id": "23",
+        "name": "",
+        "role": "organizer",
+        "phone": "",
+        "avatar": ""
+      },
+      "services": [
+        {
+          "id": "service_1763215046959_tsqz8q1zh",
+          "description": "Catering",
+          "quantity": 50,
+          "unitPrice": 10,
+          "currency": "S/.",
+          "total": 500
+        },
+        {
+          "id": "service_1763215059283_isev6iqvh",
+          "description": "Decoracion",
+          "quantity": 1,
+          "unitPrice": 500,
+          "currency": "S/.",
+          "total": 500
+        },
+        {
+          "id": "service_1763215074998_8rdfgylkw",
+          "description": "Mano de obra",
+          "quantity": 1,
+          "unitPrice": 350,
+          "currency": "S/.",
+          "total": 350
+        }
+      ],
+      "state": "APPROVED",
+      "vatPercentage": 18,
+      "currency": "S/.",
+      "subtotal": 1350,
+      "vat": 243,
+      "total": 1593,
+      "createdAt": "2025-11-15T13:56:46.457Z",
+      "updatedAt": "2025-11-15T14:18:48.978Z",
+      "ownerId": "23",
+      "organizerId": "23",
       "customerId": "21"
     }
   ],
