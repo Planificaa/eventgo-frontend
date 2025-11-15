@@ -1068,6 +1068,59 @@
       "ownerId": "21",
       "organizerId": "22",
       "customerId": "21"
+    },
+    {
+      "id": "quote_1763210882910_baui2cy75",
+      "customer": {
+        "id": "21",
+        "name": "Deybbi Crisanto",
+        "email": "dacc7056@gmail.com",
+        "phone": ""
+      },
+      "event": {
+        "id": "event_1763210882910_l77i5b54q",
+        "type": "BIRTHDAY",
+        "name": "",
+        "date": "2025-11-20T05:00:00.000Z",
+        "location": "Mi casa",
+        "numberOfGuests": 100
+      },
+      "organizer": {
+        "id": "22",
+        "name": "",
+        "role": "organizer",
+        "phone": "",
+        "avatar": ""
+      },
+      "services": [
+        {
+          "id": "service_1763210911607_ed9r19f4u",
+          "description": "Decoracion",
+          "quantity": 1,
+          "unitPrice": 100,
+          "currency": "S/.",
+          "total": 100
+        },
+        {
+          "id": "service_1763211064391_rwqm98184",
+          "description": "Catering",
+          "quantity": 100,
+          "unitPrice": 15,
+          "currency": "S/.",
+          "total": 1500
+        }
+      ],
+      "state": "APPROVED",
+      "vatPercentage": 18,
+      "currency": "S/.",
+      "subtotal": 1600,
+      "vat": 288,
+      "total": 1888,
+      "createdAt": "2025-11-15T12:48:02.910Z",
+      "updatedAt": "2025-11-15T12:51:18.649Z",
+      "ownerId": "22",
+      "organizerId": "22",
+      "customerId": "21"
     }
   ],
   "tasks": [
