@@ -295,7 +295,13 @@
       "actions": "Actions",
       "view": "View",
       "edit": "Edit",
-      "noQuotes": "No quotes available"
+      "noQuotes": "No quotes available",
+      "title": "My Quotes",
+      "empty": "No quotes available",
+      "filter": "Filter by status",
+      "search": "Search quote",
+      "allStates": "All statuses",
+      "noResults": "No results found"
     },
     "filters": {
       "all": "All",
@@ -314,7 +320,8 @@
       "draft": "Draft",
       "pending": "Pending",
       "approved": "Approved",
-      "declined": "Declined"
+      "declined": "Declined",
+      "expired": "Expired"
     },
     "form": {
       "createTitle": "Create New Quote",
@@ -329,7 +336,9 @@
       "numberOfGuests": "Number of Guests",
       "guestsPlaceholder": "Quantity",
       "location": "Location",
-      "locationPlaceholder": "Event venue"
+      "locationPlaceholder": "Event venue",
+      "eventName": "Event Name",
+      "eventDescription": "Event Description"
     },
     "services": {
       "title": "Included Services",
@@ -341,7 +350,8 @@
       "unitPrice": "Unit Price",
       "total": "Total",
       "noServices": "No services added",
-      "services": "services"
+      "services": "services",
+      "removeService": "Remove Service"
     },
     "financial": {
       "title": "Financial Summary",
@@ -349,7 +359,10 @@
       "vat": "VAT",
       "total": "Total",
       "services": "services",
-      "paymentTerms": "Payment terms: 50% upfront, 50% upon completion"
+      "paymentTerms": "Payment terms: 50% upfront, 50% upon completion",
+      "currency": "Currency",
+      "discount": "Discount",
+      "finalTotal": "Final Total"
     },
     "actions": {
       "title": "Actions",
@@ -360,7 +373,11 @@
       "currentState": "Current state",
       "lastUpdate": "Last update",
       "approve": "Approve",
-      "decline": "Decline"
+      "decline": "Decline",
+      "requestQuote": "Request Quote",
+      "downloadPDF": "Download PDF",
+      "share": "Share",
+      "print": "Print"
     },
     "preview": {
       "title": "Quote Preview",
@@ -382,7 +399,9 @@
       "lastUpdate": "Last update",
       "quoteId": "Quote ID",
       "notFound": "Quote not found",
-      "notFoundMessage": "We couldn't find the requested quote."
+      "status": "Status",
+      "metadata": "Additional Information",
+      "notFoundMessage": "We cannot find the quote you're looking for."
     },
     "messages": {
       "loadedSuccessfully": "Quotes loaded successfully",
@@ -400,7 +419,9 @@
       "stateApproved": "Quote approved",
       "stateDeclined": "Quote declined",
       "stateChangeError": "Error updating state",
-      "forbiddenQuote": "You do not have permission to view this quote"
+      "forbiddenQuote": "You do not have permission to view this quote",
+      "deleteSuccess": "Quote deleted successfully",
+      "updateSuccess": "Quote updated successfully"
     }
   },
   "messages": {
@@ -465,7 +486,7 @@
     "loginSubtitle": "Access your EventGO account",
     "registerTitle": "Create Account",
     "registerSubtitle": "Join the EventGO community",
-    "emailPlaceholder": "you@email.com",
+    "emailPlaceholder": "you email",
     "passwordPlaceholder": "Enter your password",
     "confirmPasswordPlaceholder": "Confirm your password",
     "fullName": "Full Name",
@@ -486,7 +507,7 @@
     "passwordHint": "Minimum 8 characters, include letters and numbers"
   },
   "dashboard": {
-    "welcome": "Welcome, {name}",
+    "welcome": "Welcome, {user}",
     "activitySummary": "Your activity summary",
     "seeAll": "See all",
     "viewAll": "View all",

@@ -27,7 +27,6 @@ const clearPersistedSession = () => {
 }
 
 const loadPersistedSession = () => {
-  // siempre buscamos primero en localStorage
   const token =
     localStorage.getItem(STORAGE_KEYS.TOKEN) ||
     sessionStorage.getItem(STORAGE_KEYS.TOKEN)
@@ -54,7 +53,41 @@ export const useAuthStore = defineStore('auth', () => {
   const storageType = ref('local')
 
   /* ============================================================
-     LOGIN (funciona perfecto con JSON-SERVER)
+      REGISTER — PARA JSON-SERVER
+  ============================================================ */
+  const register = async (payload, persistence = 'local') => {
+    try {
+      // Verificar si ya existe el email
+      const exists = await api.get('/users', {
+        params: { email: payload.email }
+      })
+
+      if (exists.data.length > 0) {
+        throw new Error('El email ya está registrado')
+      }
+
+      // Crear usuario
+      const { data: newUser } = await api.post('/users', payload)
+
+      // json-server no genera tokens
+      const generatedToken = 'auth_' + Math.random().toString(36).substring(2)
+
+      // Guardamos en estado
+      user.value = newUser
+      token.value = generatedToken
+      storageType.value = persistence
+
+      persistSession(newUser, generatedToken, persistence)
+
+      return newUser
+    } catch (err) {
+      console.error('Register error:', err)
+      throw err
+    }
+  }
+
+  /* ============================================================
+      LOGIN
   ============================================================ */
   const login = async (email, password, persistence = 'local') => {
     try {
@@ -67,18 +100,15 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       const loggedUser = data[0]
-
-      // json-server no genera tokens → generamos uno básico
       const generatedToken = 'auth_' + Math.random().toString(36).substring(2)
 
-      // Guardar en estado
       user.value = loggedUser
       token.value = generatedToken
       storageType.value = persistence
 
       persistSession(loggedUser, generatedToken, persistence)
 
-      return true
+      return loggedUser
     } catch (err) {
       console.error('Login error:', err)
       throw err
@@ -86,21 +116,18 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   /* ============================================================
-     RESTORE SESSION — MÁXIMA IMPORTANCIA
-     No usamos validateToken (json-server no lo soporta)
+      RESTORE SESSION
   ============================================================ */
   const restoreSession = async () => {
     const persisted = loadPersistedSession()
 
     if (!persisted.token || !persisted.user) {
-      // limpiar basura
       clearPersistedSession()
       user.value = null
       token.value = null
       return false
     }
 
-    // Simplemente restauramos lo persistido
     token.value = persisted.token
     user.value = persisted.user
     storageType.value = persisted.storageType
@@ -109,20 +136,18 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   /* ============================================================
-     LOGOUT
+      LOGOUT
   ============================================================ */
   const logout = async () => {
     clearPersistedSession()
     user.value = null
     token.value = null
-    storageType.value = 'local'
   }
 
   /* ============================================================
-     GETTERS
+      GETTERS
   ============================================================ */
   const isAuthenticated = computed(() => token.value !== null)
-
   const isHost = computed(() => user.value?.role === 'host')
   const isOrganizer = computed(() => user.value?.role === 'organizer')
 
@@ -131,6 +156,7 @@ export const useAuthStore = defineStore('auth', () => {
     token,
     storageType,
 
+    register,
     login,
     restoreSession,
     logout,

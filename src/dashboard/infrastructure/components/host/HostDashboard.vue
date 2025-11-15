@@ -1,6 +1,50 @@
+<script setup>
+import { ref, onMounted } from "vue";
+import api from "@/shared/infrastructure/http/axios.config.js";
+import { useRouter } from "vue-router";
+import { useI18n } from 'vue-i18n';
+const router = useRouter();
+const { t } = useI18n();
+const organizers = ref([]);
+const loading = ref(true);
+const error = ref(null);
+const showModal = ref(false);
+const selected = ref(null);
+
+const defaultAvatar =
+  "https://cdn-icons-png.flaticon.com/512/3177/3177440.png";
+
+// Cargar organizadores desde API
+const loadOrganizers = async () => {
+  try {
+    const response = await api.get("/users", {
+      params: { role: "organizer" },
+    });
+    organizers.value = response.data;
+  } catch (error) {
+    error.value = "Error al cargar organizadores";
+  } finally {
+    loading.value = false;
+  }
+};
+
+const openProfile = (org) => {
+  selected.value = org;
+  showModal.value = true;
+};
+
+const goToQuote = (org) => {
+  router.push({
+    name: "quote-create",
+    query: { organizerId: org.id },
+  });
+};
+
+onMounted(loadOrganizers);
+</script>
 <template>
   <div class="dashboard-container">
-    <h1 class="page-title">Panel de Anfitrión</h1>
+    <h1 class="page-title">{{$t('dashboard.welcome')}}</h1>
     <p class="page-subtitle">Explora y conecta con los organizadores disponibles</p>
 
     <!-- Loading State -->
@@ -75,7 +119,7 @@
         <Divider />
 
         <Button
-          label="Enviar Cotización"
+          label="Solicitar Cotización"
           icon="pi pi-send"
           class="p-button-success w-full"
           @click="goToQuote(selected)"
@@ -84,52 +128,6 @@
     </Dialog>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted } from "vue";
-import api from "@/shared/infrastructure/http/axios.config.js";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-
-const organizers = ref([]);
-const loading = ref(true);
-const error = ref(null);
-const showModal = ref(false);
-const selected = ref(null);
-
-const defaultAvatar =
-  "https://cdn-icons-png.flaticon.com/512/3177/3177440.png";
-
-// Cargar organizadores desde API
-const loadOrganizers = async () => {
-  try {
-    const response = await api.get("/users", {
-      params: { role: "organizer" },
-    });
-    organizers.value = response.data;
-  } catch (err) {
-    error.value = "Error al cargar organizadores";
-  } finally {
-    loading.value = false;
-  }
-};
-
-const openProfile = (org) => {
-  selected.value = org;
-  showModal.value = true;
-};
-
-const goToQuote = (org) => {
-  router.push({
-    name: "quote-create",
-    query: { organizerId: org.id },
-  });
-};
-
-onMounted(loadOrganizers);
-</script>
-
 <style scoped>
 .dashboard-container {
   padding: 2.5rem;

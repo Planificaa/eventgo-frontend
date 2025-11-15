@@ -25,6 +25,10 @@ export const useAuth = () => {
     return await auth.login(email, password, persistence)
   }
 
+  const register = async (payload, persistence = 'local') => {
+    return await auth.register(payload, persistence)
+  }
+
   const logout = async () => {
     return await auth.logout()
   }
@@ -65,11 +69,12 @@ export const useAuth = () => {
 
     // actions
     login,
+    register,
     logout,
     restoreSession,
 
     // helpers
     userDisplayName,
-    profileRoute,
+    profileRoute
   }
 }

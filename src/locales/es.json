@@ -1,6 +1,6 @@
 {
   "header": {
-    "dashboard": "Inicio",
+    "dashboard": "Panel",
     "events": "Eventos",
     "task": "Tareas",
     "quotes": "Cotizaciones",
@@ -13,14 +13,14 @@
     "settings": "Configuración",
     "language": "Idioma",
     "goHome": "Ir al inicio",
-    "goBack": "Volver atrás",
+    "goBack": "Regresar",
     "create": "Crear",
     "update": "Actualizar",
     "loading": "Cargando...",
     "actions": "Acciones",
     "viewDetails": "Ver detalles",
     "noData": "No hay datos disponibles",
-    "back": "Volver",
+    "back": "Atrás",
     "cancel": "Cancelar",
     "warning": "Advertencia",
     "add": "Agregar",
@@ -36,7 +36,7 @@
   },
   "errors": {
     "pageNotFound": "Página no encontrada",
-    "pageNotFoundDescription": "La página que estás buscando no existe o ha sido movida.",
+    "pageNotFoundDescription": "La página que buscas no existe o ha sido movida.",
     "fetchError": "Ocurrió un error al obtener los datos.",
     "saveError": "Ocurrió un error al guardar.",
     "deleteError": "Ocurrió un error al eliminar."
@@ -44,12 +44,12 @@
   "profile": {
     "title": "Perfil del Organizador",
     "editTitle": "Editar Perfil del Organizador",
-    "description": "Administra tu información personal y profesional.",
+    "description": "Gestiona tu información personal y profesional.",
     "name": "Nombre",
     "specialty": "Especialidad",
     "location": "Ubicación",
     "about": "Sobre mí",
-    "editProfileButton": "Editar Perfil",
+    "editProfileButton": "Editar perfil",
     "updateSuccess": "Perfil actualizado con éxito",
     "updateError": "Error al actualizar el perfil",
     "noDescription": "Este organizador aún no tiene descripción.",
@@ -64,14 +64,14 @@
       "manageQuotes": "Gestionar cotizaciones",
       "logout": "Cerrar sesión",
       "viewAllQuotes": "Ver todas las cotizaciones",
-      "viewQuote": "Ver detalle",
+      "viewQuote": "Ver detalles",
       "settings": "Configuración",
       "addService": "Agregar servicio",
       "createAlbum": "Crear álbum"
     },
     "sections": {
       "contactInfo": "Información de contacto",
-      "preferences": "Preferencias para eventos",
+      "preferences": "Preferencias de evento",
       "recentEvents": "Eventos recientes",
       "recentOrganizers": "Organizadores recientes",
       "quotes": "Cotizaciones",
@@ -82,7 +82,7 @@
       "albums": "Mis álbumes"
     },
     "hostMetrics": {
-      "totalQuotes": "Cotizaciones totales",
+      "totalQuotes": "Total de cotizaciones",
       "totalQuotesSubtitle": "Solicitudes enviadas",
       "pendingQuotes": "Cotizaciones pendientes",
       "pendingQuotesSubtitle": "Esperando tu decisión",
@@ -107,21 +107,21 @@
     },
     "labels": {
       "name": "Nombre",
-      "email": "Correo electrónico",
+      "email": "Correo",
       "phone": "Teléfono",
       "city": "Ciudad",
       "photos": "fotos"
     },
     "empty": {
       "preferences": "Aún no has seleccionado preferencias.",
-      "events": "Todavía no tienes eventos recientes.",
-      "organizers": "Aún no has trabajado con ningún organizador.",
-      "quotes": "Todavía no has solicitado cotizaciones.",
-      "services": "No has agregado servicios aún.",
-      "albums": "No tienes álbumes aún.",
+      "events": "No tienes eventos recientes.",
+      "organizers": "Aún no has trabajado con organizadores.",
+      "quotes": "Aún no has solicitado cotizaciones.",
+      "services": "Aún no has agregado servicios.",
+      "albums": "Aún no tienes álbumes.",
       "reviews": "No hay reseñas disponibles.",
-      "description": "Sin descripción disponible.",
-      "notProvided": "No especificado"
+      "description": "Sin descripción.",
+      "notProvided": "No proporcionado"
     },
     "eventStates": {
       "active": "Activo",
@@ -130,18 +130,19 @@
       "cancelled": "Cancelado"
     }
   },
+
   "host-profile": {
     "title": "Mi Perfil",
     "editTitle": "Editar Mi Perfil",
-    "description": "Administra tu información personal y preferencias de eventos.",
+    "description": "Gestiona tu información personal y tus preferencias de eventos.",
     "name": "Nombre",
     "specialty": "Especialidad",
     "location": "Ubicación",
     "about": "Sobre mí",
-    "editProfileButton": "Editar Perfil",
+    "editProfileButton": "Editar perfil",
     "updateSuccess": "Perfil actualizado con éxito",
-    "updateError": "Error al actualizar el perfil",
-    "noDescription": "Este anfitrión aún no tiene descripción.",
+    "updateError": "Error al actualizar perfil",
+    "noDescription": "Este anfitrión no ha agregado descripción.",
     "loading": "Cargando información del perfil...",
     "roles": {
       "host": "Anfitrión",
@@ -149,35 +150,35 @@
       "admin": "Administrador"
     },
     "actions": {
-      "editProfile": "Editar Perfil",
+      "editProfile": "Editar perfil",
       "manageQuotes": "Gestionar cotizaciones",
       "logout": "Cerrar sesión",
-      "viewAllQuotes": "Ver todos",
-      "viewQuote": "Ver detalle",
+      "viewAllQuotes": "Ver todas",
+      "viewQuote": "Ver detalles",
       "settings": "Configuración",
-      "addService": "Solicitar Cotización",
+      "addService": "Solicitar cotización",
       "createAlbum": "Crear álbum"
     },
     "sections": {
-      "contactInfo": "Información de Contacto",
-      "preferences": "Preferencias para Eventos",
-      "recentEvents": "Eventos Recientes",
-      "recentOrganizers": "Organizadores Recientes",
+      "contactInfo": "Información de contacto",
+      "preferences": "Preferencias",
+      "recentEvents": "Eventos recientes",
+      "recentOrganizers": "Organizadores recientes",
       "quotes": "Cotizaciones",
-      "personalInfo": "Información Personal",
+      "personalInfo": "Información personal",
       "description": "Descripción",
-      "social": "Redes Sociales",
-      "services": "Servicios Ofrecidos",
-      "albums": "Mis Álbumes"
+      "social": "Redes sociales",
+      "services": "Servicios ofrecidos",
+      "albums": "Mis álbumes"
     },
     "hostMetrics": {
-      "totalQuotes": "Cotizaciones Totales",
-      "totalQuotesSubtitle": "Solicitudes Enviadas",
-      "pendingQuotes": "Cotizaciones Pendientes",
+      "totalQuotes": "Total de cotizaciones",
+      "totalQuotesSubtitle": "Solicitudes enviadas",
+      "pendingQuotes": "Pendientes",
       "pendingQuotesSubtitle": "Esperando tu decisión",
-      "approvedQuotes": "Cotizaciones Aprobadas",
-      "approvedQuotesSubtitle": "Organizadores listos para trabajar",
-      "declinedQuotes": "Cotizaciones Rechazadas",
+      "approvedQuotes": "Aprobadas",
+      "approvedQuotesSubtitle": "Organizadores listos",
+      "declinedQuotes": "Rechazadas",
       "declinedQuotesSubtitle": "Solicitudes descartadas"
     },
     "columns": {
@@ -195,66 +196,69 @@
       "reviews": "Reseñas"
     },
     "labels": {
-      "name": "Nombre Completo",
-      "email": "Correo Electrónico",
+      "name": "Nombre completo",
+      "email": "Correo",
       "phone": "Teléfono",
       "city": "Ciudad",
       "photos": "fotos"
     },
     "empty": {
-      "preferences": "Aún no has seleccionado preferencias.",
-      "events": "Todavía no tienes eventos recientes.",
-      "organizers": "Aún no has trabajado con ningún organizador.",
-      "quotes": "Todavía no has solicitado cotizaciones.",
-      "services": "No has agregado servicios aún.",
-      "albums": "No tienes álbumes aún.",
+      "preferences": "No has seleccionado preferencias.",
+      "events": "No tienes eventos recientes.",
+      "organizers": "No has trabajado con organizadores.",
+      "quotes": "No has solicitado cotizaciones.",
+      "services": "No has agregado servicios.",
+      "albums": "No tienes álbumes.",
       "reviews": "No hay reseñas disponibles.",
-      "description": "Sin descripción disponible."
+      "description": "Sin descripción."
     }
   },
+
   "albums": {
     "title": "Álbumes",
     "createTitle": "Crear Álbum",
     "editTitle": "Editar Álbum",
     "detailsTitle": "Detalles del Álbum",
-    "emptyMessage": "Este organizador no tiene álbumes todavía.",
+    "emptyMessage": "Este organizador no tiene álbumes aún.",
     "createButton": "Crear Álbum",
     "editButton": "Editar",
     "deleteButton": "Eliminar",
-    "albumName": "Nombre del Álbum",
-    "albumDescription": "Descripción del Álbum",
-    "coverImage": "Imagen de Portada",
+    "albumName": "Nombre del álbum",
+    "albumDescription": "Descripción del álbum",
+    "coverImage": "Imagen de portada",
     "saveSuccess": "Álbum guardado con éxito",
     "deleteSuccess": "Álbum eliminado con éxito",
     "noDescription": "Sin descripción"
   },
+
   "chat": {
-    "title": "Chat con Clientes",
+    "title": "Chat con clientes",
     "emptyMessage": "No hay conversaciones activas.",
     "sendMessage": "Enviar mensaje",
     "placeholder": "Escribe tu mensaje...",
     "messageSent": "Mensaje enviado con éxito",
     "messageError": "Error al enviar el mensaje"
   },
+
   "eventManagement": {
     "pageTitle": "Gestión de Eventos",
     "actions": {
       "selectAll": "Seleccionar todo",
       "deleteSelected": "Eliminar seleccionados ({count})",
       "search": "Buscar eventos...",
-      "newEvent": "Nuevo Evento",
+      "newEvent": "Nuevo evento",
       "cancel": "Cancelar",
       "delete": "Eliminar"
     },
     "filters": {
       "all": "Todos los estados",
-      "active": "Activos",
-      "pending": "Pendientes",
-      "cancelled": "Cancelados"
+      "active": "Activo",
+      "pending": "Pendiente",
+      "cancelled": "Cancelado"
     },
     "sort": {
-      "recent": "Más recientes",
-      "oldest": "Más antiguos",
+      "recent": "Más reciente",
+      "oldest": "Más antiguo",
       "title": "Por título"
     },
     "pagination": {
@@ -265,11 +269,11 @@
     },
     "confirmation": {
       "title": "Confirmar eliminación",
-      "message": "¿Está seguro de eliminar {count} evento(s)? Esta acción no se puede deshacer."
+      "message": "¿Estás seguro de eliminar {count} evento(s)? Esta acción no se puede deshacer."
     },
     "messages": {
       "noEvents": "No hay eventos disponibles",
-      "forbiddenEvent": "No tienes permisos para modificar este evento."
+      "forbiddenEvent": "No tienes permiso para modificar este evento."
     },
     "status": {
       "active": "Activo",
@@ -277,16 +281,17 @@
       "cancelled": "Cancelado"
     }
   },
+
   "quotes": {
     "page": {
       "title": "Cotizaciones",
-      "subtitle": "Gestiona todas tus cotizaciones de eventos"
+      "subtitle": "Gestiona todas tus cotizaciones"
     },
     "list": {
       "searchPlaceholder": "Buscar cotizaciones...",
-      "filterAll": "Todos",
+      "filterAll": "Todas",
       "sortRecent": "Más recientes",
-      "newQuote": "Nueva Cotización",
+      "newQuote": "Nueva cotización",
       "customer": "Cliente",
       "event": "Evento",
       "date": "Fecha",
@@ -295,75 +300,100 @@
       "actions": "Acciones",
       "view": "Ver",
       "edit": "Editar",
-      "noQuotes": "No hay cotizaciones disponibles"
+      "noQuotes": "No hay cotizaciones",
+      "title": "Mis cotizaciones",
+      "empty": "No hay cotizaciones disponibles",
+      "filter": "Filtrar por estado",
+      "search": "Buscar cotización",
+      "allStates": "Todos los estados",
+      "noResults": "Sin resultados"
     },
+
     "filters": {
-      "all": "Todos",
+      "all": "Todas",
       "approved": "Aprobadas",
       "pending": "Pendientes",
       "declined": "Rechazadas",
       "draft": "Borradores"
     },
+
     "sort": {
       "recent": "Más recientes",
       "oldest": "Más antiguas",
-      "amountHigh": "Monto mayor",
-      "amountLow": "Monto menor"
+      "amountHigh": "Mayor monto",
+      "amountLow": "Menor monto"
     },
+
     "states": {
       "draft": "Borrador",
       "pending": "Pendiente",
       "approved": "Aprobada",
-      "declined": "Rechazada"
+      "declined": "Rechazada",
+      "expired": "Expirada"
     },
+
     "form": {
-      "createTitle": "Crear Nueva Cotización",
-      "editTitle": "Editar Cotización",
-      "basicInfo": "Información Básica",
+      "createTitle": "Crear nueva cotización",
+      "editTitle": "Editar cotización",
+      "basicInfo": "Información básica",
       "customer": "Cliente",
       "customerPlaceholder": "Nombre del cliente",
-      "eventType": "Tipo de Evento",
+      "eventType": "Tipo de evento",
       "selectType": "Seleccionar tipo",
-      "eventDate": "Fecha del Evento",
+      "eventDate": "Fecha del evento",
       "datePlaceholder": "DD/MM/AAAA",
-      "numberOfGuests": "Número de Invitados",
+      "numberOfGuests": "Número de invitados",
       "guestsPlaceholder": "Cantidad",
       "location": "Ubicación",
-      "locationPlaceholder": "Lugar del evento"
+      "locationPlaceholder": "Lugar del evento",
+      "eventName": "Nombre del evento",
+      "eventDescription": "Descripción del evento"
     },
+
     "services": {
-      "title": "Servicios Incluidos",
-      "addService": "Agregar Servicio",
-      "addNewService": "Agregar Nuevo Servicio",
+      "title": "Servicios incluidos",
+      "addService": "Agregar servicio",
+      "addNewService": "Agregar nuevo servicio",
       "description": "Descripción",
       "descriptionPlaceholder": "Nombre del servicio",
       "quantity": "Cantidad",
-      "unitPrice": "Precio Unitario",
+      "unitPrice": "Precio unitario",
       "total": "Total",
-      "noServices": "No se han agregado servicios",
-      "services": "servicios"
+      "noServices": "No hay servicios agregados",
+      "services": "servicios",
+      "removeService": "Eliminar servicio"
     },
+
     "financial": {
-      "title": "Resumen Financiero",
+      "title": "Resumen financiero",
       "subtotal": "Subtotal",
       "vat": "IGV",
       "total": "Total",
       "services": "servicios",
-      "paymentTerms": "Condiciones de pago: 50% adelanto, 50% al finalizar"
+      "paymentTerms": "Condiciones de pago: 50% adelantado, 50% al finalizar",
+      "currency": "Moneda",
+      "discount": "Descuento",
+      "finalTotal": "Total final"
     },
+
     "actions": {
       "title": "Acciones",
       "save": "Guardar",
-      "preview": "Vista Previa",
+      "preview": "Vista previa",
       "send": "Enviar",
       "cancel": "Cancelar",
       "currentState": "Estado actual",
       "lastUpdate": "Última actualización",
       "approve": "Aprobar",
-      "decline": "Rechazar"
+      "decline": "Rechazar",
+      "requestQuote": "Solicitar cotización",
+      "downloadPDF": "Descargar PDF",
+      "share": "Compartir",
+      "print": "Imprimir"
     },
+
     "preview": {
-      "title": "Vista Previa de Cotización",
+      "title": "Vista previa",
       "quotation": "Cotización",
       "for": "PARA",
       "event": "EVENTO",
@@ -371,44 +401,51 @@
       "location": "Ubicación",
       "guests": "Invitados",
       "tel": "Tel",
-      "editAgain": "Editar Nuevamente",
-      "saveAndSend": "Guardar y Enviar"
+      "editAgain": "Editar nuevamente",
+      "saveAndSend": "Guardar y enviar"
     },
+
     "detail": {
-      "title": "Detalle de la cotización",
+      "title": "Detalle de cotización",
       "information": "Información",
       "organizer": "Organizador",
-      "created": "Creada",
+      "created": "Creado",
       "lastUpdate": "Última actualización",
       "quoteId": "ID de cotización",
       "notFound": "Cotización no encontrada",
-      "notFoundMessage": "No pudimos encontrar la cotización solicitada."
+      "status": "Estado",
+      "metadata": "Información adicional",
+      "notFoundMessage": "No encontramos la cotización solicitada."
     },
+
     "messages": {
-      "loadedSuccessfully": "Cotizaciones cargadas exitosamente",
+      "loadedSuccessfully": "Cotizaciones cargadas con éxito",
       "loadError": "No se pudieron cargar las cotizaciones. Inténtalo nuevamente.",
-      "createdSuccessfully": "Cotización creada exitosamente",
-      "createError": "No se pudo crear la cotización. Inténtalo nuevamente.",
-      "updatedSuccessfully": "Cotización actualizada exitosamente",
-      "updateError": "No se pudo actualizar la cotización. Inténtalo nuevamente.",
-      "deletedSuccessfully": "Cotización eliminada exitosamente",
-      "deleteError": "No se pudo eliminar la cotización. Inténtalo nuevamente.",
-      "invalidData": "Los datos de la cotización son inválidos.",
-      "requiredFields": "Por favor completa todos los campos requeridos.",
-      "sentSuccessfully": "Cotización enviada correctamente",
+      "createdSuccessfully": "Cotización creada con éxito",
+      "createError": "No se pudo crear la cotización",
+      "updatedSuccessfully": "Cotización actualizada con éxito",
+      "updateError": "No se pudo actualizar la cotización",
+      "deletedSuccessfully": "Cotización eliminada con éxito",
+      "deleteError": "No se pudo eliminar la cotización",
+      "invalidData": "Datos inválidos",
+      "requiredFields": "Completa todos los campos obligatorios",
+      "sentSuccessfully": "Cotización enviada",
       "sendError": "No se pudo enviar la cotización",
       "stateApproved": "Cotización aprobada",
       "stateDeclined": "Cotización rechazada",
       "stateChangeError": "Error al actualizar el estado",
-      "forbiddenQuote": "No tienes permiso para ver esta cotización"
+      "forbiddenQuote": "No tienes permiso para ver esta cotización",
+      "deleteSuccess": "Cotización eliminada",
+      "updateSuccess": "Cotización actualizada"
     }
   },
+
   "messages": {
     "title": "Mensajes",
-    "subtitle": "Comunícate con tus clientes y organizadores",
+    "subtitle": "Comunícate con clientes y organizadores",
     "searchPlaceholder": "Buscar conversaciones...",
-    "newMessage": "Nuevo Mensaje",
-    "noConversations": "No hay conversaciones",
+    "newMessage": "Nuevo mensaje",
+    "noConversations": "Sin conversaciones",
     "startConversation": "Inicia una conversación con tus contactos",
     "typeMessage": "Escribe un mensaje...",
     "send": "Enviar",
@@ -419,75 +456,78 @@
     "messageError": "Error al enviar el mensaje",
     "loadingMessages": "Cargando mensajes..."
   },
+
   "tasks": {
     "title": "Tareas",
-    "pending": "Pendiente",
+    "pending": "Pendientes",
     "in_progress": "En progreso",
-    "done": "Completada",
+    "done": "Completadas",
     "status": {
-      "todo": "Por Hacer",
-      "inprogress": "En Progreso",
-      "done": "Completado",
-      "cancelled": "Cancelado"
+      "todo": "Por hacer",
+      "inprogress": "En progreso",
+      "done": "Hecho",
+      "cancelled": "Cancelada"
     }
   },
+
   "auth": {
-    "email": "Email",
+    "email": "Correo",
     "password": "Contraseña",
-    "rememberMe": "Recuérdame en este dispositivo",
-    "loginButton": "Iniciar Sesión",
+    "rememberMe": "Recordarme en este dispositivo",
+    "loginButton": "Iniciar sesión",
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "noAccount": "¿No tienes cuenta?",
     "registerHere": "Regístrate aquí",
     "securePassword": "Crea una contraseña segura",
     "minChars": "Mínimo 8 caracteres",
-    "confirmPassword": "Confirmar Contraseña",
+    "confirmPassword": "Confirmar contraseña",
     "roleQuestion": "¿Qué tipo de cuenta necesitas?",
     "roleHost": "Anfitrión",
     "roleOrganizer": "Organizador",
     "agreeTerms": "Acepto los",
     "terms": "términos y condiciones",
+    "and": "y",
     "privacyPolicy": "política de privacidad",
-    "registerButton": "Crear Cuenta",
+    "registerButton": "Crear cuenta",
     "alreadyAccount": "¿Ya tienes cuenta?",
     "loginHere": "Inicia sesión aquí",
     "errorPasswordMismatch": "Las contraseñas no coinciden",
     "errorPasswordLength": "La contraseña debe tener al menos 8 caracteres",
     "errorAcceptTerms": "Debes aceptar los términos y condiciones",
-    "errorLogin": "Email o contraseña incorrectos",
-    "errorAccountInactive": "La cuenta está desactivada",
-    "errorEmailRegistered": "El email ya está registrado",
+    "errorLogin": "Correo o contraseña incorrectos",
+    "errorAccountInactive": "La cuenta está inactiva",
+    "errorEmailRegistered": "El correo ya está registrado",
     "successLogin": "Inicio de sesión exitoso",
-    "successRegister": "Cuenta creada exitosamente",
-    "signOut": "Cerrar Sesión",
-    "and": "y",
-    "loginTitle": "Iniciar Sesión",
-    "loginSubtitle": "Accede a tu cuenta de EventGO",
-    "registerTitle": "Crear Cuenta",
-    "registerSubtitle": "Únete a la comunidad de EventGO",
-    "emailPlaceholder": "tu@email.com",
+    "successRegister": "Cuenta creada con éxito",
+    "signOut": "Cerrar sesión",
+    "loginTitle": "Iniciar sesión",
+    "loginSubtitle": "Accede a tu cuenta EventGO",
+    "registerTitle": "Crear cuenta",
+    "registerSubtitle": "Únete a la comunidad EventGO",
+    "emailPlaceholder": "tu email",
     "passwordPlaceholder": "Ingresa tu contraseña",
     "confirmPasswordPlaceholder": "Confirma tu contraseña",
-    "fullName": "Nombre Completo",
+    "fullName": "Nombre completo",
     "fullNamePlaceholder": "Juan Pérez",
     "selectRole": "Selecciona tu rol",
     "roleHostDescription": "Busco organizadores para mis eventos",
-    "roleOrganizerDescription": "Ofrezco servicios de organización",
-    "welcomeBack": "Hola {name}, nos alegra verte de nuevo",
-    "welcomeHost": "¡Bienvenido {name}! Empieza a buscar organizadores perfectos para tus eventos",
-    "welcomeOrganizer": "¡Bienvenido {name}! Empieza a gestionar tus cotizaciones y eventos",
-    "errorFieldsRequired": "Por favor completa todos los campos requeridos",
+    "roleOrganizerDescription": "Ofrezco servicios de organización de eventos",
+    "welcomeBack": "Hola {name}, ¡qué bueno verte nuevamente!",
+    "welcomeHost": "¡Bienvenido {name}! Encuentra organizadores para tus eventos",
+    "welcomeOrganizer": "¡Bienvenido {name}! Administra tus cotizaciones y eventos",
+    "errorFieldsRequired": "Completa todos los campos obligatorios",
     "errorNameLength": "El nombre debe tener al menos 3 caracteres",
-    "errorInvalidEmail": "Por favor ingresa un correo electrónico válido",
-    "errorCheckFields": "Por favor revisa los campos marcados en rojo",
-    "errorInvalidCredentials": "Correo o contraseña incorrectos",
-    "errorEmailExists": "Este correo electrónico ya está registrado",
-    "errorNetwork": "Error de conexión. Por favor verifica tu internet",
+    "errorInvalidEmail": "Ingrese un correo válido",
+    "errorCheckFields": "Revisa los campos marcados",
+    "errorInvalidCredentials": "Credenciales inválidas",
+    "errorEmailExists": "Este correo ya está registrado",
+    "errorNetwork": "Error de conexión",
     "passwordHint": "Mínimo 8 caracteres, incluye letras y números"
   },
+
   "dashboard": {
-    "welcome": "Bienvenido, {name}",
-    "activitySummary": "Resumen de tu actividad",
+    "welcome": "Bienvenido, {user}",
+    "activitySummary": "Tu resumen de actividad",
     "seeAll": "Ver todo",
     "viewAll": "Ver todo",
     "user": {
@@ -495,25 +535,25 @@
     },
     "metrics": {
       "activeEvents": {
-        "title": "Eventos Activos",
+        "title": "Eventos activos",
         "subtitle": "{count} eventos esta semana"
       },
       "pendingTasks": {
-        "title": "Tareas Pendientes",
-        "subtitle": "{count} vencen hoy"
+        "title": "Tareas pendientes",
+        "subtitle": "{count} para hoy"
       },
       "quotes": {
         "title": "Cotizaciones",
-        "subtitle": "{count} nueva esta semana"
+        "subtitle": "{count} nuevas esta semana"
       }
     },
     "recentMessages": {
-      "title": "Mensajes Recientes",
-      "seeAll": "Ver todos",
+      "title": "Mensajes recientes",
+      "seeAll": "Ver todo",
       "empty": "No hay mensajes recientes"
     },
     "messages": {
-      "loadError": "No se pudo cargar el tablero. Inténtalo nuevamente."
+      "loadError": "No pudimos cargar el panel. Inténtalo de nuevo."
     },
     "host": {
       "welcome": "Bienvenido, {name}",
@@ -526,7 +566,7 @@
         "classification": "Clasificación"
       },
       "filters": {
-        "allTypes": "Todos los tipos",
+        "allTypes": "Todos los tipos de evento",
         "allClassifications": "Todas las clasificaciones",
         "classifications": {
           "premium": "Premium",
@@ -535,8 +575,8 @@
         }
       },
       "sidebar": {
-        "searchOrganizers": "Buscar Organizadores",
-        "myEvents": "Mis Eventos",
+        "searchOrganizers": "Buscar organizadores",
+        "myEvents": "Mis eventos",
         "quotes": "Cotizaciones",
         "messages": "Mensajes",
         "reviews": "Reseñas",
@@ -545,80 +585,82 @@
       },
       "organizerBrowser": {
         "viewProfile": "Ver perfil",
-        "empty": "No se encontraron organizadores con esos criterios",
-        "allCategories": "Todas las Categorías"
+        "empty": "No se encontraron organizadores con tu búsqueda",
+        "allCategories": "Todas las categorías"
       },
       "organizerDialog": {
-        "requestQuote": "Solicitar Cotización",
-        "sendMessage": "Enviar Mensaje",
+        "requestQuote": "Solicitar cotización",
+        "sendMessage": "Enviar mensaje",
         "tabs": {
           "information": "Información",
           "services": "Servicios",
           "albums": "Álbumes",
           "reviews": "Reseñas"
         },
-        "aboutTitle": "Acerca de {name}",
+        "aboutTitle": "Sobre {name}",
         "specialties": "Especialidades",
         "experience": "Experiencia",
         "eventifyOrganizer": "Organizador Eventify",
         "present": "2019 - Presente",
-        "experienceDescription": "Organizador profesional de eventos con {count} eventos completados. Especializado en crear experiencias memorables adaptadas a la visión única de cada cliente.",
+        "experienceDescription": "Organizador profesional con {count} eventos realizados. Especializado en crear experiencias memorables adaptadas a cada cliente.",
         "certifications": "Certificaciones",
-        "servicesOffered": "Servicios Ofrecidos",
-        "noServices": "No hay información de servicios disponible por el momento.",
-        "priceRange": "Rango de Precios",
-        "noAlbums": "Los álbumes de fotos estarán disponibles próximamente.",
-        "featuredReviews": "Reseñas Destacadas",
-        "sampleReview": "Servicio excepcional y atención al detalle. El organizador superó todas las expectativas e hizo que nuestro evento fuera verdaderamente inolvidable.",
-        "verifiedClient": "Cliente Verificado, Marzo 2025",
-        "noReviews": "Aún no hay reseñas disponibles."
+        "servicesOffered": "Servicios ofrecidos",
+        "noServices": "No hay servicios disponibles por ahora.",
+        "priceRange": "Rango de precios",
+        "noAlbums": "Pronto habrá álbumes disponibles.",
+        "featuredReviews": "Reseñas destacadas",
+        "sampleReview": "Servicio excepcional y atención al detalle. El organizador superó las expectativas.",
+        "verifiedClient": "Cliente verificado, marzo 2025",
+        "noReviews": "Aún no hay reseñas."
       },
       "pagination": {
         "label": "Página {page} de {total}"
       },
       "organizerBrowserMessages": {
-        "unableToNavigateQuotes": "No se pudo navegar a cotizaciones en este momento",
-        "featureComingSoon": "Esta función estará disponible pronto"
+        "unableToNavigateQuotes": "No se puede acceder a cotizaciones por ahora",
+        "featureComingSoon": "Función disponible próximamente"
       }
     },
     "organizer": {
       "welcome": "Bienvenido, {name}"
     }
   },
+
   "settings": {
     "title": "Configuración",
-    "subtitle": "Administra las preferencias de tu cuenta",
+    "subtitle": "Gestiona tus preferencias de cuenta",
     "account": "Cuenta",
-    "accountName": "Nombre de Cuenta",
-    "accountEmail": "Correo Electrónico",
-    "accountPhone": "Número de Teléfono",
+    "accountName": "Nombre de la cuenta",
+    "accountEmail": "Correo electrónico",
+    "accountPhone": "Número telefónico",
     "security": "Seguridad",
-    "changePassword": "Cambiar Contraseña",
-    "twoFactor": "Autenticación de Dos Factores",
+    "changePassword": "Cambiar contraseña",
+    "twoFactor": "Autenticación en dos pasos",
     "enabled": "Activado",
     "disabled": "Desactivado",
     "enable": "Activar",
     "preferences": "Preferencias",
     "language": "Idioma",
     "notifications": "Notificaciones",
-    "emailNotifications": "Notificaciones por Email",
-    "pushNotifications": "Notificaciones Push",
+    "emailNotifications": "Notificaciones por correo",
+    "pushNotifications": "Notificaciones push",
     "theme": "Tema",
-    "lightMode": "Modo Claro",
-    "darkMode": "Modo Oscuro",
+    "lightMode": "Modo claro",
+    "darkMode": "Modo oscuro",
     "privacy": "Privacidad",
-    "profileVisibility": "Visibilidad del Perfil",
+    "profileVisibility": "Visibilidad del perfil",
     "public": "Público",
     "private": "Privado",
-    "dataExport": "Exportar Mis Datos",
-    "deleteAccount": "Eliminar Cuenta",
-    "save": "Guardar Cambios",
+    "dataExport": "Exportar mis datos",
+    "deleteAccount": "Eliminar cuenta",
+    "save": "Guardar cambios",
     "cancel": "Cancelar",
-    "successUpdate": "Configuración actualizada exitosamente"
+    "successUpdate": "Configuración actualizada con éxito"
   },
+
   "notifications": {
     "title": "Notificaciones",
-    "subtitle": "Mantente actualizado con tus actividades",
+    "subtitle": "Mantente al día con tus actividades",
     "markAllRead": "Marcar todo como leído",
     "clearAll": "Limpiar todo",
     "noNotifications": "No hay notificaciones",
@@ -633,10 +675,11 @@
       "system": "Sistema"
     }
   },
+
   "events": {
     "types": {
       "boda": "Boda",
-      "social": "Social",
+      "social": "Evento social",
       "cumpleaños": "Cumpleaños",
       "corporativo": "Corporativo",
       "wedding": "Boda",

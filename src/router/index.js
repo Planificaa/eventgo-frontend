@@ -174,7 +174,7 @@ const routes = [
     path: "/quotes/create",
     name: "quote-create",
     component: QuoteCreatePage,
-    meta: { requiresAuth: true, requiresRole: "organizer" },
+    meta: { requiresAuth: true, allowedRoles: ["organizer", "host"] },
   },
   {
     path: "/quotes/:id",
