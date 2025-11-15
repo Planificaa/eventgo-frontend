@@ -2,6 +2,10 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import InputText from 'primevue/inputtext';
+import Calendar from 'primevue/calendar';
+import Dropdown from 'primevue/dropdown';
+import Button from 'primevue/button';
 
 // Servicios
 import EventService from '@/social-event-management/application/services/event.service.js';
@@ -16,6 +20,7 @@ const currentUserId = computed(() => {
   const value = user.value?.id;
   return value != null ? String(value) : null;
 });
+
 // Props
 const props = defineProps({
   id: {
@@ -38,9 +43,9 @@ const loading = ref(false);
 
 // Opciones para el dropdown de status
 const statusOptions = computed(() => [
-  { label: t('events.status.active'), value: 'Active' },
-  { label: t('events.status.toBeConfirmed'), value: 'To be confirmed' },
-  { label: t('events.status.cancelled'), value: 'Cancelled' }
+  { label: t('eventManagement.status.active'), value: 'Active' },
+  { label: t('eventManagement.status.pending'), value: 'Pending' },
+  { label: t('eventManagement.status.cancelled'), value: 'Cancelled' }
 ]);
 
 // Computed: verificar si estamos en modo edición
@@ -57,7 +62,6 @@ const fetchEvent = async () => {
     }
 
     const response = await EventService.getEvent(props.id);
-    // Convertir la fecha del backend al formato de Calendar
     const eventDataFromServer = { ...response.data };
 
     const ownerId = eventDataFromServer.userId != null ? String(eventDataFromServer.userId) : null;
@@ -87,7 +91,6 @@ const fetchEvent = async () => {
 const saveEvent = async () => {
   loading.value = true;
   try {
-    // Preparar datos para enviar al backend
     const dataToSend = { ...eventData.value };
 
     // Convertir Date object a string si es necesario
@@ -106,7 +109,6 @@ const saveEvent = async () => {
       await EventService.createEvent(dataToSend);
     }
 
-    // Redirect to events list after saving
     router.push('/events');
   } catch (error) {
     console.error('Error saving event:', error);
@@ -131,7 +133,6 @@ onMounted(async () => {
 </script>
 
 <template>
-
   <div class="event-form-container">
     <div class="form-header">
       <h1>{{ isEditMode ? 'Edit Event' : 'Create New Event' }}</h1>
@@ -140,63 +141,81 @@ onMounted(async () => {
     <form @submit.prevent="saveEvent" class="event-form">
       <div class="form-group">
         <label for="title">Event Title</label>
-        <input
-          type="text"
+        <InputText
           id="title"
           v-model="eventData.title"
-          required
           placeholder="Enter event title"
-        >
+          :disabled="loading"
+          class="w-full"
+        />
       </div>
 
       <div class="form-group">
         <label for="date">Event Date</label>
-        <input
-          type="date"
+        <Calendar
           id="date"
           v-model="eventData.date"
-          required
-        >
+          placeholder="2025/11/15"
+          dateFormat="yy-mm-dd"
+          :disabled="loading"
+          showIcon iconDisplay="input"
+          class="w-full"
+        />
       </div>
 
       <div class="form-group">
         <label for="customerName">Customer Name</label>
-        <input
-          type="text"
+        <InputText
           id="customerName"
           v-model="eventData.customerName"
-          required
           placeholder="Enter customer name"
-        >
+          :disabled="loading"
+          class="w-full"
+        />
       </div>
 
       <div class="form-group">
         <label for="location">Location</label>
-        <input
-          type="text"
+        <InputText
           id="location"
           v-model="eventData.location"
-          required
           placeholder="Enter event location"
-        >
+          :disabled="loading"
+          class="w-full"
+        />
       </div>
 
       <div class="form-group">
         <label for="status">Status</label>
-        <select id="status" v-model="eventData.status" required>
-          <option value="Active">Active</option>
-          <option value="To be confirmed">To be confirmed</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
+        <Dropdown
+          id="status"
+          v-model="eventData.status"
+          :options="statusOptions"
+          optionLabel="label"
+          optionValue="value"
+          :disabled="loading"
+          class="w-full"
+        />
       </div>
 
       <div class="form-actions">
-        <button type="button" @click="goBack" class="cancel-btn">Cancel</button>
-        <button type="submit" class="save-btn">{{ isEditMode ? 'Update Event' : 'Create Event' }}</button>
+        <Button
+          type="button"
+          label="Cancel"
+          severity="secondary"
+          @click="goBack"
+          :disabled="loading"
+          class="cancel-btn"
+        />
+        <Button
+          type="submit"
+          :label="isEditMode ? 'Update Event' : 'Create Event'"
+          :loading="loading"
+          class="save-btn"
+        />
       </div>
     </form>
   </div>
-
 </template>
 
 <style scoped>
@@ -207,16 +226,11 @@ onMounted(async () => {
   padding: 0 1rem;
 }
 
-/* Card del formulario */
-.event-form-card {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
 /* Header del formulario */
 .form-header {
   padding: 1.5rem;
-  background: var(--primary-color, #3A506B);
-  color: var(--primary-color-text, #6FFFE9);
+  background: #3A506B;
+  color: #6FFFE9;
   border-radius: 6px 6px 0 0;
 }
 
@@ -231,6 +245,10 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Grupos de formulario */
@@ -244,20 +262,6 @@ onMounted(async () => {
   font-weight: 600;
   color: #3A506B;
   font-size: 0.95rem;
-}
-
-/* Personalización de componentes PrimeVue */
-:deep(.p-inputtext),
-:deep(.p-dropdown),
-:deep(.p-calendar) {
-  font-size: 1rem;
-}
-
-:deep(.p-inputtext:enabled:focus),
-:deep(.p-dropdown:not(.p-disabled):focus),
-:deep(.p-calendar:not(.p-disabled) .p-inputtext:enabled:focus) {
-  border-color: #5BC0BE;
-  box-shadow: 0 0 0 0.2rem rgba(91, 192, 190, 0.25);
 }
 
 /* Acciones del formulario */
@@ -281,8 +285,8 @@ onMounted(async () => {
 }
 
 .save-btn:hover {
-  background-color: #4aa9a7;
-  border-color: #4aa9a7;
+  background-color: #4aa9a7 !important;
+  border-color: #4aa9a7 !important;
 }
 
 /* Responsive */
@@ -305,10 +309,5 @@ onMounted(async () => {
     width: 100%;
     min-width: unset;
   }
-}
-
-/* Estado de carga */
-:deep(.p-button-loading) {
-  opacity: 0.7;
 }
 </style>
