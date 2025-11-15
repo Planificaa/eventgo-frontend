@@ -238,6 +238,9 @@
   },
   "eventManagement": {
     "pageTitle": "Event Management",
+    "location": "Location",
+    "customer": "Customer",
+    "edit": "Edit",
     "actions": {
       "selectAll": "Select all",
       "deleteSelected": "Delete selected ({count})",
@@ -273,7 +276,7 @@
     },
     "status": {
       "active": "Active",
-      "toBeConfirmed": "To be confirmed",
+      "pending": "Pending",
       "cancelled": "Cancelled"
     }
   },

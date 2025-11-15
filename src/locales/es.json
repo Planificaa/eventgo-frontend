@@ -242,6 +242,9 @@
 
   "eventManagement": {
     "pageTitle": "Gestión de Eventos",
+    "location": "Lugar",
+    "customer": "Cliente",
+    "edit": "Editar",
     "actions": {
       "selectAll": "Seleccionar todo",
       "deleteSelected": "Eliminar seleccionados ({count})",
@@ -277,7 +280,7 @@
     },
     "status": {
       "active": "Activo",
-      "toBeConfirmed": "Por confirmar",
+      "pending": "Pendiente",
       "cancelled": "Cancelado"
     }
   },
