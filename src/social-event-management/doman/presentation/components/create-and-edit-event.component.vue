@@ -5,11 +5,17 @@ import { useI18n } from 'vue-i18n';
 
 // Servicios
 import EventService from '@/social-event-management/application/services/event.service.js';
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
 
 // Composables
 const router = useRouter();
 const { t } = useI18n();
+const { user, restoreSession } = useAuth();
 
+const currentUserId = computed(() => {
+  const value = user.value?.id;
+  return value != null ? String(value) : null;
+});
 // Props
 const props = defineProps({
   id: {
@@ -25,7 +31,7 @@ const eventData = ref({
   customerName: '',
   location: '',
   status: 'Active',
-  userId: 1 // Fixed user for demonstration
+  userId: currentUserId.value
 });
 
 const loading = ref(false);
@@ -46,16 +52,30 @@ const fetchEvent = async () => {
 
   loading.value = true;
   try {
-    const response = await EventService.getEventById(props.id);
+    if (!user.value) {
+      await restoreSession();
+    }
+
+    const response = await EventService.getEvent(props.id);
     // Convertir la fecha del backend al formato de Calendar
     const eventDataFromServer = { ...response.data };
+
+    const ownerId = eventDataFromServer.userId != null ? String(eventDataFromServer.userId) : null;
+    const userId = currentUserId.value;
+
+    if (!userId || (ownerId && ownerId !== userId)) {
+      throw new Error(t('eventManagement.messages.forbiddenEvent'));
+    }
 
     // Si la fecha viene como string, convertirla a objeto Date
     if (eventDataFromServer.date && typeof eventDataFromServer.date === 'string') {
       eventDataFromServer.date = new Date(eventDataFromServer.date);
     }
 
-    eventData.value = eventDataFromServer;
+    eventData.value = {
+      ...eventDataFromServer,
+      userId: ownerId || userId
+    };
   } catch (error) {
     console.error('Error fetching event:', error);
     router.push('/events');
@@ -74,6 +94,11 @@ const saveEvent = async () => {
     if (dataToSend.date instanceof Date) {
       dataToSend.date = dataToSend.date.toISOString().split('T')[0];
     }
+    if (!currentUserId.value) {
+      throw new Error(t('eventManagement.messages.forbiddenEvent'));
+    }
+
+    dataToSend.userId = currentUserId.value;
 
     if (isEditMode.value) {
       await EventService.updateEvent(props.id, dataToSend);
@@ -95,7 +120,12 @@ const goBack = () => {
 };
 
 // Lifecycle: cargar datos si estamos en modo edición
-onMounted(() => {
+onMounted(async () => {
+  if (!user.value) {
+    await restoreSession();
+    eventData.value.userId = currentUserId.value;
+  }
+
   fetchEvent();
 });
 </script>

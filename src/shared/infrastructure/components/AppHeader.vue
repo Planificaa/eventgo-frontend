@@ -1,148 +1,189 @@
 <script setup>
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
+import Divider from 'primevue/divider'
+import { useAppHeader } from './useAppHeader.js'
 
-const { locale } = useI18n()
+const {
+  languageOptions,
+  selectedLanguage,
+  changeLanguage,
+  sidebarVisible,
+  toggleSidebar,
+  closeSidebar,
+  handleLogout,
+  isAuthenticated,
+  userDisplayName,
+  user,          // ahora TODO se basa en user
+  profileRoute,
+} = useAppHeader()
 
-// Idiomas
-const languageOptions = ref([
-  { name: 'English', code: 'en', flag: '🇺🇸' },
-  { name: 'Spanish', code: 'es', flag: '🇪🇸' },
-])
-const selectedLanguage = ref(languageOptions.value.find((lang) => lang.code === locale.value))
-const changeLanguage = (language) => {
-  locale.value = language.code
-  selectedLanguage.value = language
-}
+/* ============================================================
+   1. Esperar a que el usuario y su rol estén cargados
+============================================================ */
+const isSessionLoaded = computed(() => {
+  return !!(user.value && user.value.role)
+})
 
-// Sidebar
-const sidebarVisible = ref(false)
-const toggleSidebar = () => { sidebarVisible.value = !sidebarVisible.value }
+const navigationItems = computed(() => {
+  if (!isSessionLoaded.value) return []
 
-const closeSidebar = () => {
-  sidebarVisible.value = false
-}
+  const role = user.value?.role ?? null
+  if (!role) return []
+
+  if (role === 'host') {
+    return [
+      { key: 'dashboard', icon: 'pi pi-home', to: '/host/dashboard', labelKey: 'header.dashboard' },
+      { key: 'events', icon: 'pi pi-calendar', to: '/events', labelKey: 'header.events' },
+      { key: 'quotes', icon: 'pi pi-file-edit', to: '/quotes', labelKey: 'header.quotes' },
+      { key: 'messages', icon: 'pi pi-envelope', to: '/messages', labelKey: 'header.messages' },
+    ]
+  }
+
+  if (role === 'organizer') {
+    return [
+      { key: 'dashboard', icon: 'pi pi-home', to: '/organizer/dashboard', labelKey: 'header.dashboard' },
+      { key: 'events', icon: 'pi pi-calendar', to: '/events', labelKey: 'header.events' },
+      { key: 'tasks', icon: 'pi pi-check-square', to: '/tasks', labelKey: 'header.task' },
+      { key: 'quotes', icon: 'pi pi-file-edit', to: '/quotes', labelKey: 'header.quotes' },
+      { key: 'messages', icon: 'pi pi-envelope', to: '/messages', labelKey: 'header.messages' },
+    ]
+  }
+
+  return []
+})
 </script>
 
 <template>
-  <header class="app-header">
+  <!-- Mostrar pantalla de carga mientras user.role NO existe -->
+  <div v-if="!isSessionLoaded" class="loading-header">
+    <i class="pi pi-spin pi-spinner"></i> Cargando...
+  </div>
+
+  <header v-else class="app-header">
     <div class="header-container">
-      <!-- Botón hamburger -->
+
       <Button icon="pi pi-bars" @click="toggleSidebar" class="menu-toggle-btn" text />
 
-      <!-- Logo -->
       <div class="logo-container">
-        <img src="/src/assets/img/EventGO_logo.png" alt="EventGO" class="logo" />
+        <img src="/src/assets/img/EventGO_logo.png" class="logo" />
       </div>
 
-      <!-- Navegación principal -->
+      <!-- Navegación -->
       <nav class="main-navigation">
-        <RouterLink to="/dashboard" class="nav-item">
-          <i class="pi pi-home"></i>
-          <span>{{ $t('header.dashboard') }}</span>
+        <RouterLink
+          v-for="item in navigationItems"
+          :key="item.key"
+          :to="item.to"
+          class="nav-item"
+        >
+          <i :class="item.icon"></i>
+          <span>{{ $t(item.labelKey) }}</span>
         </RouterLink>
-        <RouterLink to="/events" class="nav-item">
-          <i class="pi pi-calendar"></i>
-          <span>{{ $t('header.events') }}</span>
-        </RouterLink>
-        <RouterLink to="/tasks" class="nav-item">
-          <i class="pi pi-check-square"></i>
-          <span>{{ $t('header.task') }}</span>
-        </RouterLink>
-        <RouterLink to="/quotes" class="nav-item">
-          <i class="pi pi-file-edit"></i>
-          <span>{{ $t('header.quotes') }}</span>
-        </RouterLink>
-        <RouterLink to="/messages" class="nav-item">
-          <i class="pi pi-envelope"></i>
-          <span>{{ $t('header.messages') }}</span>
-        </RouterLink>
-
-
       </nav>
 
-      <!-- Zona de usuario -->
       <div class="user-zone">
+
         <Dropdown
           v-model="selectedLanguage"
           :options="languageOptions"
           optionLabel="name"
           @change="changeLanguage($event.value)"
           class="language-selector"
-        >
-          <template #value="slotProps">
-            <span v-if="slotProps.value">{{ slotProps.value.flag }}</span>
-          </template>
-          <template #option="slotProps">
-            <span>{{ slotProps.option.flag }} {{ slotProps.option.name }}</span>
-          </template>
-        </Dropdown>
+        />
 
-        <Button icon="pi pi-cog" class="user-action-btn" text />
-
-        <RouterLink to="/profile" class="user-profile">
-          <Avatar
-            class="user-avatar"
-            shape="circle"
-            image="https://www.gravatar.com/avatar/05dfd4b41340d09cae045235eb0893c3?d=mp"
-          />
-          <span class="user-name">Roberto Fox</span>
+        <RouterLink to="/notifications" class="user-action-btn">
+          <i class="pi pi-bell"></i>
         </RouterLink>
+
+        <RouterLink to="/settings" class="user-action-btn">
+          <i class="pi pi-cog"></i>
+        </RouterLink>
+
+        <RouterLink :to="profileRoute" v-if="isAuthenticated" class="user-profile">
+          <Avatar class="user-avatar" shape="circle"
+                  image="https://www.gravatar.com/avatar/05dfd4b41340d09cae045235eb0893c3?d=mp" />
+          <span class="user-name">{{ userDisplayName }}</span>
+        </RouterLink>
+
+        <Button
+          v-if="isAuthenticated"
+          icon="pi pi-sign-out"
+          label="Sign Out"
+          @click="handleLogout"
+          class="p-button-danger p-button-sm"
+        />
       </div>
     </div>
 
-    <!-- Sidebar para móvil -->
+    <!-- Sidebar móvil -->
     <Sidebar v-model:visible="sidebarVisible" position="left" class="custom-sidebar">
       <template #header>
-        <div class="sidebar-header">
-          <div>
-            <img class="logo" src="/src/assets/img/EventGO_logo.png" />
-          </div>
-        </div>
+        <img class="logo" src="/src/assets/img/EventGO_logo.png" />
       </template>
 
       <nav class="sidebar-navigation">
-        <RouterLink to="/dashboard" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-home"></i>
-          <span>{{ $t('header.dashboard') }}</span>
+        <RouterLink
+          v-for="item in navigationItems"
+          :key="item.key"
+          :to="item.to"
+          @click="closeSidebar"
+          class="sidebar-nav-item"
+        >
+          <i :class="item.icon"></i>
+          <span>{{ $t(item.labelKey) }}</span>
         </RouterLink>
-        <RouterLink to="/events" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-calendar"></i>
-          <span>{{ $t('header.events') }}</span>
+
+        <Divider />
+
+        <RouterLink to="/notifications" class="sidebar-nav-item" @click="closeSidebar">
+          <i class="pi pi-bell"></i>
+          <span>Notificaciones</span>
         </RouterLink>
-        <RouterLink to="/tasks" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-check-square"></i>
-          <span>{{ $t('header.task') }}</span>
+
+        <RouterLink to="/settings" class="sidebar-nav-item" @click="closeSidebar">
+          <i class="pi pi-cog"></i>
+          <span>Configuración</span>
         </RouterLink>
-        <RouterLink to="/quotes" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-file-edit"></i>
-          <span>{{ $t('header.quotes') }}</span>
-        </RouterLink>
-        <RouterLink to="/messages" class="sidebar-nav-item" @click="closeSidebar">
-          <i class="pi pi-envelope"></i>
-          <span>{{ $t('header.messages') }}</span>
-        </RouterLink>
+
+        <Divider />
+
+        <Button
+          label="Cerrar Sesión"
+          icon="pi pi-sign-out"
+          @click="handleLogout"
+          class="p-button-danger p-button-text w-full text-left p-3"
+        />
       </nav>
     </Sidebar>
-
   </header>
 </template>
 <style scoped>
+/* =======================
+   loading safe render
+======================= */
+.loading-header {
+  padding: 1rem;
+  text-align: center;
+  background: #3a506b;
+  color: white;
+  font-weight: 500;
+}
+
+/* =======================
+   rest of your exact styles
+======================= */
 
 .user-profile {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  cursor: pointer;
   text-decoration: none;
   color: inherit;
 }
-
 .user-profile:hover .user-name {
   color: #ffffff;
 }
 
-/* Header principal */
 .app-header {
   position: sticky;
   top: 0;
@@ -158,27 +199,15 @@ const closeSidebar = () => {
   padding: 0.75rem 1.5rem;
 }
 
-/* Logo */
-.logo-container {
-  display: flex;
-  align-items: center;
-}
-
 .logo {
   height: 32px;
-  width: auto;
 }
 
-/* Botón hamburger - oculto en desktop */
 .menu-toggle-btn {
   display: none;
   color: #6fffe9 !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0.5rem !important;
 }
 
-/* Navegación principal - visible en desktop */
 .main-navigation {
   display: flex;
   gap: 0.5rem;
@@ -189,11 +218,10 @@ const closeSidebar = () => {
   align-items: center;
   gap: 0.5rem;
   color: #6fffe9;
-  text-decoration: none;
   padding: 0.75rem 1rem;
   border-radius: 8px;
   transition: all 0.3s ease;
-  font-weight: 500;
+  text-decoration: none;
 }
 
 .nav-item:hover,
@@ -202,7 +230,6 @@ const closeSidebar = () => {
   color: #ffffff;
 }
 
-/* Zona de usuario */
 .user-zone {
   display: flex;
   align-items: center;
@@ -211,204 +238,43 @@ const closeSidebar = () => {
 
 .user-action-btn {
   color: #6fffe9 !important;
-  background: transparent !important;
-  border: none !important;
   padding: 0.5rem !important;
   border-radius: 50% !important;
-  transition: all 0.3s ease !important;
-}
-
-.user-action-btn:hover {
-  background: #5bc0be !important;
-  color: #ffffff !important;
-}
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
 }
 
 .user-avatar {
   width: 32px !important;
   height: 32px !important;
-  background: #1c2541 !important;
   border: 2px solid #5bc0be !important;
 }
 
 .user-name {
   color: #6fffe9;
   font-weight: 500;
-  font-size: 0.875rem;
 }
 
-/* Sidebar estilos */
 .custom-sidebar {
   width: 280px !important;
 }
 
-.sidebar-header {
-  padding: 1rem;
-  color: #6fffe9;
-  text-align: center;
-}
-
-.sidebar-navigation {
-  padding: 1rem 0;
-}
-
 .sidebar-nav-item {
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: #1c2541;
-  text-decoration: none;
   padding: 1rem 1.5rem;
-  transition: all 0.3s ease;
-  border-left: 4px solid transparent;
-}
-
-.sidebar-nav-item:hover,
-.sidebar-nav-item.router-link-active {
-  background: #f0f9ff;
-  border-left-color: #5bc0be;
+  text-decoration: none;
   color: #1c2541;
 }
 
-/* RESPONSIVE - Móvil */
 @media (max-width: 768px) {
-  /* Mostrar hamburger, ocultar navegación */
   .menu-toggle-btn {
     display: flex !important;
   }
-
   .main-navigation {
     display: none;
   }
-
-  /* Ocultar nombre de usuario en móvil */
   .user-name {
     display: none;
-  }
-
-  /* Compactar header */
-  .header-container {
-    padding: 0.5rem 1rem;
-  }
-
-  .logo {
-    height: 28px;
-  }
-}
-
-/* Sidebar estilos mejorados */
-.app-header :deep(.p-sidebar) {
-  width: 280px !important;
-  background: #ffffff !important;
-}
-
-.app-header :deep(.p-sidebar-header) {
-  background: #3a506b !important;
-  border-bottom: 1px solid #5bc0be !important;
-}
-
-.sidebar-header {
-  padding: 1.5rem;
-  color: #6fffe9;
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.sidebar-navigation {
-  padding: 1rem 0;
-  background: #ffffff;
-}
-
-.sidebar-nav-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: #1c2541;
-  text-decoration: none;
-  padding: 1rem 1.5rem;
-  transition: all 0.3s ease;
-  border-left: 4px solid transparent;
-  font-weight: 500;
-}
-
-.sidebar-nav-item i {
-  font-size: 1.1rem;
-  color: #3a506b;
-}
-
-.sidebar-nav-item:hover {
-  background: #f0f9ff;
-  border-left-color: #5bc0be;
-  color: #1c2541;
-}
-
-.sidebar-nav-item.router-link-active {
-  background: #e0f7fa;
-  border-left-color: #5bc0be;
-  color: #1c2541;
-}
-
-.sidebar-nav-item.router-link-active i {
-  color: #5bc0be;
-}
-
-/* Selector de idioma */
-.language-selector {
-  min-width: 60px !important;
-}
-
-.language-selector :deep(.p-dropdown) {
-  background: transparent !important;
-  border: 1px solid #5bc0be !important;
-  border-radius: 6px !important;
-}
-
-.language-selector :deep(.p-dropdown:not(.p-disabled):hover) {
-  border-color: #6fffe9 !important;
-}
-
-.language-selector :deep(.p-dropdown-trigger) {
-  color: #6fffe9 !important;
-}
-
-.language-selector :deep(.p-dropdown-label) {
-  color: #6fffe9 !important;
-  font-size: 1.2rem;
-  padding: 0.25rem 0.5rem !important;
-}
-
-/* Panel del dropdown */
-.language-selector :deep(.p-dropdown-panel) {
-  background: #ffffff !important;
-  border: 1px solid #5bc0be !important;
-  border-radius: 6px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-}
-
-.language-selector :deep(.p-dropdown-item) {
-  color: #1c2541 !important;
-  padding: 0.75rem 1rem !important;
-}
-
-.language-selector :deep(.p-dropdown-item:hover) {
-  background: #f0f9ff !important;
-  color: #1c2541 !important;
-}
-
-/* Responsive - ocultar en móvil si es necesario */
-@media (max-width: 768px) {
-  .language-selector {
-    min-width: 50px !important;
-  }
-
-  .language-selector :deep(.p-dropdown-label) {
-    font-size: 1rem;
   }
 }
 </style>

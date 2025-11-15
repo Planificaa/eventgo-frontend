@@ -13,11 +13,19 @@ import Button from 'primevue/button';
 import QuoteStateBadge from '/src/quote-management/presentation/pages/QuoteStateBadge.vue'
 import { QuoteApiService } from '../../application/services/quote-api.service.js';
 import { QuoteOrder } from '../../domain/model';
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
 
 const router = useRouter();
 const { t } = useI18n();
 const toast = useToast();
+const { user, isOrganizer, isHost, restoreSession } = useAuth();
+const isHostUser = computed(() => isHost.value);
+const quoteStates = QuoteOrder.STATES;
 
+const currentUserId = computed(() => {
+  const value = user.value?.id;
+  return value != null ? String(value) : null;
+});
 // Estado reactivo
 const quotes = ref([]);
 const loading = ref(false);
@@ -101,11 +109,91 @@ const handleEdit = (quoteId) => {
   router.push({ name: 'quote-edit', params: { id: quoteId } });
 };
 
+const applyQuoteState = (quoteId, newState) => {
+  const index = quotes.value.findIndex((item) => item.id === quoteId);
+  if (index === -1) {
+    return;
+  }
+
+  const updatedQuote = quotes.value[index];
+  updatedQuote.state = newState;
+  if (typeof updatedQuote.markAsUpdated === 'function') {
+    updatedQuote.markAsUpdated();
+  }
+  quotes.value = [...quotes.value];
+};
+
+const changeQuoteState = async (quoteId, newState) => {
+  loading.value = true;
+  try {
+    const response = await QuoteApiService.changeState(quoteId, newState);
+    const updatedEntity = QuoteOrder.fromJSON(response);
+    applyQuoteState(updatedEntity.id, updatedEntity.state);
+
+    const successMessage = newState === QuoteOrder.STATES.APPROVED
+      ? t('quotes.messages.stateApproved')
+      : t('quotes.messages.stateDeclined');
+
+    toast.add({
+      severity: 'success',
+      summary: t('common.success'),
+      detail: successMessage,
+      life: 3000,
+    });
+  } catch (error) {
+    console.error('Error updating quote state:', error);
+    toast.add({
+      severity: 'error',
+      summary: t('common.error'),
+      detail: error.message || t('quotes.messages.stateChangeError'),
+      life: 5000,
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleApprove = (quoteId) => changeQuoteState(quoteId, QuoteOrder.STATES.APPROVED);
+const handleDecline = (quoteId) => changeQuoteState(quoteId, QuoteOrder.STATES.DECLINED);
+
 const loadQuotes = async () => {
   loading.value = true;
   try {
+    if (!user.value) {
+      await restoreSession();
+    }
+
     const data = await QuoteApiService.getAll();
-    quotes.value = data.map(q => QuoteOrder.fromJSON(q));
+    const userId = currentUserId.value;
+
+    if (!userId) {
+      quotes.value = [];
+      return;
+    }
+
+    const filtered = data.filter((quoteItem) => {
+      const ownerId = quoteItem.ownerId ?? quoteItem.organizerId ?? quoteItem.customerId ?? quoteItem.organizer?.id ?? quoteItem.customer?.id;
+      const normalizedOwner = ownerId != null ? String(ownerId) : null;
+
+      if (!normalizedOwner) {
+        return false;
+      }
+
+      if (isOrganizer.value) {
+        return normalizedOwner === userId;
+      }
+
+      const customerId = quoteItem.customerId != null
+        ? String(quoteItem.customerId)
+        : (quoteItem.customer?.id != null ? String(quoteItem.customer.id) : null);
+      return normalizedOwner === userId || (customerId && customerId === userId);
+    });
+
+    quotes.value = filtered.map(q => {
+      const entity = QuoteOrder.fromJSON(q);
+      entity.ownerId = entity.ownerId || userId;
+      return entity;
+    });
 
     toast.add({
       severity: 'success',
@@ -166,6 +254,7 @@ onMounted(() => {
         />
 
         <Button
+          v-if="isOrganizer"
           :label="$t('quotes.list.newQuote')"
           icon="pi pi-plus"
           @click="handleNewQuote"
@@ -228,15 +317,32 @@ onMounted(() => {
               class="action-btn view-btn"
             />
             <Button
+              v-if="isOrganizer"
               :label="$t('quotes.list.edit')"
               icon="pi pi-pencil"
               text
               @click="handleEdit(data.id)"
               class="action-btn edit-btn"
             />
-          </div>
-        </template>
-      </Column>
+            <Button
+              v-if="isHostUser && data.state === quoteStates.PENDING"
+              :label="$t('quotes.actions.approve')"
+              icon="pi pi-check"
+              text
+              class="action-btn approve-btn"
+              @click="handleApprove(data.id)"
+            />
+            <Button
+              v-if="isHostUser && data.state === quoteStates.PENDING"
+              :label="$t('quotes.actions.decline')"
+              icon="pi pi-times"
+              text
+              class="action-btn decline-btn"
+              @click="handleDecline(data.id)"
+            />
+         </div>
+       </template>
+     </Column>
 
       <template #empty>
         <div class="empty-state">
@@ -358,6 +464,22 @@ onMounted(() => {
 
 .edit-btn {
   color: #6C757D;
+}
+
+.approve-btn {
+  color: #16a34a;
+}
+
+.approve-btn:hover {
+  color: #0f766e;
+}
+
+.decline-btn {
+  color: #dc2626;
+}
+
+.decline-btn:hover {
+  color: #b91c1c;
 }
 
 .edit-btn:hover {

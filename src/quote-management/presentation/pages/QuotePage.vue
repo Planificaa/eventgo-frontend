@@ -1,3 +1,9 @@
+<script setup>
+import { useI18n } from 'vue-i18n';
+import QuotesList from '../components/quotes-list.vue';
+
+const { t } = useI18n();
+</script>
 <template>
   <main class="quote-page">
     <div class="quote-page__container">
@@ -12,14 +18,6 @@
     </div>
   </main>
 </template>
-
-<script setup>
-import { useI18n } from 'vue-i18n';
-import QuotesList from '../components/quotes-list.vue';
-
-const { t } = useI18n();
-</script>
-
 <style scoped>
 .quote-page {
   min-height: 100vh;

@@ -21,18 +21,18 @@ export class Organizer {
    * @param {string} [params.updatedAt] - Fecha de actualización
    */
   constructor({
-    id,
-    name,
-    email,
-    phone = '',
-    city = '',
-    description = '',
-    profileImage = '',
-    socialLinks = [],
-    status = 'active',
-    createdAt = new Date().toISOString(),
-    updatedAt = new Date().toISOString(),
-  }) {
+                id,
+                name,
+                email,
+                phone = '',
+                city = '',
+                description = '',
+                profileImage = '',
+                socialLinks = [],
+                status = 'active',
+                createdAt = new Date().toISOString(),
+                updatedAt = new Date().toISOString(),
+              }) {
     this.id = id;
     this.name = name;
     this.email = email;

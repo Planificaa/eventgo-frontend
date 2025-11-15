@@ -172,6 +172,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ProfileApiService } from '@/profile-management/application/profile-api.service.js'
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js'
 
 const router = useRouter()
 const organizer = ref({
@@ -190,10 +191,19 @@ const organizer = ref({
 })
 
 const previewPhoto = ref(null)
+const { user, restoreSession } = useAuth()
 
 onMounted(async () => {
   try {
-    const data = await ProfileApiService.getProfile()
+    if (!user.value) {
+      await restoreSession()
+    }
+
+    if (!user.value?.id) {
+      return
+    }
+
+    const data = await ProfileApiService.getProfile(user.value.id)
     organizer.value = data
   } catch (error) {
     console.error('Error al cargar perfil:', error)

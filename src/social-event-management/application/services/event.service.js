@@ -4,12 +4,20 @@ import axios from 'axios';
 const API_URL = 'https://data-jaon-eventgo.onrender.com';
 
 class EventService {
-  async getEvents() {
-    return await axios.get(`${API_URL}/events`);
+  async getEvents(params = {}) {
+    return await axios.get(`${API_URL}/events`, { params });
   }
 
   async getEvent(id) {
     return await axios.get(`${API_URL}/events/${id}`);
+  }
+
+  async getEventsByUser(userId) {
+    if (!userId) {
+      return await this.getEvents();
+    }
+
+    return await this.getEvents({ userId });
   }
 
   async createEvent(eventData) {

@@ -1,5 +1,4 @@
 <!-- src/bounded-contexts/quote-management/presentation/components/create-and-edit-quotes.vue -->
-
 <template>
   <div class="quote-form">
     <div class="quote-form__container">
@@ -157,34 +156,127 @@ import FinancialSummary from './financial-summary.vue';
 import ActionsQuotes from './actions-quotes.vue';
 import QuotePreviewModal from './QuotePreviewModal.vue';
 import { QuoteApiService } from '../../application/services/quote-api.service.js';
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
 
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 const toast = useToast();
+const { user, restoreSession, isOrganizer } = useAuth();
 
-// Estado reactivo
+/* =========================================
+   Datos del usuario actual
+========================================= */
+const currentUserId = computed(() => {
+  const value = user.value?.id;
+  return value != null ? String(value) : null;
+});
+
+/* =========================================
+   Datos del organizador desde la URL
+   (cuando el host viene desde HostDashboard)
+========================================= */
+const organizerFromRoute = computed(() => {
+  const id = route.query.organizerId;
+  if (!id) return null;
+
+  return new Organizer({
+    id: String(id),
+    name: route.query.organizerName || '',
+    role: 'organizer',
+    phone: route.query.organizerPhone || '',
+    avatar: route.query.organizerAvatar || ''
+  });
+});
+
+/**
+ * ownerId: siempre será el organizador.
+ * - Si soy organizador, ownerId = mi id
+ * - Si soy host, ownerId = organizerId que viene en la URL
+ */
+const ownerIdForNewQuote = computed(() => {
+  if (isOrganizer.value) return currentUserId.value;
+  if (organizerFromRoute.value?.id) return organizerFromRoute.value.id;
+  return null; // fallback, pero idealmente siempre hay organizerId
+});
+
+/* =========================================
+   Construir organizer desde el usuario
+   (solo cuando el que crea es organizador)
+========================================= */
+const buildOrganizerForUser = () => {
+  if (!user.value || !isOrganizer.value) {
+    return new Organizer({});
+  }
+
+  return new Organizer({
+    id: String(user.value.id),
+    name: user.value.name || '',
+    role: user.value.role || '',
+    phone: user.value.phone || '',
+    avatar: user.value.profileImage || ''
+  });
+};
+
+/* =========================================
+   Estado principal de la cotización
+========================================= */
 const quote = ref(new QuoteOrder({
   customer: new Customer({}),
   event: new Event({}),
-  organizer: new Organizer({
-    name: 'Andrea Ramirez',
-    role: 'Event Organizer',
-    phone: '+51 999 888 777',
-    avatar: 'https://i.pravatar.cc/150?img=1'
-  })
+  organizer: isOrganizer.value
+    ? buildOrganizerForUser()
+    : (organizerFromRoute.value || new Organizer({})),
+  ownerId: ownerIdForNewQuote.value
 }));
 
+/**
+ * Aplica contexto del usuario:
+ * - Si soy organizador → organizador y ownerId = mi id
+ * - Si soy host → customer = host, ownerId = organizerId
+ */
+const applyUserContextToQuote = () => {
+  if (!currentUserId.value) return;
+
+  if (isOrganizer.value) {
+    quote.value.organizer = buildOrganizerForUser();
+  } else {
+    // Host = cliente
+    const customerData = {
+      id: currentUserId.value,
+      name: user.value?.name || quote.value.customer.name,
+      email: user.value?.email || quote.value.customer.email,
+      phone: user.value?.phone || quote.value.customer.phone
+    };
+    quote.value.customer = new Customer(customerData);
+
+    // Organizador desde la URL
+    if (organizerFromRoute.value && !quote.value.organizer?.id) {
+      quote.value.organizer = organizerFromRoute.value;
+    }
+  }
+
+  // ownerId siempre es el organizador
+  if (ownerIdForNewQuote.value) {
+    quote.value.ownerId = ownerIdForNewQuote.value;
+  }
+};
+
+/* =========================================
+   Flags / UI
+========================================= */
 const isSaving = ref(false);
 const isSending = ref(false);
 const showPreviewModal = ref(false);
 const isLoadingQuote = ref(false);
 
-// Computed
 const isEditMode = computed(() => {
   return route.name === 'quote-edit' && route.params.id;
 });
 
+/* =========================================
+   Opciones de tipos de evento
+========================================= */
 const eventTypes = computed(() => {
   return [
     { label: t('events.types.wedding'), value: 'WEDDING' },
@@ -198,6 +290,9 @@ const eventTypes = computed(() => {
   ];
 });
 
+/* =========================================
+   Reglas para habilitar acciones
+========================================= */
 const canSave = computed(() => {
   return quote.value.customer.name.trim().length > 0 &&
     quote.value.event.type &&
@@ -205,15 +300,16 @@ const canSave = computed(() => {
     quote.value.services.length > 0;
 });
 
-const canPreview = computed(() => {
+const canPreview = computed(() => canSave.value);
+
+const canSend = computed(() => {
+  // para simplificar: permitimos enviar siempre que se pueda guardar
   return canSave.value;
 });
 
-const canSend = computed(() => {
-  return canSave.value && quote.value.state !== 'DRAFT';
-});
-
-// Métodos
+/* =========================================
+   Handlers de servicios
+========================================= */
 const handleServicesUpdate = (updatedServices) => {
   quote.value.services = updatedServices;
 };
@@ -226,16 +322,45 @@ const handleServiceRemoved = (service) => {
   console.log('Service removed:', service);
 };
 
+/* =========================================
+   Guardar cotización (crear / editar)
+========================================= */
 const handleSave = async () => {
   if (!canSave.value) return;
 
   isSaving.value = true;
 
   try {
+    if (!currentUserId.value) {
+      throw new Error(t('quotes.messages.missingOwner'));
+    }
+
+    // Aseguramos organizer y ownerId antes de serializar
+    if (!quote.value.organizer?.id && organizerFromRoute.value) {
+      quote.value.organizer = organizerFromRoute.value;
+    }
+    if (ownerIdForNewQuote.value) {
+      quote.value.ownerId = ownerIdForNewQuote.value;
+    }
+
     const quoteData = quote.value.toJSON();
     quoteData.updatedAt = new Date().toISOString();
+    quoteData.ownerId = quote.value.ownerId;
+
+    // customer = host si el que crea es host
+    if (!isOrganizer.value) {
+      quoteData.customer = quoteData.customer || {};
+      quoteData.customer.id = currentUserId.value;
+      quoteData.customerId = currentUserId.value;
+    }
+
+    // organizerId explícito (útil para filtros)
+    if (quoteData.organizer?.id) {
+      quoteData.organizerId = quoteData.organizer.id;
+    }
 
     let savedQuote;
+
     if (isEditMode.value) {
       // Actualizar cotización existente
       savedQuote = await QuoteApiService.update(route.params.id, quoteData);
@@ -246,7 +371,8 @@ const handleSave = async () => {
         life: 3000
       });
     } else {
-      // Crear nueva cotización
+      // Nueva cotización: por defecto DRAFT
+      quoteData.state = quoteData.state || QuoteOrder.STATES.DRAFT;
       savedQuote = await QuoteApiService.create(quoteData);
       toast.add({
         severity: 'success',
@@ -257,8 +383,6 @@ const handleSave = async () => {
     }
 
     console.log('Quote saved:', savedQuote);
-
-    // Navegar a la lista
     router.push({ name: 'quotes' });
   } catch (error) {
     console.error('Error saving quote:', error);
@@ -273,6 +397,9 @@ const handleSave = async () => {
   }
 };
 
+/* =========================================
+   Preview
+========================================= */
 const handlePreview = () => {
   if (!canPreview.value) return;
   showPreviewModal.value = true;
@@ -282,20 +409,29 @@ const closePreview = () => {
   showPreviewModal.value = false;
 };
 
+/* =========================================
+   Enviar cotización
+   - Si es nueva → guardar (DRAFT) y luego cambiar estado
+   - Estado al enviar: PENDING
+========================================= */
 const handleSend = async () => {
   if (!canSend.value) return;
 
   isSending.value = true;
 
   try {
-    // Primero guardar si hay cambios
-    if (quote.value.state === 'DRAFT') {
-      const quoteData = quote.value.toJSON();
-      await QuoteApiService.update(quote.value.id, quoteData);
+    if (!currentUserId.value) {
+      throw new Error(t('quotes.messages.missingOwner'));
+    }
+
+    // Si no tiene ID todavía, guardamos primero
+    if (!quote.value.id) {
+      await handleSave();
     }
 
     // Cambiar estado a PENDING
-    await QuoteApiService.changeState(quote.value.id, 'PENDING');
+    const updated = await QuoteApiService.changeState(quote.value.id, QuoteOrder.STATES.PENDING);
+    quote.value = QuoteOrder.fromJSON(updated);
 
     toast.add({
       severity: 'success',
@@ -334,11 +470,37 @@ const handleBack = () => {
   router.push({ name: 'quotes' });
 };
 
+/* =========================================
+   Cargar cotización para editar
+========================================= */
 const loadQuote = async (quoteId) => {
   isLoadingQuote.value = true;
   try {
     const data = await QuoteApiService.getById(quoteId);
-    quote.value = QuoteOrder.fromJSON(data);
+    const loadedQuote = QuoteOrder.fromJSON(data);
+    const userId = currentUserId.value;
+
+    const ownerId = loadedQuote.ownerId ? String(loadedQuote.ownerId) : null;
+    const organizerId = loadedQuote.organizer?.id ? String(loadedQuote.organizer.id) : null;
+    const customerId = loadedQuote.customer?.id
+      ? String(loadedQuote.customer.id)
+      : (data.customerId != null ? String(data.customerId) : null);
+
+    // Permisos básicos
+    const isAllowed = () => {
+      if (!userId) return false;
+      if (isOrganizer.value) {
+        return ownerId === userId || organizerId === userId;
+      }
+      return customerId === userId;
+    };
+
+    if (!isAllowed()) {
+      throw new Error(t('quotes.messages.forbiddenQuote'));
+    }
+
+    loadedQuote.ownerId = ownerId || organizerId || userId;
+    quote.value = loadedQuote;
 
     toast.add({
       severity: 'success',
@@ -351,7 +513,7 @@ const loadQuote = async (quoteId) => {
     toast.add({
       severity: 'error',
       summary: t('common.error'),
-      detail: t('quotes.messages.loadError'),
+      detail: error.message || t('quotes.messages.loadError'),
       life: 5000
     });
     router.push({ name: 'quotes' });
@@ -360,10 +522,18 @@ const loadQuote = async (quoteId) => {
   }
 };
 
-// Lifecycle
-onMounted(() => {
+/* =========================================
+   Lifecycle
+========================================= */
+onMounted(async () => {
+  if (!user.value) {
+    await restoreSession();
+  }
+
+  applyUserContextToQuote();
+
   if (isEditMode.value) {
-    loadQuote(route.params.id);
+    await loadQuote(route.params.id);
   }
 });
 </script>

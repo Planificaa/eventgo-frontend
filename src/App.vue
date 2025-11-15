@@ -1,14 +1,19 @@
 <script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import AppHeader from '@/shared/infrastructure/components/AppHeader.vue'
+
+const route = useRoute()
+const isAuthRoute = computed(() => route.path === '/login' || route.path === '/register')
 </script>
 
 <template>
   <div id="app">
     <!-- BARRA DE NAVEGACIÓN -->
-    <AppHeader />
+    <AppHeader v-if="!isAuthRoute" />
 
     <!-- CONTENIDO PRINCIPAL -->
-    <main class="main-content">
+    <main :class="['main-content', { 'full-screen': isAuthRoute }]">
       <!-- Transición suave para páginas como perfil, álbumes y chat -->
       <transition name="fade" mode="out-in">
         <router-view />
@@ -38,10 +43,17 @@ import AppHeader from '@/shared/infrastructure/components/AppHeader.vue'
 /* MAIN CONTENT — Mantuvimos lo tuyo y agregamos ancho máximo */
 .main-content {
   padding: 2rem;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 80px); /* Altura con header */
   max-width: 1280px;
   margin: 0 auto;
   width: 100%;
+}
+
+.main-content.full-screen {
+  padding: 0;
+  min-height: 100vh; /* Altura sin header */
+  max-width: none;
+  margin: 0;
 }
 
 /* ================================

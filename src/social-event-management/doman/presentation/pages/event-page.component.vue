@@ -19,10 +19,17 @@ import EventCard from '../../presentation/components/event-card.component.vue';
 
 // Services
 import EventService from '../../../../social-event-management/application/services/event.service.js';
+import { useAuth } from '/src/auth-management/infrastructure/composables/useAuth.js'
 
 // Composables
 const router = useRouter();
 const { t } = useI18n();
+const { user, restoreSession } = useAuth();
+
+const currentUserId = computed(() => {
+  const value = user.value?.id;
+  return value != null ? String(value) : null;
+});
 
 // Reactive State
 const events = ref([]);
@@ -105,10 +112,26 @@ const endItem = computed(() => {
 const fetchEvents = async () => {
   loading.value = true;
   try {
-    const response = await EventService.getEvents();
-    events.value = response.data;
-  } catch (error) {
+    if (!user.value) {
+      await restoreSession();
+    }
+
+    const userId = currentUserId.value;
+    const response = await EventService.getEventsByUser(userId);
+    const data = Array.isArray(response.data) ? response.data : [];
+
+    if (!userId) {
+      events.value = [];
+      return;
+    }
+
+    events.value = data.filter((event) => {
+      const ownerId = event.userId != null ? String(event.userId) : null;
+      return ownerId === userId;
+    });
+    } catch (error) {
     console.error('Error fetching events:', error);
+    events.value = [];
   } finally {
     loading.value = false;
   }
