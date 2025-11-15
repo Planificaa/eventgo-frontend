@@ -73,13 +73,11 @@ const filteredEvents = computed(() => {
   }
 
   // Status Filter
+  // Status Filter
   if (selectedFilter.value !== 'all') {
-    filtered = filtered.filter(event => {
-      if (selectedFilter.value === 'active') return event.status === t('eventManagement.status.active');
-      if (selectedFilter.value === 'pending') return event.status === t('eventManagement.status.toBeConfirmed');
-      if (selectedFilter.value === 'cancelled') return event.status === t('eventManagement.status.cancelled');
-      return true;
-    });
+    filtered = filtered.filter(event =>
+      event.status.toLowerCase() === selectedFilter.value
+    );
   }
 
   // Sorting
