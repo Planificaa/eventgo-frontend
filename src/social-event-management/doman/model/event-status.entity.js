@@ -5,8 +5,7 @@
 export class EventStatus {
   // Status constants
   static ACTIVE = 'Active';
-  static PENDING = 'To be confirmed';
-  static CONFIRMED = 'Confirmed';
+  static PENDING = 'Pending';
   static CANCELLED = 'Cancelled';
 
   /**
@@ -17,7 +16,6 @@ export class EventStatus {
     return [
       EventStatus.ACTIVE,
       EventStatus.PENDING,
-      EventStatus.CONFIRMED,
       EventStatus.CANCELLED
     ];
   }
