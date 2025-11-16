@@ -33,7 +33,7 @@ const navigationItems = computed(() => {
   if (role === 'host') {
     return [
       { key: 'dashboard', icon: 'pi pi-home', to: '/host/dashboard', labelKey: 'header.dashboard' },
-      { key: 'events', icon: 'pi pi-calendar', to: '/social-events', labelKey: 'header.events' },
+      { key: 'events', icon: 'pi pi-calendar', to: '/events', labelKey: 'header.events' },
       { key: 'quotes', icon: 'pi pi-file-edit', to: '/quotes', labelKey: 'header.quotes' },
       { key: 'messages', icon: 'pi pi-envelope', to: '/messages', labelKey: 'header.messages' },
     ]
@@ -42,7 +42,7 @@ const navigationItems = computed(() => {
   if (role === 'organizer') {
     return [
       { key: 'dashboard', icon: 'pi pi-home', to: '/organizer/dashboard', labelKey: 'header.dashboard' },
-      { key: 'events', icon: 'pi pi-calendar', to: '/social-events', labelKey: 'header.events' },
+      { key: 'events', icon: 'pi pi-calendar', to: '/events', labelKey: 'header.events' },
       { key: 'tasks', icon: 'pi pi-check-square', to: '/tasks', labelKey: 'header.task' },
       { key: 'quotes', icon: 'pi pi-file-edit', to: '/quotes', labelKey: 'header.quotes' },
       { key: 'messages', icon: 'pi pi-envelope', to: '/messages', labelKey: 'header.messages' },

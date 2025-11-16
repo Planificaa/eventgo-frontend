@@ -25,17 +25,15 @@ const routes = [
   // LOGIN / REGISTRO
   // ========================================
   {
-    path: "/login",
-    name: "Login",
-    component: () =>
-      import("@/auth-management/presentation/pages/LoginPage.vue"),
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/auth-management/presentation/pages/LoginPage.vue'),
     meta: { requiresAuth: false, redirectIfAuth: true },
   },
   {
-    path: "/register",
-    name: "Register",
-    component: () =>
-      import("@/auth-management/presentation/pages/RegisterPage.vue"),
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/auth-management/presentation/pages/RegisterPage.vue'),
     meta: { requiresAuth: false, redirectIfAuth: true },
   },
 
@@ -43,12 +41,12 @@ const routes = [
   // REDIRECCIÓN RAÍZ
   // ========================================
   {
-    path: "/",
+    path: '/',
     redirect: () => {
-      const auth = useAuthStore(pinia);
-      if (auth.user?.role === "host") return "/host/dashboard";
-      if (auth.user?.role === "organizer") return "/organizer/dashboard";
-      return "/login";
+      const auth = useAuthStore(pinia)
+      if (auth.user?.role === 'host') return '/host/dashboard'
+      if (auth.user?.role === 'organizer') return '/organizer/dashboard'
+      return '/login'
     },
   },
 
@@ -56,25 +54,24 @@ const routes = [
   // DASHBOARDS POR ROL
   // ========================================
   {
-    path: "/host/dashboard",
-    name: "host-dashboard",
-    component: () =>
-      import("@/dashboard/infrastructure/components/host/HostDashboard.vue"),
+    path: '/host/dashboard',
+    name: 'host-dashboard',
+    component: () => import('@/dashboard/infrastructure/components/host/HostDashboard.vue'),
     meta: {
       requiresAuth: true,
-      requiresRole: "host",
-      title: "Panel Anfitrión",
+      requiresRole: 'host',
+      title: 'Panel Anfitrión',
     },
   },
   {
-    path: "/organizer/dashboard",
-    name: "organizer-dashboard",
+    path: '/organizer/dashboard',
+    name: 'organizer-dashboard',
     component: () =>
-      import("@/dashboard/infrastructure/components/organizer/OrganizerDashboard.vue"),
+      import('@/dashboard/infrastructure/components/organizer/OrganizerDashboard.vue'),
     meta: {
       requiresAuth: true,
-      requiresRole: "organizer",
-      title: "Panel Organizador",
+      requiresRole: 'organizer',
+      title: 'Panel Organizador',
     },
   },
 
@@ -82,29 +79,47 @@ const routes = [
   // PERFIL - ANFITRIÓN
   // ========================================
   {
-    path: "/host/profile",
-    name: "host-profile",
-    component: () =>
-      import("@/profile-management/presentation/pages/HostProfilePage.vue"),
+    path: '/host/profile',
+    name: 'host-profile',
+    component: () => import('@/profile-management/presentation/pages/HostProfilePage.vue'),
     meta: {
       requiresAuth: true,
-      requiresRole: "host",
-      title: "Mi Perfil",
+      requiresRole: 'host',
+      title: 'Mi Perfil',
     },
   },
+   {
+     path: '/host/profile/edit',
+     name: 'host-profile-edit',
+     component: () => import('@/profile-management/presentation/pages/HostProfileEditPage.vue'),
+     meta: {
+       requiresAuth: true,
+       requiresRole: 'host',
+       title: 'Editar Perfil',
+     },
+   },
 
   // ========================================
   // PERFIL - ORGANIZADOR
   // ========================================
   {
-    path: "/organizer/profile",
-    name: "organizer-profile",
-    component: () =>
-      import("@/profile-management/presentation/pages/OrganizerProfilePage.vue"),
+    path: '/organizer/profile',
+    name: 'organizer-profile',
+    component: () => import('@/profile-management/presentation/pages/OrganizerProfilePage.vue'),
     meta: {
       requiresAuth: true,
-      requiresRole: "organizer",
-      title: "Mi Perfil",
+      requiresRole: 'organizer',
+      title: 'Mi Perfil',
+    },
+  },
+  {
+    path: '/organizer/profile/edit',
+    name: 'organizer-profile-edit',
+    component: () => import('@/profile-management/presentation/pages/OrganizerProfileEditPage.vue'),
+    meta: {
+      requiresAuth: true,
+      requiresRole: 'organizer',
+      title: 'Editar Perfil',
     },
   },
 
@@ -112,20 +127,20 @@ const routes = [
   // EVENTOS
   // ========================================
   {
-    path: "/social-events",
-    name: "social-events",
+    path: '/events',
+    name: 'events',
     component: EventPage,
     meta: { requiresAuth: true },
   },
   {
-    path: "/social-events/create",
-    name: "social-events-create",
+    path: '/events/create',
+    name: 'events-create',
     component: CreateAndEditEvent,
     meta: { requiresAuth: true },
   },
   {
-    path: "/social-events/:id/edit",
-    name: "social-events-edit",
+    path: '/events/:id/edit',
+    name: 'events-edit',
     component: CreateAndEditEvent,
     props: true,
     meta: { requiresAuth: true },
@@ -135,71 +150,105 @@ const routes = [
   // TAREAS (solo organizador)
   // ========================================
   {
-    path: "/tasks",
-    name: "tasks",
+    path: '/tasks',
+    name: 'tasks',
     component: TaskPage,
-    meta: { requiresAuth: true, requiresRole: "organizer" },
+    meta: { requiresAuth: true, requiresRole: 'organizer' },
   },
   {
-    path: "/tasks/create",
-    name: "task-create",
+    path: '/tasks/create',
+    name: 'task-create',
     component: TaskCreatePage,
-    meta: { requiresAuth: true, requiresRole: "organizer" },
+    meta: { requiresAuth: true, requiresRole: 'organizer' },
   },
   {
-    path: "/tasks/:id",
-    name: "task-detail",
+    path: '/tasks/:id',
+    name: 'task-detail',
     component: TaskDetailPage,
     props: true,
-    meta: { requiresAuth: true, requiresRole: "organizer" },
+    meta: { requiresAuth: true, requiresRole: 'organizer' },
   },
   {
-    path: "/tasks/:id/edit",
-    name: "task-edit",
+    path: '/tasks/:id/edit',
+    name: 'task-edit',
     component: TaskEditPage,
     props: true,
-    meta: { requiresAuth: true, requiresRole: "organizer" },
+    meta: { requiresAuth: true, requiresRole: 'organizer' },
   },
 
   // ========================================
   // COTIZACIONES
   // ========================================
   {
-    path: "/quotes",
-    name: "quotes",
+    path: '/quotes',
+    name: 'quotes',
     component: QuotePage,
-    meta: { requiresAuth: true, allowedRoles: ["organizer", "host"] },
+    meta: { requiresAuth: true, allowedRoles: ['organizer', 'host'] },
   },
   {
-    path: "/quotes/create",
-    name: "quote-create",
+    path: '/quotes/create',
+    name: 'quote-create',
     component: QuoteCreatePage,
-    meta: { requiresAuth: true, allowedRoles: ["organizer", "host"] },
+    meta: { requiresAuth: true, allowedRoles: ['organizer', 'host'] },
   },
   {
-    path: "/quotes/:id",
-    name: "quote-detail",
+    path: '/quotes/:id',
+    name: 'quote-detail',
     component: QuoteDetailPage,
     props: true,
-    meta: { requiresAuth: true, allowedRoles: ["organizer", "host"] },
+    meta: { requiresAuth: true, allowedRoles: ['organizer', 'host'] },
   },
   {
-    path: "/quotes/:id/edit",
-    name: "quote-edit",
+    path: '/quotes/:id/edit',
+    name: 'quote-edit',
     component: QuoteEditPage,
     props: true,
-    meta: { requiresAuth: true, requiresRole: "organizer" },
+    meta: { requiresAuth: true, requiresRole: 'organizer' },
   },
-
+  // ========================================
+  // FIN RUTAS QUOTE MANAGEMENT
+  // ========================================
+  {
+    path: '/messages',
+    name: 'Messages',
+    component: () => import('/src/direct-communication/presentation/views/MessagesView.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: ':conversationId',
+        name: 'MessagesConversation',
+        component: () => import('/src/direct-communication/presentation/views/MessagesView.vue'),
+        props: true,
+      },
+    ],
+  },
+  {
+    path: '/chat/:userId',
+    name: 'DirectChat',
+    component: () => import('/src/direct-communication/presentation/views/ChatView.vue'),
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/Notifications',
+    name: 'Notifications',
+    component: () => import('/src/profile-management/presentation/pages/NotificationsPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: () => import('/src/profile-management/presentation/pages/SettingsPage.vue'),
+    meta: { requiresAuth: true },
+  },
   // ========================================
   // NOT FOUND
   // ========================================
   {
-    path: "/:pathMatch(.*)*",
-    component: () =>
-      import("@/shared/infrastructure/components/common/PageNotFound.vue"),
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/shared/infrastructure/components/common/PageNotFound.vue'),
   },
-];
+]
 
 // ========================================
 // CONFIGURACIÓN DEL ROUTER

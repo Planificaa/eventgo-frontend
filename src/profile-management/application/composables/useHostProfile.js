@@ -8,12 +8,11 @@ import { ref, computed } from 'vue';
 import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js';
 import { ProfileApiService } from '@/profile-management/application/profile-api.service.js';
 import { useToast } from 'primevue/usetoast';
+import { useAuthStore } from '@/auth-management/application/services/auth.store.js';
 
 export function useHostProfile() {
   const { user } = useAuth();
-  const toast = useToast();
-
-  // Estado
+  const toast = useToast();// Estado
   const profile = ref(null);
   const isLoading = ref(false);
   const isEditing = ref(false);
@@ -84,24 +83,47 @@ export function useHostProfile() {
     }
   };
 
-  // Actualizar perfil
+  const auth = useAuthStore();
+
+  // Update profile
   const updateProfile = async (profileData) => {
+    const auth = useAuthStore();
+
     if (!user.value?.id) return;
 
+    // ✔ convertir solo a plano: nada de .value anidados
+    const fullUser = JSON.parse(JSON.stringify({
+      ...user.value,      // objeto plano original
+      ...profileData      // cambios nuevos
+    }));
+
     isLoading.value = true;
+
     try {
-      const updated = await ProfileApiService.update(user.value.id, profileData);
+      const updated = await ProfileApiService.update(
+        user.value.id,
+        fullUser,
+        'host'
+      );
+
+      // Actualizar Pinia correctamente
+      auth.user = updated;
+
+      // Actualizar almacenamiento
+      const storageType = auth.storageType ?? 'local';
+      const storage = storageType === 'local' ? localStorage : sessionStorage;
+      storage.setItem('authUser', JSON.stringify(updated));
+
       profile.value = updated;
-      isEditing.value = false;
-      error.value = null;
+
       toast.add({
         severity: 'success',
         summary: 'Éxito',
         detail: 'Perfil actualizado correctamente',
         life: 3000,
       });
+
     } catch (err) {
-      error.value = err.message;
       toast.add({
         severity: 'error',
         summary: 'Error',
@@ -112,6 +134,8 @@ export function useHostProfile() {
       isLoading.value = false;
     }
   };
+
+
 
   // Computed
   const userInitials = computed(() => {

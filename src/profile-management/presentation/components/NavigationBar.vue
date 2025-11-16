@@ -62,7 +62,7 @@ const router = useRouter()
 
 const links = [
   { name: 'Dashboard', path: '/dashboard' },
-  { name: 'Eventos', path: '/social-events' },
+  { name: 'Eventos', path: '/events' },
   { name: 'Tareas', path: '/task' },
   { name: 'Cotizaciones', path: '/quotes' },
   { name: 'Mensajes', path: '/messages' },

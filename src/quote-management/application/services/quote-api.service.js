@@ -4,7 +4,7 @@
  * Servicio para comunicación con la API de cotizaciones usando Axios
  * Maneja todas las operaciones CRUD
  */
-
+import { NotificationApiService } from '/src/profile-management/infrastructure/notification-api.service.js'
 import apiClient from '/src/shared/infrastructure/http/axios.config.js';
 
 export class QuoteApiService {
@@ -47,7 +47,20 @@ export class QuoteApiService {
   static async create(quoteData) {
     try {
       const response = await apiClient.post(this.ENDPOINT, quoteData);
-      return response.data;
+      const createdQuote = response.data;
+
+      await NotificationApiService.create({
+        userId: quoteData.organizerId,
+        type: 'quote',
+        title: 'Nueva cotización recibida',
+        message: `${quoteData.hostName} te envió una nueva cotización`,
+        time: new Date().toISOString(),
+        read: false,
+        icon: 'pi-file-edit',
+        color: '#10b981',
+        quoteId: createdQuote.id
+      });
+      return createdQuote;
     } catch (error) {
       console.error('QuoteApiService.create error:', error);
       throw this.handleError(error);

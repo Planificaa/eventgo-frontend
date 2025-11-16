@@ -39,11 +39,11 @@ export class ProfileApiService {
   }
 
   // Actualizar perfil por ID
-  static async update(id, profileData) {
+  static async update(id, profileData, role = 'host') {
+    const endpoint = role === 'organizer' ? '/organizers' : '/users';
+
     try {
-      const response = await apiClient.put(`${this.ENDPOINT}/${id}`, profileData, {
-        headers: profileData instanceof FormData ? { 'Content-Type': 'multipart/form-data' } : {},
-      });
+      const response = await apiClient.put(`${endpoint}/${id}`, profileData);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
