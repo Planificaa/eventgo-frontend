@@ -281,12 +281,12 @@ onMounted(async () => {
 
 .save-btn {
   min-width: 150px;
-  background-color: #5BC0BE;
+  background-color: #3A506B;
   border-color: #5BC0BE;
 }
 
 .save-btn:hover {
-  background-color: #4aa9a7 !important;
+  background-color: #3A506B !important;
   border-color: #4aa9a7 !important;
 }
 
