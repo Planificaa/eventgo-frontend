@@ -133,14 +133,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="event-form-container">
+  <div class="event-form-container text-5xl" >
     <div class="form-header">
-      <h1>{{ isEditMode ? 'Edit Event' : 'Create New Event' }}</h1>
+      <h1>{{ isEditMode ? $t('eventManagement.editEvent') : $t('eventManagement.createEvent') }}</h1>
     </div>
 
     <form @submit.prevent="saveEvent" class="event-form">
       <div class="form-group">
-        <label for="title">Event Title</label>
+        <label for="title" >Event Title</label >
         <InputText
           id="title"
           v-model="eventData.title"
@@ -229,8 +229,9 @@ onMounted(async () => {
 /* Header del formulario */
 .form-header {
   padding: 1.5rem;
-  background: #3A506B;
-  color: #6FFFE9;
+  font-weight: bold;
+
+  color: #3a506b;
   border-radius: 6px 6px 0 0;
 }
 
