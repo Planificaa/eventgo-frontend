@@ -1,15 +1,14 @@
 // event.service.js
-import axios from 'axios';
 
-const API_URL = 'https://data-jaon-eventgo.onrender.com';
+import apiClient from '@/shared/infrastructure/http/axios.config.js'
 
 class EventService {
   async getEvents(params = {}) {
-    return await axios.get(`${API_URL}/events`, { params });
+    return await apiClient.get('/events', { params });
   }
 
   async getEvent(id) {
-    return await axios.get(`${API_URL}/events/${id}`);
+    return await apiClient.get(`/events/${id}`);
   }
 
   async getEventsByUser(userId) {
@@ -21,30 +20,30 @@ class EventService {
   }
 
   async createEvent(eventData) {
-    return await axios.post(`${API_URL}/events`, eventData);
+    return await apiClient.post('/events', eventData);
   }
 
   async updateEvent(id, eventData) {
-    return await axios.put(`${API_URL}/events/${id}`, eventData);
+    return await apiClient.put(`/events/${id}`, eventData);
   }
 
   async deleteEvent(id) {
-    return await axios.delete(`${API_URL}/events/${id}`);
+    return await apiClient.delete(`/events/${id}`);
   }
 
   async deleteMultipleEvents(eventIds) {
     const deletePromises = eventIds.map(id =>
-      axios.delete(`${API_URL}/events/${id}`)
+      apiClient.delete(`/events/${id}`)
     );
     return await Promise.all(deletePromises);
   }
 
   async searchEvents(query) {
-    return await axios.get(`${API_URL}/events?q=${query}`);
+    return await apiClient.get(`/events?q=${query}`);
   }
 
   async filterEventsByStatus(status) {
-    return await axios.get(`${API_URL}/events?status=${status}`);
+    return await apiClient.get(`/events?status=${status}`);
   }
 }
 
