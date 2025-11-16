@@ -117,26 +117,26 @@ export default {
 
 /* Header classes según estado */
 .card-header-content.header-active {
-  background: linear-gradient(135deg, #3A506B 0%, #2c3e50 100%);
+  background: linear-gradient(135deg, #3A506B 50%, #16a34a 100%);
 }
 
 .card-header-content.header-pending {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: linear-gradient(135deg, #3A506B 50%, #d97706 100%);
 }
 
 .card-header-content.header-cancelled {
-  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  background: linear-gradient(135deg, #3A506B 50%, #991b1b 100%);
 }
 
 .card-header-content.header-new {
-  background: linear-gradient(135deg, #5BC0BE 0%, #3aa9a7 100%);
+  background: linear-gradient(135deg, #3A506B 50%, #3aa9a7 100%);
 }
 
 .event-title {
   margin: 0 0 0.5rem 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #6FFFE9;
+  color: #FFFFEF;
 }
 
 .event-date {
@@ -182,6 +182,7 @@ export default {
 
 .edit-btn {
   min-width: 80px;
+  background-color: #3A506B;
 }
 
 /* Responsive */
