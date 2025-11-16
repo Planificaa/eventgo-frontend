@@ -9,7 +9,7 @@ export class Event {
                  date = '',
                  customer = '',
                  location = '',
-                 status = 'To be confirmed' //default in the options
+                 status = 'pending' //default in the options
                }  = {} ) {
     this.id = id;
     this.title = title;
@@ -32,7 +32,7 @@ export class Event {
    * @returns {boolean} True if the event is pending
    */
   isPending() {
-    return this.status.toLowerCase() === 'to be confirmed';
+    return this.status.toLowerCase() === 'pending';
   }
 
   isCancelled() {

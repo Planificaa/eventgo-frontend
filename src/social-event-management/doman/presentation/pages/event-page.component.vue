@@ -13,13 +13,18 @@ import Paginator from 'primevue/paginator';
 import ProgressSpinner from 'primevue/progressspinner';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
 
 // Local Components
 import EventCard from '../../presentation/components/event-card.component.vue';
 
 // Services
 import EventService from '../../../../social-event-management/application/services/event.service.js';
+
 import { useAuth } from '/src/auth-management/infrastructure/composables/useAuth.js'
+import { QuoteApiService } from '@/quote-management/application/services/quote-api.service.js'
+import QuoteCard from '@/quote-management/presentation/components/quote-card.component.vue'
 
 // Composables
 const router = useRouter();
@@ -33,6 +38,7 @@ const currentUserId = computed(() => {
 
 // Reactive State
 const events = ref([]);
+const quotes = ref([]);
 const selectedEvents = ref([]);
 const selectAll = ref(false);
 const searchQuery = ref('');
@@ -42,6 +48,7 @@ const currentPage = ref(1);
 const pageSize = ref(5);
 const showDeleteConfirmation = ref(false);
 const loading = ref(false);
+const activeTab = ref(0); // 0 = Events, 1 = Quotes
 
 // Filter Options
 const filterOptions = computed(() => [
@@ -58,7 +65,7 @@ const sortOptions = computed(() => [
   { label: t('eventManagement.sort.title'), value: 'title' }
 ]);
 
-// Computed Properties
+// Computed Properties para Events
 const filteredEvents = computed(() => {
   let filtered = [...events.value];
 
@@ -74,12 +81,9 @@ const filteredEvents = computed(() => {
 
   // Status Filter
   if (selectedFilter.value !== 'all') {
-    filtered = filtered.filter(event => {
-      if (selectedFilter.value === 'active') return event.status === t('eventManagement.status.active');
-      if (selectedFilter.value === 'pending') return event.status === t('eventManagement.status.toBeConfirmed');
-      if (selectedFilter.value === 'cancelled') return event.status === t('eventManagement.status.cancelled');
-      return true;
-    });
+    filtered = filtered.filter(event =>
+      event.status.toLowerCase() === selectedFilter.value
+    );
   }
 
   // Sorting
@@ -97,15 +101,52 @@ const filteredEvents = computed(() => {
   return filtered.slice(startIndex, endIndex);
 });
 
+// Computed Properties para Quotes (solo APPROVED)
+const approvedQuotes = computed(() => {
+  let filtered = quotes.value.filter(quote =>
+    quote.state === 'APPROVED'
+  );
+
+  // Search Filter
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase();
+    filtered = filtered.filter(quote =>
+      quote.customer?.name?.toLowerCase().includes(query) ||
+      quote.event?.type?.toLowerCase().includes(query) ||
+      quote.event?.location?.toLowerCase().includes(query)
+    );
+  }
+
+  // Sorting
+  if (selectedSort.value === 'recent') {
+    filtered.sort((a, b) => new Date(b.event?.date || b.createdAt) - new Date(a.event?.date || a.createdAt));
+  } else if (selectedSort.value === 'oldest') {
+    filtered.sort((a, b) => new Date(a.event?.date || a.createdAt) - new Date(b.event?.date || b.createdAt));
+  } else if (selectedSort.value === 'title') {
+    filtered.sort((a, b) =>
+      (a.customer?.name || '').localeCompare(b.customer?.name || '')
+    );
+  }
+
+  // Pagination
+  const startIndex = (currentPage.value - 1) * pageSize.value;
+  const endIndex = startIndex + pageSize.value;
+  return filtered.slice(startIndex, endIndex);
+});
+
 const totalEvents = computed(() => events.value.length);
-const totalPages = computed(() => Math.ceil(totalEvents.value / pageSize.value));
+const totalQuotes = computed(() => quotes.value.filter(q => q.state === 'APPROVED').length);
+
+const currentTotal = computed(() => activeTab.value === 0 ? totalEvents.value : totalQuotes.value);
+
+const totalPages = computed(() => Math.ceil(currentTotal.value / pageSize.value));
 const startItem = computed(() => {
-  if (totalEvents.value === 0) return 0;
+  if (currentTotal.value === 0) return 0;
   return (currentPage.value - 1) * pageSize.value + 1;
 });
 const endItem = computed(() => {
-  if (totalEvents.value === 0) return 0;
-  return Math.min(currentPage.value * pageSize.value, totalEvents.value);
+  if (currentTotal.value === 0) return 0;
+  return Math.min(currentPage.value * pageSize.value, currentTotal.value);
 });
 
 // Methods
@@ -129,12 +170,46 @@ const fetchEvents = async () => {
       const ownerId = event.userId != null ? String(event.userId) : null;
       return ownerId === userId;
     });
-    } catch (error) {
+  } catch (error) {
     console.error('Error fetching events:', error);
     events.value = [];
   } finally {
     loading.value = false;
   }
+};
+
+const fetchQuotes = async () => {
+  loading.value = true;
+  try {
+    if (!user.value) {
+      await restoreSession();
+    }
+
+    const userId = currentUserId.value;
+    if (!userId) {
+      quotes.value = [];
+      return;
+    }
+
+    // Obtener todas las cotizaciones
+    const allQuotes = await QuoteApiService.getAll();
+
+    // Filtrar por usuario (organizador)
+    quotes.value = allQuotes.filter((quote) => {
+      const ownerId = quote.ownerId != null ? String(quote.ownerId) : null;
+      const organizerId = quote.organizer?.id != null ? String(quote.organizer.id) : null;
+      return ownerId === userId || organizerId === userId;
+    });
+  } catch (error) {
+    console.error('Error fetching quotes:', error);
+    quotes.value = [];
+  } finally {
+    loading.value = false;
+  }
+};
+
+const fetchData = async () => {
+  await Promise.all([fetchEvents(), fetchQuotes()]);
 };
 
 const isSelected = (eventId) => {
@@ -177,6 +252,13 @@ const onPageChange = (event) => {
   currentPage.value = event.page + 1;
 };
 
+const onTabChange = (event) => {
+  activeTab.value = event.index;
+  currentPage.value = 1; // Reset pagination
+  searchQuery.value = ''; // Reset search
+  selectedEvents.value = []; // Clear selections
+};
+
 const navigateToCreateEvent = () => {
   router.push('/events/create');
 };
@@ -185,9 +267,28 @@ const navigateToEditEvent = (eventId) => {
   router.push(`/events/${eventId}/edit`);
 };
 
+const viewQuoteDetails = (quoteId) => {
+  router.push(`/quotes/${quoteId}`);
+};
+
+const createEventFromQuote = (quote) => {
+  // Navegar a crear evento con datos prellenados de la cotización
+  router.push({
+    name: 'event-create',
+    query: {
+      fromQuote: quote.id,
+      customerName: quote.customer?.name,
+      eventType: quote.event?.type,
+      eventDate: quote.event?.date,
+      location: quote.event?.location,
+      guests: quote.event?.numberOfGuests
+    }
+  });
+};
+
 // Lifecycle
 onMounted(() => {
-  fetchEvents();
+  fetchData();
 });
 </script>
 
@@ -198,108 +299,164 @@ onMounted(() => {
       <h1 class="page-title">{{ $t('eventManagement.pageTitle') }}</h1>
     </header>
 
-    <!-- Actions Bar -->
-    <section class="actions-section">
-      <!-- Selection Bar (visible when items are selected) -->
-      <div v-if="selectedEvents.length > 0" class="selection-bar">
-        <Checkbox
-          v-model="selectAll"
-          :binary="true"
-          @change="toggleSelectAll"
-        />
-        <span class="selection-text">
-          {{ $t('eventManagement.actions.selectAll') }}
-        </span>
-        <Button
-          :label="$t('eventManagement.actions.deleteSelected', { count: selectedEvents.length })"
-          icon="pi pi-trash"
-          severity="danger"
-          @click="showDeleteConfirmation = true"
-          class="delete-selected-btn"
-        />
-      </div>
+    <!-- Tabs -->
+    <TabView :activeIndex="activeTab" @tab-change="onTabChange" class="custom-tabview">
+      <!-- TAB: Events -->
+      <TabPanel :header="$t('eventManagement.tabs.events') || 'Eventos'">
+        <!-- Actions Bar -->
+        <section class="actions-section">
+          <!-- Selection Bar (visible when items are selected) -->
+          <div v-if="selectedEvents.length > 0" class="selection-bar">
+            <Checkbox
+              v-model="selectAll"
+              :binary="true"
+              @change="toggleSelectAll"
+            />
+            <span class="selection-text">
+              {{ $t('eventManagement.actions.selectAll') }}
+            </span>
+            <Button
+              :label="$t('eventManagement.actions.deleteSelected', { count: selectedEvents.length })"
+              icon="pi pi-trash"
+              severity="danger"
+              @click="showDeleteConfirmation = true"
+              class="delete-selected-btn"
+            />
+          </div>
 
-      <!-- Search and Filter Bar (visible when no items selected) -->
-      <div v-else class="search-filter-bar">
-        <IconField iconPosition="left" class="search-field">
-          <InputIcon class="pi pi-search" />
-          <InputText
-            v-model="searchQuery"
-            :placeholder="$t('eventManagement.actions.search')"
-          />
-        </IconField>
+          <!-- Search and Filter Bar (visible when no items selected) -->
+          <div v-else class="search-filter-bar">
+            <IconField iconPosition="left" class="search-field">
+              <InputIcon class="pi pi-search" />
+              <InputText
+                v-model="searchQuery"
+                :placeholder="$t('eventManagement.actions.search')"
+              />
+            </IconField>
 
-        <div class="filters-group">
-          <Dropdown
-            v-model="selectedFilter"
-            :options="filterOptions"
-            optionLabel="label"
-            optionValue="value"
-            :placeholder="$t('eventManagement.filters.all')"
-            class="filter-dropdown"
-          />
+            <div class="filters-group">
+              <Dropdown
+                v-model="selectedFilter"
+                :options="filterOptions"
+                optionLabel="label"
+                optionValue="value"
+                :placeholder="$t('eventManagement.filters.all')"
+                class="filter-dropdown"
+              />
 
-          <Dropdown
-            v-model="selectedSort"
-            :options="sortOptions"
-            optionLabel="label"
-            optionValue="value"
-            :placeholder="$t('eventManagement.sort.recent')"
-            class="sort-dropdown"
-          />
-        </div>
+              <Dropdown
+                v-model="selectedSort"
+                :options="sortOptions"
+                optionLabel="label"
+                optionValue="value"
+                :placeholder="$t('eventManagement.sort.recent')"
+                class="sort-dropdown"
+              />
+            </div>
 
-        <Button
-          :label="$t('eventManagement.actions.newEvent')"
-          icon="pi pi-plus"
-          @click="navigateToCreateEvent"
-          class="new-event-btn"
-        />
-      </div>
-    </section>
+            <Button
+              :label="$t('eventManagement.actions.newEvent')"
+              icon="pi pi-plus"
+              @click="navigateToCreateEvent"
+              class="new-event-btn"
+            />
+          </div>
+        </section>
 
-    <!-- Events List Section -->
-    <section class="events-list-section">
-      <ProgressSpinner v-if="loading" class="loading-spinner" />
+        <!-- Events List Section -->
+        <section class="events-list-section">
+          <ProgressSpinner v-if="loading" class="loading-spinner" />
 
-      <div v-else-if="filteredEvents.length === 0" class="no-events-message">
-        <i class="pi pi-calendar-times"></i>
-        <p>{{ $t('eventManagement.messages.noEvents') }}</p>
-      </div>
+          <div v-else-if="filteredEvents.length === 0" class="no-events-message">
+            <i class="pi pi-calendar-times"></i>
+            <p>{{ $t('eventManagement.messages.noEvents') }}</p>
+          </div>
 
-      <div v-else class="events-grid">
-        <div
-          v-for="event in filteredEvents"
-          :key="event.id"
-          class="event-item"
-          :class="{ 'selected': isSelected(event.id) }"
-        >
-          <Checkbox
-            :modelValue="isSelected(event.id)"
-            :binary="true"
-            @change="toggleEventSelection(event.id)"
-            class="event-checkbox"
-          />
+          <div v-else class="events-grid">
+            <div
+              v-for="event in filteredEvents"
+              :key="event.id"
+              class="event-item"
+              :class="{ 'selected': isSelected(event.id) }"
+            >
+              <Checkbox
+                :modelValue="isSelected(event.id)"
+                :binary="true"
+                @change="toggleEventSelection(event.id)"
+                class="event-checkbox"
+              />
 
-          <EventCard
-            :event="event"
-            :selected="isSelected(event.id)"
-            @edit="navigateToEditEvent(event.id)"
-          />
-        </div>
-      </div>
-    </section>
+              <EventCard
+                :event="event"
+                :selected="isSelected(event.id)"
+                @edit="navigateToEditEvent(event.id)"
+              />
+            </div>
+          </div>
+        </section>
+      </TabPanel>
+
+      <!-- TAB: Approved Quotes -->
+      <TabPanel :header="$t('eventManagement.tabs.approvedQuotes') || 'Cotizaciones Aprobadas'">
+        <!-- Actions Bar -->
+        <section class="actions-section">
+          <div class="search-filter-bar">
+            <IconField iconPosition="left" class="search-field">
+              <InputIcon class="pi pi-search" />
+
+              <InputText
+                v-model="searchQuery"
+                :placeholder="$t('eventManagement.actions.search') || 'Buscar cotizaciones...'"
+              />
+            </IconField>
+
+            <div class="filters-group">
+              <Dropdown
+                v-model="selectedSort"
+                :options="sortOptions"
+                optionLabel="label"
+                optionValue="value"
+                :placeholder="$t('eventManagement.sort.recent')"
+                class="sort-dropdown"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- Quotes List Section -->
+        <section class="events-list-section">
+          <ProgressSpinner v-if="loading" class="loading-spinner" />
+
+          <div v-else-if="approvedQuotes.length === 0" class="no-events-message">
+            <i class="pi pi-file-excel"></i>
+            <p>{{ $t('eventManagement.messages.noEvents') || 'No hay cotizaciones aprobadas' }}</p>
+          </div>
+
+
+
+          <div v-else class="quotes-grid">
+            <QuoteCard
+              v-for="quote in approvedQuotes"
+              :key="quote.id"
+              :quote="quote"
+              @view="viewQuoteDetails(quote.id)"
+              @create-event="createEventFromQuote(quote)"
+            />
+          </div>
+        </section>
+      </TabPanel>
+    </TabView>
 
     <!-- Pagination Section -->
     <footer class="pagination-section">
       <span class="pagination-info">
         {{ $t('eventManagement.pagination.showing') }} {{ startItem }}-{{ endItem }}
-        {{ $t('eventManagement.pagination.of') }} {{ totalEvents }}
+        {{ $t('eventManagement.pagination.of') }} {{ currentTotal }}
       </span>
 
       <Paginator
         :rows="pageSize"
-        :totalRecords="totalEvents"
+        :totalRecords="currentTotal"
         @page="onPageChange"
         :first="(currentPage - 1) * pageSize"
         template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
@@ -343,6 +500,7 @@ onMounted(() => {
   --dark-bg: #1C2541;
   --border-color: #e0e0e0;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --success-color: #22C55E;
 }
 
 /* Container Principal */
@@ -363,6 +521,27 @@ onMounted(() => {
   font-weight: 600;
   color: var(--primary-bg);
   margin: 0;
+}
+
+/* Custom TabView */
+.custom-tabview {
+  margin-bottom: 2rem;
+}
+
+:deep(.custom-tabview .p-tabview-nav) {
+  background: white;
+  border-bottom: 2px solid var(--border-color);
+}
+
+:deep(.custom-tabview .p-tabview-nav-link) {
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+  color: #666;
+}
+
+:deep(.custom-tabview .p-tabview-nav .p-tabview-selected .p-tabview-nav-link) {
+  color: var(--primary-bg);
+  border-color: var(--accent-color);
 }
 
 /* Actions Section */
@@ -420,6 +599,7 @@ onMounted(() => {
 
 /* Events List Section */
 .events-list-section {
+
   min-height: 400px;
   position: relative;
 }
@@ -466,6 +646,14 @@ onMounted(() => {
 
 .event-checkbox {
   margin-top: 0.5rem;
+}
+
+/* Quotes Grid */
+.quotes-grid {
+
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 }
 
 /* Pagination Section */
@@ -543,7 +731,8 @@ onMounted(() => {
     width: 100%;
   }
 
-  .events-grid {
+  .events-grid,
+  .quotes-grid {
     grid-template-columns: 1fr;
   }
 

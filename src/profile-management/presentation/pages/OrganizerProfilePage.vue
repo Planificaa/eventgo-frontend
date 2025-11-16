@@ -463,7 +463,7 @@ const getEventSeverity = (state) => {
 }
 
 const goToEdit = () => {
-  router.push('/profile/edit')
+  router.push('/organizer/profile/edit')
 }
 
 const goToSettings = () => {

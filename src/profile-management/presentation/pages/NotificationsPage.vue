@@ -1,64 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 
+import { useAuth } from '@/auth-management/infrastructure/composables/useAuth.js'
+import { NotificationApiService } from '@/profile-management/infrastructure/notification-api.service.js'
+
 const { t } = useI18n()
 const toast = useToast()
+const { user } = useAuth()
 
-// Sample notifications data
-const notifications = ref([
-  {
-    id: 1,
-    type: 'event',
-    title: 'Nuevo evento creado',
-    message: 'El evento "Boda Elegante" ha sido creado exitosamente',
-    time: '2025-11-10T10:30:00',
-    read: false,
-    icon: 'pi-calendar',
-    color: '#5bc0be'
-  },
-  {
-    id: 2,
-    type: 'task',
-    title: 'Tarea vencida',
-    message: 'La tarea "Confirmar catering" está próxima a vencer',
-    time: '2025-11-10T09:15:00',
-    read: false,
-    icon: 'pi-check-square',
-    color: '#f59e0b'
-  },
-  {
-    id: 3,
-    type: 'message',
-    title: 'Nuevo mensaje',
-    message: 'Maria Garcia te ha enviado un mensaje',
-    time: '2025-11-09T18:45:00',
-    read: true,
-    icon: 'pi-envelope',
-    color: '#3a506b'
-  },
-  {
-    id: 4,
-    type: 'quote',
-    title: 'Cotización aprobada',
-    message: 'La cotización #Q-2024-001 ha sido aprobada',
-    time: '2025-11-09T14:20:00',
-    read: true,
-    icon: 'pi-file-edit',
-    color: '#10b981'
-  },
-  {
-    id: 5,
-    type: 'system',
-    title: 'Actualización del sistema',
-    message: 'EventGO ha sido actualizado a la versión 2.0',
-    time: '2025-11-08T08:00:00',
-    read: true,
-    icon: 'pi-cog',
-    color: '#6b7280'
-  }
-])
+// Notificaciones dinámicas desde la API
+const notifications = ref([])
 
 const getTimeAgo = (timestamp) => {
   const now = new Date()
@@ -97,19 +50,35 @@ const groupNotifications = () => {
   return groups
 }
 
-const notificationGroups = ref(groupNotifications())
-const unreadCount = ref(notifications.value.filter(n => !n.read).length)
+const notificationGroups = ref({
+  today: [],
+  yesterday: [],
+  older: []
+})
 
-const markAsRead = (id) => {
-  const notification = notifications.value.find(n => n.id === id)
-  if (notification && !notification.read) {
-    notification.read = true
-    unreadCount.value--
-    notificationGroups.value = groupNotifications()
-  }
+const unreadCount = ref(0)
+
+const loadNotifications = async () => {
+  notifications.value = await NotificationApiService.getAllForUser(user.value.id)
+
+  notificationGroups.value = groupNotifications()
+  unreadCount.value = notifications.value.filter(n => !n.read).length
 }
 
-const markAllAsRead = () => {
+const markAsRead = async (id) => {
+  const notification = notifications.value.find(n => n.id === id)
+  if (!notification || notification.read) return
+
+  await NotificationApiService.markAsRead(id)
+
+  notification.read = true
+  unreadCount.value--
+  notificationGroups.value = groupNotifications()
+}
+
+const markAllAsRead = async () => {
+  await NotificationApiService.markAllAsRead(user.value.id)
+
   notifications.value.forEach(n => n.read = true)
   unreadCount.value = 0
   notificationGroups.value = groupNotifications()
@@ -121,7 +90,9 @@ const markAllAsRead = () => {
   })
 }
 
-const clearAll = () => {
+const clearAll = async () => {
+  await NotificationApiService.clearAll(user.value.id)
+
   notifications.value = []
   notificationGroups.value = groupNotifications()
   unreadCount.value = 0
@@ -132,6 +103,8 @@ const clearAll = () => {
     life: 2000
   })
 }
+
+onMounted(loadNotifications)
 </script>
 
 <template>

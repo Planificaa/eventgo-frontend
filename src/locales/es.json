@@ -242,13 +242,24 @@
 
   "eventManagement": {
     "pageTitle": "Gestión de Eventos",
+    "location": "Lugar",
+    "customer": "Cliente",
+    "edit": "Editar",
+    "editEvent": "Editar Evento",
+    "createEvent": "Crear Evento",
+    "guests": "Invitados",
+    "tabs": {
+      "events": "Mis Eventos",
+      "approvedQuotes": "De Cotizaciones Aprobadas"
+    },
     "actions": {
       "selectAll": "Seleccionar todo",
       "deleteSelected": "Eliminar seleccionados ({count})",
       "search": "Buscar eventos...",
       "newEvent": "Nuevo evento",
       "cancel": "Cancelar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "edit": "Editar"
     },
     "filters": {
       "all": "Todos los estados",
@@ -277,8 +288,12 @@
     },
     "status": {
       "active": "Activo",
-      "toBeConfirmed": "Por confirmar",
+      "pending": "Pendiente",
       "cancelled": "Cancelado"
+    },
+    "labels": {
+      "customer": "Cliente",
+      "location": "Lugar"
     }
   },
 

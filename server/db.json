@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "User 1",
       "email": "user1@example.com",
       "password": "EventGo123!",
@@ -16,7 +16,7 @@
       "updatedAt": "2025-03-03T00:00:00"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "User 2",
       "email": "user2@example.com",
       "password": "EventGo123!",
@@ -31,7 +31,7 @@
       "updatedAt": "2025-04-28T00:00:00"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "User 3",
       "email": "user3@example.com",
       "password": "EventGo123!",
@@ -46,7 +46,7 @@
       "updatedAt": "2024-10-10T00:00:00"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "User 4",
       "email": "user4@example.com",
       "password": "EventGo123!",
@@ -61,7 +61,7 @@
       "updatedAt": "2025-01-24T00:00:00"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "User 5",
       "email": "user5@example.com",
       "password": "EventGo123!",
@@ -76,7 +76,7 @@
       "updatedAt": "2024-07-19T00:00:00"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "User 6",
       "email": "user6@example.com",
       "password": "EventGo123!",
@@ -91,7 +91,7 @@
       "updatedAt": "2025-10-30T00:00:00"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "User 7",
       "email": "user7@example.com",
       "password": "EventGo123!",
@@ -106,7 +106,7 @@
       "updatedAt": "2025-02-06T00:00:00"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "User 8",
       "email": "user8@example.com",
       "password": "EventGo123!",
@@ -121,7 +121,7 @@
       "updatedAt": "2025-07-17T00:00:00"
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "User 9",
       "email": "user9@example.com",
       "password": "EventGo123!",
@@ -136,7 +136,7 @@
       "updatedAt": "2025-01-16T00:00:00"
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "User 10",
       "email": "user10@example.com",
       "password": "EventGo123!",
@@ -151,7 +151,7 @@
       "updatedAt": "2025-07-14T00:00:00"
     },
     {
-      "id": 11,
+      "id": "11",
       "name": "User 11",
       "email": "user11@example.com",
       "password": "EventGo123!",
@@ -166,7 +166,7 @@
       "updatedAt": "2025-10-03T00:00:00"
     },
     {
-      "id": 12,
+      "id": "12",
       "name": "User 12",
       "email": "user12@example.com",
       "password": "EventGo123!",
@@ -181,7 +181,7 @@
       "updatedAt": "2024-09-08T00:00:00"
     },
     {
-      "id": 13,
+      "id": "13",
       "name": "User 13",
       "email": "user13@example.com",
       "password": "EventGo123!",
@@ -196,7 +196,7 @@
       "updatedAt": "2024-12-14T00:00:00"
     },
     {
-      "id": 14,
+      "id": "14",
       "name": "User 14",
       "email": "user14@example.com",
       "password": "EventGo123!",
@@ -211,7 +211,7 @@
       "updatedAt": "2025-06-28T00:00:00"
     },
     {
-      "id": 15,
+      "id": "15",
       "name": "User 15",
       "email": "user15@example.com",
       "password": "EventGo123!",
@@ -226,7 +226,7 @@
       "updatedAt": "2024-01-13T00:00:00"
     },
     {
-      "id": 16,
+      "id": "16",
       "name": "User 16",
       "email": "user16@example.com",
       "password": "EventGo123!",
@@ -241,7 +241,7 @@
       "updatedAt": "2025-12-23T00:00:00"
     },
     {
-      "id": 17,
+      "id": "17",
       "name": "User 17",
       "email": "user17@example.com",
       "password": "EventGo123!",
@@ -256,7 +256,7 @@
       "updatedAt": "2024-05-01T00:00:00"
     },
     {
-      "id": 18,
+      "id": "18",
       "name": "User 18",
       "email": "user18@example.com",
       "password": "EventGo123!",
@@ -271,7 +271,7 @@
       "updatedAt": "2024-08-15T00:00:00"
     },
     {
-      "id": 19,
+      "id": "19",
       "name": "User 19",
       "email": "user19@example.com",
       "password": "EventGo123!",
@@ -286,7 +286,7 @@
       "updatedAt": "2025-01-11T00:00:00"
     },
     {
-      "id": 20,
+      "id": "20",
       "name": "User 20",
       "email": "user20@example.com",
       "password": "EventGo123!",
@@ -305,19 +305,54 @@
       "email": "dacc7056@gmail.com",
       "password": "Dacc2003!",
       "role": "host",
-      "id": 21
+      "id": "21"
     },
     {
       "name": "Jhon Doe",
       "email": "admin@eventgo.com",
       "password": "Admin123!",
       "role": "organizer",
-      "id": 22
+      "id": "22"
+    },
+    {
+      "id": "fd34",
+      "name": "July Paico",
+      "email": "cuentasjuly16@gmail.com",
+      "password": "12345678",
+      "role": "organizer"
+    },
+    {
+      "id": "e254",
+      "name": "July Paico",
+      "email": "july16@gmail.com",
+      "password": "123456789",
+      "role": "organizer"
+    },
+    {
+      "id": "1b29",
+      "name": "JulyAnfitrion",
+      "email": "july.anfi@gmail.com",
+      "password": "123456789",
+      "role": "host"
+    },
+    {
+      "id": "10b4",
+      "name": "JulyOrganizador",
+      "email": "cuentasjuly162@gmail.com",
+      "password": "12345678",
+      "role": "organizer"
+    },
+    {
+      "name": "July Paico",
+      "email": "july26@gmail.com",
+      "password": "july123!",
+      "role": "organizer",
+      "id": "8wtMfJa"
     }
   ],
   "events": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Event 1",
       "customerName": "Customer 1",
       "location": "Lima - Perú",
@@ -331,7 +366,7 @@
       "ownerId": 13
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Event 2",
       "customerName": "Customer 2",
       "location": "Lima - Perú",
@@ -345,7 +380,7 @@
       "ownerId": 13
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "Event 3",
       "customerName": "Customer 3",
       "location": "Lima - Perú",
@@ -359,7 +394,7 @@
       "ownerId": 12
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "Event 4",
       "customerName": "Customer 4",
       "location": "Lima - Perú",
@@ -373,7 +408,7 @@
       "ownerId": 7
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "Event 5",
       "customerName": "Customer 5",
       "location": "Lima - Perú",
@@ -387,7 +422,7 @@
       "ownerId": 13
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "Event 6",
       "customerName": "Customer 6",
       "location": "Lima - Perú",
@@ -401,7 +436,7 @@
       "ownerId": 2
     },
     {
-      "id": 7,
+      "id": "7",
       "title": "Event 7",
       "customerName": "Customer 7",
       "location": "Lima - Perú",
@@ -415,12 +450,12 @@
       "ownerId": 6
     },
     {
-      "id": 8,
+      "id": "8",
       "title": "Event 8",
       "customerName": "Customer 8",
-      "location": "Lima - Perú",
-      "status": "Pendiente",
-      "date": "2025-01-05T00:00:00",
+      "place": "Lima - Perú",
+      "status": "Pending",
+      "date": "2025-01-05",
       "type": "Cumpleaños",
       "guests": 49,
       "budget": 39460,
@@ -429,7 +464,7 @@
       "ownerId": 17
     },
     {
-      "id": 9,
+      "id": "9",
       "title": "Event 9",
       "customerName": "Customer 9",
       "location": "Lima - Perú",
@@ -443,7 +478,7 @@
       "ownerId": 8
     },
     {
-      "id": 10,
+      "id": "10",
       "title": "Event 10",
       "customerName": "Customer 10",
       "location": "Lima - Perú",
@@ -457,7 +492,7 @@
       "ownerId": 3
     },
     {
-      "id": 11,
+      "id": "11",
       "title": "Event 11",
       "customerName": "Customer 11",
       "location": "Lima - Perú",
@@ -471,7 +506,7 @@
       "ownerId": 4
     },
     {
-      "id": 12,
+      "id": "12",
       "title": "Event 12",
       "customerName": "Customer 12",
       "location": "Lima - Perú",
@@ -485,7 +520,7 @@
       "ownerId": 16
     },
     {
-      "id": 13,
+      "id": "13",
       "title": "Event 13",
       "customerName": "Customer 13",
       "location": "Lima - Perú",
@@ -499,7 +534,7 @@
       "ownerId": 1
     },
     {
-      "id": 14,
+      "id": "14",
       "title": "Event 14",
       "customerName": "Customer 14",
       "location": "Lima - Perú",
@@ -513,7 +548,7 @@
       "ownerId": 4
     },
     {
-      "id": 15,
+      "id": "15",
       "title": "Event 15",
       "customerName": "Customer 15",
       "location": "Lima - Perú",
@@ -527,7 +562,7 @@
       "ownerId": 17
     },
     {
-      "id": 16,
+      "id": "16",
       "title": "Event 16",
       "customerName": "Customer 16",
       "location": "Lima - Perú",
@@ -541,7 +576,7 @@
       "ownerId": 13
     },
     {
-      "id": 17,
+      "id": "17",
       "title": "Event 17",
       "customerName": "Customer 17",
       "location": "Lima - Perú",
@@ -555,7 +590,7 @@
       "ownerId": 4
     },
     {
-      "id": 18,
+      "id": "18",
       "title": "Event 18",
       "customerName": "Customer 18",
       "location": "Lima - Perú",
@@ -569,7 +604,7 @@
       "ownerId": 3
     },
     {
-      "id": 19,
+      "id": "19",
       "title": "Event 19",
       "customerName": "Customer 19",
       "location": "Lima - Perú",
@@ -583,7 +618,7 @@
       "ownerId": 11
     },
     {
-      "id": 20,
+      "id": "20",
       "title": "Event 20",
       "customerName": "Customer 20",
       "location": "Lima - Perú",
@@ -595,6 +630,60 @@
       "createdAt": "2024-01-31T00:00:00",
       "updatedAt": "2024-08-23T00:00:00",
       "ownerId": 4
+    },
+    {
+      "id": "a039",
+      "title": "Cumpleaños de Magaly",
+      "date": "2025-12-26",
+      "customerName": "Magaly",
+      "location": "Piura",
+      "status": "Active",
+      "userId": "10b4"
+    },
+    {
+      "id": "8e60",
+      "title": "Año nuevo",
+      "date": "2025-12-31",
+      "customerName": "July Paico",
+      "location": "Center Lima",
+      "status": "Pending",
+      "userId": "10b4"
+    },
+    {
+      "id": "227f",
+      "title": "event 1",
+      "date": "2025-11-16",
+      "customerName": "July Paico",
+      "location": "ddwd",
+      "status": "Cancelled",
+      "userId": "10b4"
+    },
+    {
+      "id": "b368",
+      "title": "Bautizo",
+      "date": "2025-11-18",
+      "customerName": "Ana Maria",
+      "location": "Convention Center",
+      "status": "Active",
+      "userId": "10b4"
+    },
+    {
+      "id": "0943",
+      "title": "Presentacion ",
+      "date": "2025-11-16",
+      "customerName": "EventGo",
+      "location": "UPC",
+      "status": "Active",
+      "userId": "10b4"
+    },
+    {
+      "id": "adc2",
+      "title": "Event 5",
+      "date": "2025-11-25",
+      "customerName": "Luisa",
+      "location": "Center locale Lima",
+      "status": "Cancelled",
+      "userId": "10b4"
     }
   ],
   "organizers": [
@@ -1019,113 +1108,11 @@
       "createdAt": "2024-09-02T00:00:00",
       "updatedAt": "2025-09-01T00:00:00",
       "eventId": 2
-    },
-    {
-      "id": "quote_1763209680202_5v0vbatjm",
-      "customer": {
-        "id": "21",
-        "name": "Deybbi Crisanto",
-        "email": "dacc7056@gmail.com",
-        "phone": ""
-      },
-      "event": {
-        "id": "event_1763209680202_o4q97wupz",
-        "type": "CONFERENCE",
-        "name": "",
-        "date": "2025-11-25T05:00:00.000Z",
-        "location": "Upc Chorrillos",
-        "numberOfGuests": 60
-      },
-      "organizer": {
-        "id": "22"
-      },
-      "services": [
-        {
-          "id": "service_1763209709018_ueekkd58t",
-          "description": "Catering",
-          "quantity": 70,
-          "unitPrice": 50,
-          "currency": "S/.",
-          "total": 3500
-        },
-        {
-          "id": "service_1763209727705_i6itmf3s3",
-          "description": "Decoracion",
-          "quantity": 1,
-          "unitPrice": 1000,
-          "currency": "S/.",
-          "total": 1000
-        }
-      ],
-      "state": "DRAFT",
-      "vatPercentage": 18,
-      "currency": "S/.",
-      "subtotal": 4500,
-      "vat": 810,
-      "total": 5310,
-      "createdAt": "2025-11-15T12:28:00.202Z",
-      "updatedAt": "2025-11-15T12:28:00.202Z",
-      "ownerId": "21",
-      "organizerId": "22",
-      "customerId": "21"
-    },
-    {
-      "id": "quote_1763210882910_baui2cy75",
-      "customer": {
-        "id": "21",
-        "name": "Deybbi Crisanto",
-        "email": "dacc7056@gmail.com",
-        "phone": ""
-      },
-      "event": {
-        "id": "event_1763210882910_l77i5b54q",
-        "type": "BIRTHDAY",
-        "name": "",
-        "date": "2025-11-20T05:00:00.000Z",
-        "location": "Mi casa",
-        "numberOfGuests": 100
-      },
-      "organizer": {
-        "id": "22",
-        "name": "",
-        "role": "organizer",
-        "phone": "",
-        "avatar": ""
-      },
-      "services": [
-        {
-          "id": "service_1763210911607_ed9r19f4u",
-          "description": "Decoracion",
-          "quantity": 1,
-          "unitPrice": 100,
-          "currency": "S/.",
-          "total": 100
-        },
-        {
-          "id": "service_1763211064391_rwqm98184",
-          "description": "Catering",
-          "quantity": 100,
-          "unitPrice": 15,
-          "currency": "S/.",
-          "total": 1500
-        }
-      ],
-      "state": "APPROVED",
-      "vatPercentage": 18,
-      "currency": "S/.",
-      "subtotal": 1600,
-      "vat": 288,
-      "total": 1888,
-      "createdAt": "2025-11-15T12:48:02.910Z",
-      "updatedAt": "2025-11-15T12:51:18.649Z",
-      "ownerId": "22",
-      "organizerId": "22",
-      "customerId": "21"
     }
   ],
   "tasks": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Task 1",
       "description": "Description for task 1",
       "status": "in_progress",
@@ -1133,7 +1120,7 @@
       "dueDate": "2024-12-06T00:00:00"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Task 2",
       "description": "Description for task 2",
       "status": "pending",
@@ -1141,7 +1128,7 @@
       "dueDate": "2024-03-30T00:00:00"
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "Task 3",
       "description": "Description for task 3",
       "status": "in_progress",
@@ -1149,7 +1136,7 @@
       "dueDate": "2024-11-13T00:00:00"
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "Task 4",
       "description": "Description for task 4",
       "status": "in_progress",
@@ -1157,7 +1144,7 @@
       "dueDate": "2025-09-18T00:00:00"
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "Task 5",
       "description": "Description for task 5",
       "status": "pending",
@@ -1165,7 +1152,7 @@
       "dueDate": "2025-07-08T00:00:00"
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "Task 6",
       "description": "Description for task 6",
       "status": "done",
@@ -1173,7 +1160,7 @@
       "dueDate": "2025-07-04T00:00:00"
     },
     {
-      "id": 7,
+      "id": "7",
       "title": "Task 7",
       "description": "Description for task 7",
       "status": "pending",
@@ -1181,7 +1168,7 @@
       "dueDate": "2025-07-27T00:00:00"
     },
     {
-      "id": 8,
+      "id": "8",
       "title": "Task 8",
       "description": "Description for task 8",
       "status": "done",
@@ -1189,7 +1176,7 @@
       "dueDate": "2024-03-22T00:00:00"
     },
     {
-      "id": 9,
+      "id": "9",
       "title": "Task 9",
       "description": "Description for task 9",
       "status": "in_progress",
@@ -1197,7 +1184,7 @@
       "dueDate": "2025-04-15T00:00:00"
     },
     {
-      "id": 10,
+      "id": "10",
       "title": "Task 10",
       "description": "Description for task 10",
       "status": "pending",
@@ -1205,7 +1192,7 @@
       "dueDate": "2025-01-26T00:00:00"
     },
     {
-      "id": 11,
+      "id": "11",
       "title": "Task 11",
       "description": "Description for task 11",
       "status": "pending",
@@ -1213,7 +1200,7 @@
       "dueDate": "2024-06-11T00:00:00"
     },
     {
-      "id": 12,
+      "id": "12",
       "title": "Task 12",
       "description": "Description for task 12",
       "status": "pending",
@@ -1221,7 +1208,7 @@
       "dueDate": "2025-01-13T00:00:00"
     },
     {
-      "id": 13,
+      "id": "13",
       "title": "Task 13",
       "description": "Description for task 13",
       "status": "done",
@@ -1229,7 +1216,7 @@
       "dueDate": "2025-10-16T00:00:00"
     },
     {
-      "id": 14,
+      "id": "14",
       "title": "Task 14",
       "description": "Description for task 14",
       "status": "pending",
@@ -1237,7 +1224,7 @@
       "dueDate": "2024-08-24T00:00:00"
     },
     {
-      "id": 15,
+      "id": "15",
       "title": "Task 15",
       "description": "Description for task 15",
       "status": "in_progress",
@@ -1245,7 +1232,7 @@
       "dueDate": "2024-08-14T00:00:00"
     },
     {
-      "id": 16,
+      "id": "16",
       "title": "Task 16",
       "description": "Description for task 16",
       "status": "in_progress",
@@ -1253,7 +1240,7 @@
       "dueDate": "2025-07-08T00:00:00"
     },
     {
-      "id": 17,
+      "id": "17",
       "title": "Task 17",
       "description": "Description for task 17",
       "status": "done",
@@ -1261,7 +1248,7 @@
       "dueDate": "2025-03-22T00:00:00"
     },
     {
-      "id": 18,
+      "id": "18",
       "title": "Task 18",
       "description": "Description for task 18",
       "status": "in_progress",
@@ -1269,7 +1256,7 @@
       "dueDate": "2025-01-19T00:00:00"
     },
     {
-      "id": 19,
+      "id": "19",
       "title": "Task 19",
       "description": "Description for task 19",
       "status": "in_progress",
@@ -1277,7 +1264,7 @@
       "dueDate": "2025-04-05T00:00:00"
     },
     {
-      "id": 20,
+      "id": "20",
       "title": "Task 20",
       "description": "Description for task 20",
       "status": "in_progress",
@@ -1285,7 +1272,7 @@
       "dueDate": "2024-11-16T00:00:00"
     },
     {
-      "id": 21,
+      "id": "21",
       "title": "Task 21",
       "description": "Description for task 21",
       "status": "in_progress",
@@ -1293,7 +1280,7 @@
       "dueDate": "2025-07-13T00:00:00"
     },
     {
-      "id": 22,
+      "id": "22",
       "title": "Task 22",
       "description": "Description for task 22",
       "status": "done",
@@ -1301,7 +1288,7 @@
       "dueDate": "2024-03-09T00:00:00"
     },
     {
-      "id": 23,
+      "id": "23",
       "title": "Task 23",
       "description": "Description for task 23",
       "status": "done",
@@ -1309,7 +1296,7 @@
       "dueDate": "2025-05-24T00:00:00"
     },
     {
-      "id": 24,
+      "id": "24",
       "title": "Task 24",
       "description": "Description for task 24",
       "status": "in_progress",
@@ -1317,7 +1304,7 @@
       "dueDate": "2024-09-29T00:00:00"
     },
     {
-      "id": 25,
+      "id": "25",
       "title": "Task 25",
       "description": "Description for task 25",
       "status": "in_progress",
@@ -1325,7 +1312,7 @@
       "dueDate": "2024-05-08T00:00:00"
     },
     {
-      "id": 26,
+      "id": "26",
       "title": "Task 26",
       "description": "Description for task 26",
       "status": "in_progress",
@@ -1333,7 +1320,7 @@
       "dueDate": "2024-09-21T00:00:00"
     },
     {
-      "id": 27,
+      "id": "27",
       "title": "Task 27",
       "description": "Description for task 27",
       "status": "pending",
@@ -1341,7 +1328,7 @@
       "dueDate": "2025-11-08T00:00:00"
     },
     {
-      "id": 28,
+      "id": "28",
       "title": "Task 28",
       "description": "Description for task 28",
       "status": "pending",
@@ -1349,7 +1336,7 @@
       "dueDate": "2024-01-09T00:00:00"
     },
     {
-      "id": 29,
+      "id": "29",
       "title": "Task 29",
       "description": "Description for task 29",
       "status": "pending",
@@ -1357,7 +1344,7 @@
       "dueDate": "2024-05-21T00:00:00"
     },
     {
-      "id": 30,
+      "id": "30",
       "title": "Task 30",
       "description": "Description for task 30",
       "status": "done",
@@ -1365,7 +1352,7 @@
       "dueDate": "2024-03-05T00:00:00"
     },
     {
-      "id": 31,
+      "id": "31",
       "title": "Task 31",
       "description": "Description for task 31",
       "status": "done",
@@ -1373,7 +1360,7 @@
       "dueDate": "2024-07-29T00:00:00"
     },
     {
-      "id": 32,
+      "id": "32",
       "title": "Task 32",
       "description": "Description for task 32",
       "status": "done",
@@ -1381,7 +1368,7 @@
       "dueDate": "2025-12-17T00:00:00"
     },
     {
-      "id": 33,
+      "id": "33",
       "title": "Task 33",
       "description": "Description for task 33",
       "status": "done",
@@ -1389,7 +1376,7 @@
       "dueDate": "2025-10-02T00:00:00"
     },
     {
-      "id": 34,
+      "id": "34",
       "title": "Task 34",
       "description": "Description for task 34",
       "status": "in_progress",
@@ -1397,7 +1384,7 @@
       "dueDate": "2025-12-14T00:00:00"
     },
     {
-      "id": 35,
+      "id": "35",
       "title": "Task 35",
       "description": "Description for task 35",
       "status": "pending",
@@ -1405,7 +1392,7 @@
       "dueDate": "2024-12-04T00:00:00"
     },
     {
-      "id": 36,
+      "id": "36",
       "title": "Task 36",
       "description": "Description for task 36",
       "status": "in_progress",
@@ -1413,7 +1400,7 @@
       "dueDate": "2025-06-22T00:00:00"
     },
     {
-      "id": 37,
+      "id": "37",
       "title": "Task 37",
       "description": "Description for task 37",
       "status": "done",
@@ -1421,7 +1408,7 @@
       "dueDate": "2024-03-16T00:00:00"
     },
     {
-      "id": 38,
+      "id": "38",
       "title": "Task 38",
       "description": "Description for task 38",
       "status": "pending",
@@ -1429,7 +1416,7 @@
       "dueDate": "2025-03-18T00:00:00"
     },
     {
-      "id": 39,
+      "id": "39",
       "title": "Task 39",
       "description": "Description for task 39",
       "status": "in_progress",
@@ -1437,7 +1424,7 @@
       "dueDate": "2025-02-02T00:00:00"
     },
     {
-      "id": 40,
+      "id": "40",
       "title": "Task 40",
       "description": "Description for task 40",
       "status": "pending",
@@ -1926,5 +1913,6 @@
       "time": "2024-09-20T00:00:00",
       "content": "Full content of message 60"
     }
-  ]
+  ],
+  "notifications": []
 }
