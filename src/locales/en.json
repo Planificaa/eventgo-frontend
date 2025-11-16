@@ -243,6 +243,8 @@
     "edit": "Edit",
     "editEvent": "Edit Event",
     "createEvent": "Create Event",
+    "guests": "Guests",
+
     "actions": {
       "selectAll": "Select all",
       "deleteSelected": "Delete selected ({count})",

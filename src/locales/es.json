@@ -247,6 +247,8 @@
     "edit": "Editar",
     "editEvent": "Editar Evento",
     "createEvent": "Crear Evento",
+    "guests": "Invitados",
+
     "actions": {
       "selectAll": "Seleccionar todo",
       "deleteSelected": "Eliminar seleccionados ({count})",
