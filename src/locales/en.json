@@ -241,6 +241,8 @@
     "location": "Location",
     "customer": "Customer",
     "edit": "Edit",
+    "editEvent": "Edit Event",
+    "createEvent": "Create Event",
     "actions": {
       "selectAll": "Select all",
       "deleteSelected": "Delete selected ({count})",

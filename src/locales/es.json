@@ -245,6 +245,8 @@
     "location": "Lugar",
     "customer": "Cliente",
     "edit": "Editar",
+    "editEvent": "Editar Evento",
+    "createEvent": "Crear Evento",
     "actions": {
       "selectAll": "Seleccionar todo",
       "deleteSelected": "Eliminar seleccionados ({count})",
