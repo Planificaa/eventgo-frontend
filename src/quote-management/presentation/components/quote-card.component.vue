@@ -145,6 +145,7 @@ export default {
 .quote-card {
   height: 100%;
   transition: transform 0.2s, box-shadow 0.2s;
+  border-color: #3A506B;
 }
 
 .quote-card:hover {
@@ -154,6 +155,7 @@ export default {
 
 .quote-card.selected-card {
   box-shadow: 0 0 0 2px #5BC0BE;
+
 }
 
 .card-header-content {
@@ -165,19 +167,19 @@ export default {
 
 /* Header classes según estado */
 .card-header-content.header-approved {
-  background: linear-gradient(135deg, #22C55E 0%, #16a34a 100%);
+  background: linear-gradient(135deg, #3A506B 50%, #16a34a 100%);
 }
 
 .card-header-content.header-pending {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: linear-gradient(135deg, #3A506B 50%, #d97706 100%);
 }
 
 .card-header-content.header-rejected {
-  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  background: linear-gradient(135deg, #3A506B 50%, #991b1b 100%);
 }
 
 .card-header-content.header-draft {
-  background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+  background: linear-gradient(135deg, #3A506B 50%, #4B5563 100%);
 }
 
 .header-top {
@@ -191,7 +193,7 @@ export default {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #6FFFE9;
+  color: #FFFFEF;
   flex: 1;
 }
 
@@ -275,6 +277,7 @@ export default {
 
 .view-btn {
   flex: 1;
+  background-color: #3A506B ;
 }
 
 .create-event-btn {
