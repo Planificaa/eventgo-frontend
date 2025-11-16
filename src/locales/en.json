@@ -244,7 +244,10 @@
     "editEvent": "Edit Event",
     "createEvent": "Create Event",
     "guests": "Guests",
-
+    "tabs": {
+      "events": "My Events",
+      "approvedQuotes": "From Approved Quotes"
+    },
     "actions": {
       "selectAll": "Select all",
       "deleteSelected": "Delete selected ({count})",

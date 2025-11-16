@@ -248,7 +248,10 @@
     "editEvent": "Editar Evento",
     "createEvent": "Crear Evento",
     "guests": "Invitados",
-
+    "tabs": {
+      "events": "Mis Eventos",
+      "approvedQuotes": "De Cotizaciones Aprobadas"
+    },
     "actions": {
       "selectAll": "Seleccionar todo",
       "deleteSelected": "Eliminar seleccionados ({count})",
